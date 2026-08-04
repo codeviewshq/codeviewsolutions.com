@@ -1,0 +1,34 @@
+---
+/**
+ * The mark: a beam entering a prism face and leaving as three split rays.
+ * Refraction, at 22 pixels.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className = 'wordmark__mark' } = Astro.props;
+---
+
+<svg
+  class={className}
+  viewBox="0 0 24 24"
+  fill="none"
+  aria-hidden="true"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- The prism -->
+  <path
+    d="M11.4 3.4 3.6 19.2a.8.8 0 0 0 .72 1.16h4.1"
+    stroke="currentColor"
+    stroke-width="1.7"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    opacity="0.55"></path>
+  <!-- Incoming beam -->
+  <path d="M1.6 12.4h5.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+  <!-- The split -->
+  <path d="M12.4 9.9h9.9" stroke="#A855F7" stroke-width="1.7" stroke-linecap="round"></path>
+  <path d="M12.9 14h9.4" stroke="#22D3EE" stroke-width="1.7" stroke-linecap="round"></path>
+  <path d="M13.4 18.1h8.9" stroke="#FBBF24" stroke-width="1.7" stroke-linecap="round"></path>
+</svg>

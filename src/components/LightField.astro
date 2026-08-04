@@ -1,0 +1,298 @@
+---
+/**
+ * The hero's light field.
+ *
+ * Particles drift through a slowly evolving noise field, each drawing a long
+ * luminous filament. Colour comes from horizontal position across the
+ * refraction spectrum, so the field disperses violet through cyan into amber
+ * the way light does through glass.
+ *
+ * Trails are drawn from an explicit ring buffer of recent positions rather
+ * than by fading the previous frame. Fading looks simpler but couples trail
+ * length to alpha, line width, and antialiasing all at once — in practice it
+ * produced short dashes no matter how the fade was tuned. Keeping the history
+ * makes filament length exactly what the constants say it is.
+ *
+ * No library, no WebGL, ~4 KB. It pauses when scrolled out of view or when
+ * the tab is hidden, and under prefers-reduced-motion it composes a single
+ * dense still frame instead of animating.
+ */
+---
+
+<canvas class="field" data-field aria-hidden="true"></canvas>
+
+<script>
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-field]');
+  const ctx = canvas?.getContext('2d', { alpha: true });
+
+  if (canvas && ctx) {
+    const BG = 'rgb(10,10,13)';
+    // Matches --violet / --cyan / --amber.
+    const STOPS = [
+      [168, 85, 247],
+      [34, 211, 238],
+      [251, 191, 36],
+    ];
+
+    // Trail length is TRAIL * EVERY * SPEED pixels (~150). Recording every
+    // third frame rather than every second halves the segments drawn per
+    // frame for the same visible length — the cheapest win available here.
+    const TRAIL = 30; // points kept per filament
+    const EVERY = 3; // frames between recorded points
+    const SPEED = 1.7;
+    const BUCKETS = 14;
+
+    type P = { x: number; y: number; pts: Float32Array; head: number; count: number; life: number };
+
+    let w = 0;
+    let h = 0;
+    let dpr = 1;
+    let particles: P[] = [];
+    let frame = 0;
+    let raf = 0;
+    let running = false;
+    const pointer = { x: -9999, y: -9999, active: false };
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    /* --- Value noise --------------------------------------------------- */
+    const hash = (x: number, y: number) => {
+      let n = (x | 0) * 374761393 + (y | 0) * 668265263;
+      n = (n ^ (n >> 13)) * 1274126177;
+      return ((n ^ (n >> 16)) >>> 0) / 4294967295;
+    };
+
+    const smooth = (t: number) => t * t * (3 - 2 * t);
+
+    const noise = (x: number, y: number) => {
+      const xi = Math.floor(x);
+      const yi = Math.floor(y);
+      const u = smooth(x - xi);
+      const v = smooth(y - yi);
+      const a = hash(xi, yi);
+      const b = hash(xi + 1, yi);
+      const c = hash(xi, yi + 1);
+      const d = hash(xi + 1, yi + 1);
+      return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+    };
+
+    /**
+     * Flow direction at a point. The angle spread is the whole ballgame: map
+     * noise across a wide range and neighbouring points aim in wildly
+     * different directions, so particles knot up and scribble. A narrow
+     * spread around a rightward bias gives laminar, sweeping flow.
+     */
+    const field = (x: number, y: number, t: number) => {
+      const s = 0.0019;
+      const n = noise(x * s, y * s + t) * 0.78 + noise(x * s * 2.3, y * s * 2.3 - t * 1.3) * 0.22;
+      return (n * 2 - 1) * 1.15 - 0.15;
+    };
+
+    const colorAt = (t: number) => {
+      const s = Math.max(0, Math.min(1, t)) * (STOPS.length - 1);
+      const i = Math.min(STOPS.length - 2, Math.floor(s));
+      const f = s - i;
+      const a = STOPS[i];
+      const b = STOPS[i + 1];
+      return `${Math.round(a[0] + (b[0] - a[0]) * f)},${Math.round(
+        a[1] + (b[1] - a[1]) * f
+      )},${Math.round(a[2] + (b[2] - a[2]) * f)}`;
+    };
+
+    const bucketColors = Array.from({ length: BUCKETS }, (_, i) => colorAt(i / (BUCKETS - 1)));
+    let paths: Path2D[] = [];
+
+    const reset = (p: P, seed = false): P => {
+      p.x = Math.random() * w;
+      p.y = Math.random() * h;
+      p.head = 0;
+      p.count = 0;
+      p.life = 260 + Math.random() * 420;
+      if (seed) p.life *= Math.random();
+      return p;
+    };
+
+    const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+
+      // Capping the pixel ratio keeps this cheap on dense phone screens; the
+      // filaments are soft, so extra resolution buys nothing visible.
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      w = rect.width;
+      h = rect.height;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      // Fewer filaments on low-core machines, where canvas rasterisation of
+      // this many segments is the thing most likely to drop frames.
+      const budget = (navigator.hardwareConcurrency || 4) <= 4 ? 5200 : 3200;
+      const count = Math.round(Math.min(700, Math.max(140, (w * h) / budget)));
+      particles = Array.from({ length: count }, () =>
+        reset({ x: 0, y: 0, pts: new Float32Array(TRAIL * 2), head: 0, count: 0, life: 0 }, true)
+      );
+    };
+
+    const step = (accumulate = false) => {
+      frame++;
+      const t = frame * 0.0011;
+
+      if (!accumulate) {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = BG;
+        ctx.fillRect(0, 0, w, h);
+      }
+
+      // While composing the reduced-motion still we record every frame, since
+      // that pass paints only the newest segment and relies on accumulation.
+      const record = accumulate || frame % EVERY === 0;
+      for (let i = 0; i < BUCKETS; i++) paths[i] = new Path2D();
+
+      for (const p of particles) {
+        let angle = field(p.x, p.y, t);
+
+        // The pointer bends the field around it, like a lens in the path.
+        if (pointer.active) {
+          const dx = p.x - pointer.x;
+          const dy = p.y - pointer.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 210) {
+            const push = (1 - dist / 210) ** 2;
+            angle += Math.atan2(dy, dx) * push * 0.8;
+          }
+        }
+
+        p.x += Math.cos(angle) * SPEED;
+        p.y += Math.sin(angle) * SPEED;
+        p.life--;
+
+        if (p.life < 0 || p.x < -60 || p.x > w + 60 || p.y < -60 || p.y > h + 60) {
+          reset(p);
+          continue;
+        }
+
+        if (record) {
+          p.pts[p.head * 2] = p.x;
+          p.pts[p.head * 2 + 1] = p.y;
+          p.head = (p.head + 1) % TRAIL;
+          if (p.count < TRAIL) p.count++;
+        }
+
+        if (p.count > 1) {
+          const b = Math.max(0, Math.min(BUCKETS - 1, Math.round((p.x / w) * (BUCKETS - 1))));
+          const path = paths[b];
+
+          if (accumulate) {
+            // The still frame never clears, so each pass only needs to add the
+            // newest segment. Redrawing whole trails hundreds of times over
+            // would lock the main thread for seconds.
+            const i1 = (p.head - 1 + TRAIL) % TRAIL;
+            const i0 = (p.head - 2 + TRAIL) % TRAIL;
+            path.moveTo(p.pts[i0 * 2], p.pts[i0 * 2 + 1]);
+            path.lineTo(p.pts[i1 * 2], p.pts[i1 * 2 + 1]);
+          } else {
+            // Walk oldest to newest so the ring buffer never draws a stray
+            // segment across the canvas at the wrap point.
+            const start = (p.head - p.count + TRAIL) % TRAIL;
+            path.moveTo(p.pts[start * 2], p.pts[start * 2 + 1]);
+            for (let k = 1; k < p.count; k++) {
+              const idx = (start + k) % TRAIL;
+              path.lineTo(p.pts[idx * 2], p.pts[idx * 2 + 1]);
+            }
+          }
+        }
+      }
+
+      // Additive blending gives the filaments their glow where they cross.
+      // One stroke per colour bucket keeps this to ~14 draw calls a frame.
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.lineWidth = 1.15;
+      for (let i = 0; i < BUCKETS; i++) {
+        ctx.strokeStyle = `rgba(${bucketColors[i]},0.5)`;
+        ctx.stroke(paths[i]);
+      }
+      ctx.globalCompositeOperation = 'source-over';
+    };
+
+    const loop = () => {
+      step();
+      raf = requestAnimationFrame(loop);
+    };
+
+    const start = () => {
+      if (running || reduced.matches) return;
+      running = true;
+      raf = requestAnimationFrame(loop);
+    };
+
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(raf);
+    };
+
+    // A single dense still for visitors who asked for reduced motion — they
+    // get the artwork, just not the movement.
+    const still = () => {
+      stop();
+      resize();
+      ctx.fillStyle = BG;
+      ctx.fillRect(0, 0, w, h);
+      for (let i = 0; i < 900; i++) step(true);
+    };
+
+    const init = () => {
+      resize();
+      canvas.classList.add('is-ready');
+      if (reduced.matches) still();
+      else {
+        // Warm up off-screen so the field arrives already flowing instead of
+        // growing out from nothing.
+        for (let i = 0; i < TRAIL * EVERY; i++) step();
+        start();
+      }
+    };
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(
+        (entries) => entries.forEach((e) => (e.isIntersecting ? start() : stop())),
+        { threshold: 0 }
+      ).observe(canvas);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      document.hidden ? stop() : start();
+    });
+
+    window.addEventListener(
+      'pointermove',
+      (e) => {
+        const rect = canvas.getBoundingClientRect();
+        pointer.x = e.clientX - rect.left;
+        pointer.y = e.clientY - rect.top;
+        pointer.active =
+          pointer.x > -120 &&
+          pointer.x < rect.width + 120 &&
+          pointer.y > -120 &&
+          pointer.y < rect.height + 120;
+      },
+      { passive: true }
+    );
+
+    window.addEventListener('pointerleave', () => (pointer.active = false));
+
+    let resizeTimer = 0;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        resize();
+        if (reduced.matches) still();
+      }, 180);
+    });
+
+    reduced.addEventListener('change', () => (reduced.matches ? still() : start()));
+
+    init();
+  }
+</script>

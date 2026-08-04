@@ -1,0 +1,87 @@
+---
+import { site, nav } from '../data/site.js';
+import { isPlaceholder } from '../utils/placeholder.js';
+import Logo from './Logo.astro';
+
+const year = new Date().getFullYear();
+const activeLinks = site.links.filter((l) => l.label && l.href);
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a class="wordmark" href="/">
+          <Logo />
+          <span>{site.name}</span>
+        </a>
+        <p class="footer__blurb">{site.blurb}</p>
+      </div>
+
+      <div>
+        <h2 class="footer__title">Navigate</h2>
+        <ul class="footer__list">
+          {nav.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="footer__title">Contact</h2>
+        <ul class="footer__list">
+          <li>
+            {
+              isPlaceholder(site.email) ? (
+                <span>{site.email}</span>
+              ) : (
+                <a href={`mailto:${site.email}`}>{site.email}</a>
+              )
+            }
+          </li>
+          {
+            site.phone && (
+              <li>
+                {isPlaceholder(site.phone) ? (
+                  <span>{site.phone}</span>
+                ) : (
+                  <a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a>
+                )}
+              </li>
+            )
+          }
+          {
+            activeLinks.map((l) => (
+              <li>
+                {isPlaceholder(l.href) ? (
+                  <span>
+                    {l.label}: {l.href}
+                  </span>
+                ) : (
+                  <a href={l.href} rel="me noopener" target="_blank">
+                    {l.label}
+                  </a>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="footer__title">Location</h2>
+        <ul class="footer__list">
+          <li><span>{site.location}</span></li>
+          <li><span>{site.serviceArea}</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__base">
+      <span>&copy; {year} {site.legalName}. All rights reserved.</span>
+      <span>{site.domain}</span>
+    </div>
+  </div>
+</footer>

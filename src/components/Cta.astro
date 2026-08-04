@@ -1,0 +1,34 @@
+---
+interface Props {
+  heading: string;
+  /** Second line of the heading, painted with the refraction spectrum. */
+  headingAccent?: string;
+  body?: string;
+  label?: string;
+  href?: string;
+}
+
+const {
+  heading,
+  headingAccent,
+  body,
+  label = 'Start a project',
+  href = '/contact/',
+} = Astro.props;
+---
+
+<section class="section" style="padding-bottom:clamp(4rem,8vw,7rem)">
+  <hr class="rule rule--spectrum" />
+  <div class="container" data-reveal style="padding-top:clamp(3.5rem,7vw,6rem)">
+    <h2 class="display-l">
+      {heading}{headingAccent && <> <br /><span class="spectrum">{headingAccent}</span></>}
+    </h2>
+    {body && <p class="lede" style="margin-top:1.6rem">{body}</p>}
+    <div class="btn-row">
+      <a class="btn btn--primary" href={href}>{label}</a>
+      <button class="btn btn--secondary" data-cmdk-open type="button">
+        Search the site <kbd>⌘</kbd><kbd>K</kbd>
+      </button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Cta from '../components/Cta.astro';
+import { meta, about, ctas } from '../data/site.js';
+---
+
+<BaseLayout title={meta.about.title} description={meta.about.description}>
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <p class="label">{about.label}</p>
+        <h1 class="display-l">
+          {about.headingLead}<br /><span class="spectrum">{about.headingAccent}</span>
+        </h1>
+      </div>
+
+      <div class="split">
+        <div class="prose">
+          {about.story.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+
+        <aside class="card">
+          <h2 class="footer__title" style="margin-bottom:1.25rem">Company details</h2>
+          <dl>
+            {
+              about.facts.map((fact, i) => (
+                <div style={i === 0 ? '' : 'margin-top:1.25rem'}>
+                  <dt class="meta__key">{fact.key}</dt>
+                  <dd class="meta__val">{fact.value}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <hr class="rule" style="margin-bottom:clamp(3.5rem,7vw,5.5rem)" />
+
+      <div class="section__head" data-reveal>
+        <p class="label">{about.toolsLabel}</p>
+        <h2 class="display-m">{about.toolsHeading}</h2>
+        <p class="lede">{about.toolsLede}</p>
+      </div>
+
+      <div data-reveal>
+        {
+          about.stack.map((group) => (
+            <div class="stack-group">
+              <h3 class="stack-group__name">{group.group}</h3>
+              <ul class="tags">
+                {group.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <Cta heading={ctas.about.heading} headingAccent={ctas.about.accent} body={ctas.about.body} />
+</BaseLayout>

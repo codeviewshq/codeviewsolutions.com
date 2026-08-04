@@ -1,0 +1,173 @@
+---
+/**
+ * The shell every page renders into: <head> metadata, fonts, header, footer.
+ * Page-specific copy lives in src/data/site.js.
+ */
+
+// Inter, self-hosted. Same typeface Google Fonts serves, but bundled with the
+// site so there is no third-party request blocking the first paint. The
+// weight-only variable build covers 100–900 in a single 48 KB file.
+import '@fontsource-variable/inter/wght.css';
+import '../styles/global.css';
+
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CommandPalette from '../components/CommandPalette.astro';
+import { site } from '../data/site.js';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Path to a social share image inside /public. Must resolve absolute. */
+  image?: string;
+}
+
+const { title, description, image = '/og.png' } = Astro.props;
+
+// Open Graph requires absolute URLs — relative ones produce no preview
+// anywhere. Astro.site is set in astro.config.mjs.
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(image, Astro.site).href;
+
+// Helps Google associate the site with the business and its service area.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: site.legalName,
+  alternateName: site.name,
+  url: site.url,
+  description,
+  areaServed: 'US',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Old Bridge',
+    addressRegion: 'NJ',
+    addressCountry: 'US',
+  },
+  knowsAbout: [
+    'Custom software development',
+    'Artificial intelligence integration',
+    'Technical consulting',
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="canonical" href={canonical} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={site.legalName} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- The site is dark-only; this stops browser UI flashing white. -->
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0A0A0D" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.legalName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.legalName} — ${site.tagline}`} />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <script is:inline>
+      document.documentElement.classList.remove('no-js');
+    </script>
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <CommandPalette />
+
+    <script>
+      // Mobile navigation.
+      const navToggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+      const nav = document.querySelector<HTMLElement>('[data-nav]');
+
+      const setNav = (open: boolean) => {
+        nav?.setAttribute('data-open', String(open));
+        navToggle?.setAttribute('aria-expanded', String(open));
+      };
+
+      navToggle?.addEventListener('click', () => {
+        setNav(nav?.getAttribute('data-open') !== 'true');
+      });
+
+      nav?.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => setNav(false));
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') setNav(false);
+      });
+
+      // Deep links (from the command palette and the service rows) point at
+      // section anchors. The browser's own jump fires before the webfont has
+      // settled and lands short, so re-assert it once layout is final.
+      //
+      // `instant` is deliberate: html has scroll-behavior:smooth, and an
+      // inherited smooth scroll here would animate 1600px on arrival — and
+      // gets dropped entirely if the tab isn't in the foreground yet.
+      // Deliberately not inside requestAnimationFrame: rAF does not fire in a
+      // background tab, so a link opened in one would never land on its
+      // section. Jump now, then again after load once fonts have settled.
+      if (location.hash) {
+        const target = document.querySelector(location.hash);
+        if (target) {
+          const jump = () => target.scrollIntoView({ block: 'start', behavior: 'instant' });
+          jump();
+          window.addEventListener('load', jump, { once: true });
+        }
+      }
+
+      // Sections settle upward as they enter. Skipped entirely when the
+      // visitor has asked for reduced motion.
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const targets = document.querySelectorAll('[data-reveal]');
+
+      if (reduced || !('IntersectionObserver' in window)) {
+        targets.forEach((el) => el.classList.add('is-visible'));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.05 }
+        );
+        targets.forEach((el) => io.observe(el));
+      }
+    </script>
+  </body>
+</html>

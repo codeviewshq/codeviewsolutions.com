@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LightField from '../components/LightField.astro';
+---
+
+<BaseLayout
+  title="Page not found — CodeView Solutions LLC"
+  description="That page doesn't exist. Head back to the homepage or search the site."
+>
+  <section class="hero">
+    <LightField />
+    <div class="container hero__inner">
+      <div data-rise>
+        <p class="label" style="--i:0">Error 404</p>
+        <h1 class="display-xl hero__title" style="--i:1">
+          Nothing<br /><span class="spectrum">here.</span>
+        </h1>
+        <p class="hero__sub" style="--i:2">
+          This page doesn't exist, or it moved. Everything else is one keystroke away.
+        </p>
+        <div class="btn-row" style="--i:3">
+          <a class="btn btn--primary" href="/">Back to home</a>
+          <button class="btn btn--secondary" data-cmdk-open type="button">
+            Search the site <kbd>⌘</kbd><kbd>K</kbd>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

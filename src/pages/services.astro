@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ServiceDetail from '../components/ServiceDetail.astro';
+import Cta from '../components/Cta.astro';
+import { meta, services, sections, ctas } from '../data/site.js';
+
+const intro = sections.servicesIntro;
+---
+
+<BaseLayout title={meta.services.title} description={meta.services.description}>
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <p class="label">{intro.label}</p>
+        <h1 class="display-l">
+          {intro.headingLead}<br /><span class="spectrum">{intro.headingAccent}</span>
+        </h1>
+        <p class="lede">{intro.lede}</p>
+      </div>
+
+      {
+        services.map((service) => (
+          <ServiceDetail
+            id={service.id}
+            name={service.name}
+            body={service.body}
+            includes={service.includes}
+            meta={service.meta}
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <Cta
+    heading={ctas.services.heading}
+    headingAccent={ctas.services.accent}
+    body={ctas.services.body}
+    label={ctas.services.label}
+  />
+</BaseLayout>

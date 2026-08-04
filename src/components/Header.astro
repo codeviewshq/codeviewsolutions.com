@@ -1,0 +1,78 @@
+---
+import { site, nav } from '../data/site.js';
+import Logo from './Logo.astro';
+
+// Normalise so "/services" and "/services/" both mark the same link current.
+const trim = (p: string) => (p !== '/' ? p.replace(/\/+$/, '') : '/');
+const here = trim(Astro.url.pathname);
+---
+
+<header class="header">
+  <div class="container header__bar">
+    <a class="wordmark" href="/" aria-label={`${site.legalName} — home`}>
+      <Logo />
+      <span>{site.name}</span>
+    </a>
+
+    <nav class="nav" id="main-nav" data-nav aria-label="Main">
+      {
+        nav.map((item) => (
+          <a
+            class="nav__link"
+            href={item.href}
+            aria-current={trim(item.href) === here ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="header__actions">
+      <button
+        class="icon-btn"
+        data-cmdk-open
+        type="button"
+        aria-label="Open command palette. Keyboard shortcut: Control or Command K"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m20 20-3.5-3.5"></path>
+        </svg>
+      </button>
+
+      <a class="btn btn--primary btn--small header__cta" href="/contact/">Start a project</a>
+
+      <button
+        class="icon-btn nav-toggle"
+        data-nav-toggle
+        type="button"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+        aria-controls="main-nav"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M3 6h18M3 12h18M3 18h18"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>

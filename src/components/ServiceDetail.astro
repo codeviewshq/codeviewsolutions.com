@@ -1,0 +1,54 @@
+---
+/** Full service section used on the services page. */
+interface Entry {
+  key: string;
+  value: string;
+}
+
+interface Props {
+  id: string;
+  name: string;
+  body: string;
+  includes?: string[];
+  meta?: Entry[];
+}
+
+const { id, name, body, includes = [], meta = [] } = Astro.props;
+
+const paragraphs = body.split('\n\n').filter(Boolean);
+---
+
+<section class="detail" id={id} data-reveal>
+  <h2 class="display-m detail__title">{name}</h2>
+
+  <div class="split">
+    <div class="prose">
+      {paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+
+    <div>
+      {
+        includes.length > 0 && (
+          <ul class="features">
+            {includes.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+
+  {
+    meta.length > 0 && (
+      <dl class="meta">
+        {meta.map((entry) => (
+          <div>
+            <dt class="meta__key">{entry.key}</dt>
+            <dd class="meta__val">{entry.value}</dd>
+          </div>
+        ))}
+      </dl>
+    )
+  }
+</section>

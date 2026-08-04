@@ -1,0 +1,11 @@
+# Normalise line endings to LF in the repository. Without this, files
+# committed from Windows land as CRLF and every Linux CI checkout shows the
+# whole file as changed.
+* text=auto eol=lf
+
+# Never touch binaries.
+*.png  binary
+*.jpg  binary
+*.ico  binary
+*.woff binary
+*.woff2 binary

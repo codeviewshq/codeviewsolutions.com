@@ -1,0 +1,167 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { meta, contact, site } from '../data/site.js';
+import { isPlaceholder } from '../utils/placeholder.js';
+
+// The form only points at a real endpoint once a Formspree ID has been set in
+// src/data/site.js. Until then it refuses to submit and says so on the page —
+// a form that silently swallows enquiries is worse than one that admits it is
+// not wired up yet.
+const formConnected = !isPlaceholder(site.formspreeId);
+const formAction = formConnected ? `https://formspree.io/f/${site.formspreeId}` : undefined;
+
+const emailReady = !isPlaceholder(site.email);
+const phoneReady = site.phone && !isPlaceholder(site.phone);
+---
+
+<BaseLayout title={meta.contact.title} description={meta.contact.description}>
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <p class="label">{contact.label}</p>
+        <h1 class="display-l">
+          {contact.headingLead}<br /><span class="spectrum">{contact.headingAccent}</span>
+        </h1>
+        <p class="lede">{contact.intro}</p>
+      </div>
+
+      <div class="split">
+        <form
+          class="form"
+          method="POST"
+          action={formAction}
+          data-form-live={String(formConnected)}
+        >
+          {
+            !formConnected && (
+              <p class="notice">
+                <span class="notice__tag">Placeholder</span>
+                <span>
+                  This form isn't connected yet, so it won't send anything. Add your
+                  Formspree ID to <code>src/data/site.js</code> to switch it on — see the
+                  README. Visitors can still reach you by email.
+                </span>
+              </p>
+            )
+          }
+
+          <div class="field-row">
+            <label class="field-row__label" for="name">Name <span class="req">*</span></label>
+            <input id="name" name="name" type="text" autocomplete="name" required />
+          </div>
+
+          <div class="field-row">
+            <label class="field-row__label" for="email">Email <span class="req">*</span></label>
+            <input id="email" name="email" type="email" autocomplete="email" required />
+          </div>
+
+          <div class="field-row">
+            <label class="field-row__label" for="company">Company</label>
+            <input id="company" name="company" type="text" autocomplete="organization" />
+          </div>
+
+          <div class="field-row">
+            <label class="field-row__label" for="project">What do you need?</label>
+            <select id="project" name="project">
+              {contact.projectTypes.map((type) => <option value={type}>{type}</option>)}
+            </select>
+          </div>
+
+          <div class="field-row">
+            <label class="field-row__label" for="message">
+              Message <span class="req">*</span>
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              rows="7"
+              required
+              placeholder="What are you trying to build, and what's in the way?"></textarea>
+          </div>
+
+          <!-- Formspree spam trap. Hidden from people, tempting to bots. -->
+          <div class="gotcha" aria-hidden="true">
+            <label for="_gotcha">Leave this field empty</label>
+            <input id="_gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <input
+            type="hidden"
+            name="_subject"
+            value="New enquiry from codeviewsolutions.com"
+          />
+
+          <div style="margin-top:0.35rem">
+            <button class="btn btn--primary" type="submit">Send message</button>
+          </div>
+
+          <p class="notice" data-form-error hidden role="status">
+            <span class="notice__tag">Not sent</span>
+            <span>
+              The contact form hasn't been connected to a form service yet. Please email
+              instead — the address is listed beside this form.
+            </span>
+          </p>
+        </form>
+
+        <aside class="card">
+          <h2 class="footer__title" style="margin-bottom:1.35rem">{contact.directLabel}</h2>
+
+          <div class="contact-list">
+            <div>
+              <span class="contact-list__key">Email</span>
+              <span class="contact-list__val">
+                {emailReady ? <a href={`mailto:${site.email}`}>{site.email}</a> : site.email}
+              </span>
+            </div>
+
+            {
+              site.phone && (
+                <div>
+                  <span class="contact-list__key">Phone</span>
+                  <span class="contact-list__val">
+                    {phoneReady ? (
+                      <a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a>
+                    ) : (
+                      site.phone
+                    )}
+                  </span>
+                </div>
+              )
+            }
+
+            <div>
+              <span class="contact-list__key">Based in</span>
+              <span class="contact-list__val">{site.location}</span>
+            </div>
+
+            <div>
+              <span class="contact-list__key">Service area</span>
+              <span class="contact-list__val">{site.serviceArea}</span>
+            </div>
+
+            <div>
+              <span class="contact-list__key">Response time</span>
+              <span class="contact-list__val">Within one business day</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Block submission while the form has no endpoint, so a visitor never
+    // types out an enquiry and watches it disappear into a 404.
+    const form = document.querySelector<HTMLFormElement>('[data-form-live]');
+    const error = document.querySelector<HTMLElement>('[data-form-error]');
+
+    if (form && form.dataset.formLive !== 'true') {
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        error?.removeAttribute('hidden');
+        error?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      });
+    }
+  </script>
+</BaseLayout>

@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LightField from '../components/LightField.astro';
+import Cta from '../components/Cta.astro';
+import { meta, hero, services, credibility, sections, ctas } from '../data/site.js';
+---
+
+<BaseLayout title={meta.home.title} description={meta.home.description}>
+  <!-- HERO -->
+  <section class="hero">
+    <LightField />
+
+    <div class="container hero__inner">
+      <div data-rise>
+        <p class="label" style="--i:0">{hero.eyebrow}</p>
+
+        <button class="kbd-hint" data-cmdk-open type="button" style="--i:1">
+          Search this site
+          <kbd>⌘</kbd><kbd>K</kbd>
+        </button>
+
+        <h1 class="display-xl hero__title" style="--i:2">
+          {hero.headlineLead}<br /><span class="spectrum">{hero.headlineAccent}</span>
+        </h1>
+
+        <p class="hero__sub" style="--i:3">{hero.body}</p>
+
+        <div class="btn-row" style="--i:4">
+          <a class="btn btn--primary" href={hero.primaryCta.href}>{hero.primaryCta.label}</a>
+          <a class="btn btn--secondary" href={hero.secondaryCta.href}>
+            {hero.secondaryCta.label}
+          </a>
+        </div>
+
+        <dl class="facts" style="--i:5">
+          {
+            hero.facts.map((fact) => (
+              <div>
+                <dt class="facts__key">{fact.key}</dt>
+                <dd class="facts__val">{fact.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section">
+    <div class="container">
+      <div class="section__head" data-reveal>
+        <p class="label">{sections.homeServices.label}</p>
+        <h2 class="display-l">{sections.homeServices.heading}</h2>
+        <p class="lede">{sections.homeServices.lede}</p>
+      </div>
+    </div>
+
+    <div class="container" data-reveal>
+      {
+        services.map((service) => (
+          <a class="srow" href={`/services/#${service.id}`}>
+            <div class="srow__grid">
+              <h3 class="display-m srow__name">{service.name}</h3>
+              <p class="srow__desc">{service.summary}</p>
+              <svg
+                class="srow__go"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M7 17 17 7M9 7h8v8" />
+              </svg>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- WHY WORK WITH ME -->
+  <section class="section">
+    <div class="container">
+      <div class="section__head" data-reveal>
+        <p class="label">{credibility.label}</p>
+        <h2 class="display-l">{credibility.heading}</h2>
+        <p class="lede">{credibility.intro}</p>
+      </div>
+
+      <div class="qa" data-reveal>
+        {
+          credibility.items.map((item) => (
+            <div>
+              <h3 class="qa__q">{item.q}</h3>
+              <p class="qa__a">{item.a}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <Cta heading={ctas.home.heading} headingAccent={ctas.home.accent} body={ctas.home.body} />
+</BaseLayout>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- A beam entering a prism and leaving as three split rays. -->
+  <rect width="32" height="32" rx="7" fill="#0A0A0D"/>
+  <g stroke-linecap="round" fill="none">
+    <path d="M14.6 6.4 6.2 23.4h5" stroke="#6B6B78" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M3.4 15.6h5.2" stroke="#F5F6F7" stroke-width="2.2"/>
+    <path d="M15.8 12.6h12.6" stroke="#A855F7" stroke-width="2.2"/>
+    <path d="M16.4 17h12" stroke="#22D3EE" stroke-width="2.2"/>
+    <path d="M17 21.4h11.4" stroke="#FBBF24" stroke-width="2.2"/>
+  </g>
+</svg>
