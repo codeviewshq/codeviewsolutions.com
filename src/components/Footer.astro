@@ -1,5 +1,6 @@
 ---
 import { site, nav } from '../data/site.js';
+import { withBase } from '../utils/url.js';
 import { isPlaceholder } from '../utils/placeholder.js';
 import Logo from './Logo.astro';
 
@@ -11,7 +12,7 @@ const activeLinks = site.links.filter((l) => l.label && l.href);
   <div class="container">
     <div class="footer__grid">
       <div class="footer__brand">
-        <a class="wordmark" href="/">
+        <a class="wordmark" href={withBase('/')}>
           <Logo />
           <span>{site.name}</span>
         </a>
@@ -23,7 +24,7 @@ const activeLinks = site.links.filter((l) => l.label && l.href);
         <ul class="footer__list">
           {nav.map((item) => (
             <li>
-              <a href={item.href}>{item.label}</a>
+              <a href={withBase(item.href)}>{item.label}</a>
             </li>
           ))}
         </ul>

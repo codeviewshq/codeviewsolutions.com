@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import LightField from '../components/LightField.astro';
 import Cta from '../components/Cta.astro';
 import { meta, hero, services, credibility, sections, ctas } from '../data/site.js';
+import { withBase } from '../utils/url.js';
 ---
 
 <BaseLayout title={meta.home.title} description={meta.home.description}>
@@ -26,8 +27,8 @@ import { meta, hero, services, credibility, sections, ctas } from '../data/site.
         <p class="hero__sub" style="--i:3">{hero.body}</p>
 
         <div class="btn-row" style="--i:4">
-          <a class="btn btn--primary" href={hero.primaryCta.href}>{hero.primaryCta.label}</a>
-          <a class="btn btn--secondary" href={hero.secondaryCta.href}>
+          <a class="btn btn--primary" href={withBase(hero.primaryCta.href)}>{hero.primaryCta.label}</a>
+          <a class="btn btn--secondary" href={withBase(hero.secondaryCta.href)}>
             {hero.secondaryCta.label}
           </a>
         </div>
@@ -59,7 +60,7 @@ import { meta, hero, services, credibility, sections, ctas } from '../data/site.
     <div class="container" data-reveal>
       {
         services.map((service) => (
-          <a class="srow" href={`/services/#${service.id}`}>
+          <a class="srow" href={withBase(`/services/#${service.id}`)}>
             <div class="srow__grid">
               <h3 class="display-m srow__name">{service.name}</h3>
               <p class="srow__desc">{service.summary}</p>

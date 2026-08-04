@@ -1,15 +1,17 @@
 ---
 import { site, nav } from '../data/site.js';
+import { withBase } from '../utils/url.js';
 import Logo from './Logo.astro';
 
 // Normalise so "/services" and "/services/" both mark the same link current.
+// Compared against the based path, since Astro.url.pathname includes the base.
 const trim = (p: string) => (p !== '/' ? p.replace(/\/+$/, '') : '/');
 const here = trim(Astro.url.pathname);
 ---
 
 <header class="header">
   <div class="container header__bar">
-    <a class="wordmark" href="/" aria-label={`${site.legalName} — home`}>
+    <a class="wordmark" href={withBase('/')} aria-label={`${site.legalName} — home`}>
       <Logo />
       <span>{site.name}</span>
     </a>
@@ -19,8 +21,8 @@ const here = trim(Astro.url.pathname);
         nav.map((item) => (
           <a
             class="nav__link"
-            href={item.href}
-            aria-current={trim(item.href) === here ? 'page' : undefined}
+            href={withBase(item.href)}
+            aria-current={trim(withBase(item.href)) === here ? 'page' : undefined}
           >
             {item.label}
           </a>
@@ -50,7 +52,9 @@ const here = trim(Astro.url.pathname);
         </svg>
       </button>
 
-      <a class="btn btn--primary btn--small header__cta" href="/contact/">Start a project</a>
+      <a class="btn btn--primary btn--small header__cta" href={withBase('/contact/')}>
+        Start a project
+      </a>
 
       <button
         class="icon-btn nav-toggle"

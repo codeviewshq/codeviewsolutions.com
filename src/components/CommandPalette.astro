@@ -12,6 +12,7 @@
  */
 import { nav, services, site } from '../data/site.js';
 import { isPlaceholder } from '../utils/placeholder.js';
+import { withBase } from '../utils/url.js';
 
 type Command = {
   id: string;
@@ -31,7 +32,7 @@ const commands: Command[] = [
     label: item.label,
     group: 'Pages',
     icon: 'page' as const,
-    href: item.href,
+    href: withBase(item.href),
     keywords: item.label,
   })),
   ...services.map((service) => ({
@@ -39,7 +40,7 @@ const commands: Command[] = [
     label: service.name,
     group: 'Services',
     icon: 'service' as const,
-    href: `/services/#${service.id}`,
+    href: withBase(`/services/#${service.id}`),
     keywords: `${service.name} ${service.summary}`,
   })),
 ];
@@ -73,7 +74,7 @@ commands.push({
   label: 'Start a project',
   group: 'Actions',
   icon: 'mail',
-  href: '/contact/',
+  href: withBase('/contact/'),
   keywords: 'start project contact hire enquiry inquiry brief',
 });
 ---

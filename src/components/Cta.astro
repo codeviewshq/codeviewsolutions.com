@@ -1,4 +1,6 @@
 ---
+import { withBase } from '../utils/url.js';
+
 interface Props {
   heading: string;
   /** Second line of the heading, painted with the refraction spectrum. */
@@ -25,7 +27,7 @@ const {
     </h2>
     {body && <p class="lede" style="margin-top:1.6rem">{body}</p>}
     <div class="btn-row">
-      <a class="btn btn--primary" href={href}>{label}</a>
+      <a class="btn btn--primary" href={withBase(href)}>{label}</a>
       <button class="btn btn--secondary" data-cmdk-open type="button">
         Search the site <kbd>⌘</kbd><kbd>K</kbd>
       </button>

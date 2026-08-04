@@ -14,6 +14,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CommandPalette from '../components/CommandPalette.astro';
 import { site } from '../data/site.js';
+import { withBase } from '../utils/url.js';
 
 interface Props {
   title: string;
@@ -27,7 +28,8 @@ const { title, description, image = '/og.png' } = Astro.props;
 // Open Graph requires absolute URLs — relative ones produce no preview
 // anywhere. Astro.site is set in astro.config.mjs.
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL(image, Astro.site).href;
+// withBase, because /og.png lives under the base path on GitHub Pages.
+const ogImage = new URL(withBase(image), Astro.site).href;
 
 // Helps Google associate the site with the business and its service area.
 const jsonLd = {
@@ -86,9 +88,9 @@ const jsonLd = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={withBase('/favicon.svg')} />
+    <link rel="sitemap" href={withBase('/sitemap-index.xml')} />
 
     <script is:inline>
       document.documentElement.classList.remove('no-js');

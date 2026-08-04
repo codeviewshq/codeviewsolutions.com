@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import LightField from '../components/LightField.astro';
+import { withBase } from '../utils/url.js';
 ---
 
 <BaseLayout
@@ -19,7 +20,7 @@ import LightField from '../components/LightField.astro';
           This page doesn't exist, or it moved. Everything else is one keystroke away.
         </p>
         <div class="btn-row" style="--i:3">
-          <a class="btn btn--primary" href="/">Back to home</a>
+          <a class="btn btn--primary" href={withBase('/')}>Back to home</a>
           <button class="btn btn--secondary" data-cmdk-open type="button">
             Search the site <kbd>⌘</kbd><kbd>K</kbd>
           </button>

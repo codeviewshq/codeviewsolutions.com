@@ -35,6 +35,16 @@ jobs:
         uses: withastro/action@v3
         with:
           node-version: 20
+        env:
+          # GitHub Pages serves this repo from a subdirectory, so the build
+          # needs to know both the origin and the base path. Everywhere else
+          # (Vercel, Netlify, the custom domain) uses the defaults in
+          # astro.config.mjs and serves from the root.
+          #
+          # WHEN YOU POINT codeviewsolutions.com AT PAGES: delete this whole
+          # `env:` block and add a CNAME file — see README.md.
+          SITE_URL: https://codeviewshq.github.io
+          SITE_BASE: /codeviewsolutions.com
 
   deploy:
     needs: build
