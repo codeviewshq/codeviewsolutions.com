@@ -1,31 +1,45 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import LightField from '../components/LightField.astro';
 import { withBase } from '../utils/url.js';
 ---
 
 <BaseLayout
-  title="Page not found — CodeView Solutions LLC"
+  title="Sheet not found — CodeView Solutions LLC"
   description="That page doesn't exist. Head back to the homepage or search the site."
 >
-  <section class="hero">
-    <LightField />
-    <div class="container hero__inner">
-      <div data-rise>
-        <p class="label" style="--i:0">Error 404</p>
-        <h1 class="display-xl hero__title" style="--i:1">
-          Nothing<br /><span class="spectrum">here.</span>
-        </h1>
-        <p class="hero__sub" style="--i:2">
-          This page doesn't exist, or it moved. Everything else is one keystroke away.
-        </p>
-        <div class="btn-row" style="--i:3">
-          <a class="btn btn--primary" href={withBase('/')}>Back to home</a>
-          <button class="btn btn--secondary" data-cmdk-open type="button">
-            Search the site <kbd>⌘</kbd><kbd>K</kbd>
-          </button>
-        </div>
-      </div>
+  <section class="void" data-mark data-stage>
+    <!-- The review, performed on this sheet too: the claim is clouded and
+         the finding is tied back to it, measured off the live elements. -->
+    <svg class="markup" data-markup aria-hidden="true">
+      <path class="mk-cloud" data-draw></path>
+      <path class="mk-leader" data-draw></path>
+      <circle class="mk-dot" r="3.5"></circle>
+    </svg>
+
+
+    <p class="void__stamp">Rev 404 · sheet not in set</p>
+
+    <h1 class="sh__h1">This sheet is <em data-cloud>not in the set</em>.</h1>
+
+    <p class="note" data-note data-tag="REV 404 · SUPERSEDED">
+      Nothing is lost — every sheet is indexed. Open the finder and search it.
+    </p>
+
+    <p class="sh__lede" style="margin-top:0">
+      The page you asked for does not exist, or it has been superseded. Everything else on the
+      drawing set is one keystroke away.
+    </p>
+
+    <div class="stamp-row">
+      <a class="stamp" href={withBase('/')}>
+        Back to sheet 01
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+          <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="square"></path>
+        </svg>
+      </a>
+      <button class="stamp stamp--ghost" data-cmdk-open type="button">
+        Find on sheet <kbd data-mod>Ctrl</kbd><kbd>K</kbd>
+      </button>
     </div>
   </section>
 </BaseLayout>

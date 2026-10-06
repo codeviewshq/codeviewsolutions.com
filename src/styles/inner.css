@@ -1,0 +1,723 @@
+/* ==========================================================================
+   INNER SHEETS
+   Everything the services, about, contact, and 404 sheets need. Same four
+   inks, same line-weight hierarchy, same grid as global.css — nothing new is
+   introduced here, only applied.
+   ========================================================================== */
+
+/* The find control beside the masthead's routes. */
+.ts__find {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 0.95rem;
+  border: 0;
+  border-left: var(--w-hair) solid var(--rule);
+  background: transparent;
+  color: var(--graphite);
+  font: 500 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 90ms var(--snap), color 90ms var(--snap);
+}
+.ts__find:hover,
+.ts__find:focus-visible {
+  background: var(--ink);
+  color: var(--stock);
+}
+kbd {
+  font: 500 0.625rem/1 var(--f-tech);
+  border: var(--w-hair) solid currentColor;
+  padding: 0.15rem 0.3rem;
+}
+
+/* --------------------------------------------------------------------------
+   PAGE HEAD — the title block of an inner sheet
+   -------------------------------------------------------------------------- */
+.sh__h1 {
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.94;
+  max-width: 16ch;
+  text-wrap: balance;
+}
+
+/* --------------------------------------------------------------------------
+   PROSE — running text on a ruled sheet
+   -------------------------------------------------------------------------- */
+.prose {
+  max-width: 66ch;
+  display: grid;
+  gap: 1.1rem;
+}
+.prose p {
+  color: var(--graphite);
+  font-size: clamp(1rem, 0.97rem + 0.25vw, 1.125rem);
+}
+.prose strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   SERVICE DETAIL — a full clause with its schedule of inclusions
+   -------------------------------------------------------------------------- */
+.detail {
+  border-top: var(--w-div) solid var(--ink);
+  padding: clamp(2rem, 4vw, 3.5rem) 0;
+  scroll-margin-top: 5rem;
+}
+.detail__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: clamp(1.25rem, 2.4vw, 2rem);
+}
+.detail__no {
+  font: 600 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--red-ink);
+}
+.detail__title {
+  font-size: clamp(1.75rem, 3.6vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  flex: 1 1 18ch;
+}
+.detail__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(1.5rem, 3.5vw, 3.5rem);
+  align-items: start;
+}
+
+/* Inclusions are a numbered schedule, not a tick list. */
+.schedule {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  border-top: var(--w-key) solid var(--ink);
+  counter-reset: line;
+}
+.schedule li {
+  counter-increment: line;
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  gap: 0.9rem;
+  padding: 0.7rem 0;
+  border-bottom: var(--w-hair) solid var(--rule);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+.schedule li::before {
+  content: counter(line, decimal-leading-zero);
+  font: 500 0.75rem/1.5 var(--f-tech);
+  color: var(--red-ink);
+}
+
+/* --------------------------------------------------------------------------
+   FACT STRIP — the title block, reused on any sheet
+   -------------------------------------------------------------------------- */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  background: var(--ink);
+  gap: var(--w-hair);
+  border: var(--w-key) solid var(--ink);
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+.facts > div {
+  background: var(--stock);
+  padding: 0.85rem 1rem;
+  display: grid;
+  gap: 0.3rem;
+  align-content: start;
+}
+.facts dt {
+  font: 500 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--graphite);
+}
+.facts dd {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.facts dd a {
+  display: inline-block;
+  color: var(--ink);
+  text-underline-offset: 3px;
+}
+.facts dd a:hover {
+  color: var(--red-ink);
+}
+
+/* --------------------------------------------------------------------------
+   GROUPED TAGS — the "what we look after" plate
+   -------------------------------------------------------------------------- */
+.groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  background: var(--ink);
+  gap: var(--w-key);
+  border: var(--w-key) solid var(--ink);
+}
+.group {
+  background: var(--stock);
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
+.group__name {
+  font: 600 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--red-ink);
+  padding-bottom: 0.6rem;
+  border-bottom: var(--w-key) solid var(--ink);
+}
+.group ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+}
+.group li {
+  font-size: 0.9375rem;
+  padding: 0.5rem 0;
+  border-bottom: var(--w-hair) solid var(--rule);
+  color: var(--graphite);
+}
+.group li:last-child {
+  border-bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   FORMS — boxed fields on a ruled sheet
+   -------------------------------------------------------------------------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(1.5rem, 3.5vw, 3.5rem);
+  align-items: start;
+}
+.form {
+  display: grid;
+  gap: 0;
+  border: var(--w-key) solid var(--ink);
+}
+.field {
+  display: grid;
+  border-bottom: var(--w-key) solid var(--ink);
+}
+.field label {
+  font: 500 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--graphite);
+  padding: 0.7rem 0.9rem 0;
+}
+.field .req {
+  color: var(--red-ink);
+}
+.field input,
+.field select,
+.field textarea {
+  font-family: var(--f-sheet);
+  font-size: 1rem;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  padding: 0.35rem 0.9rem 0.75rem;
+  width: 100%;
+  border-radius: 0;
+  /* The insertion point is the marking pen, not the browser's default black. */
+  caret-color: var(--red-ink);
+}
+.field textarea {
+  resize: vertical;
+  min-height: 8rem;
+  line-height: 1.55;
+}
+
+/* The OS chevron is the one surface the sheet had not drawn. This one is a
+   drafting caret: two strokes at the sheet's own keyline weight, in the ink. */
+.field select {
+  appearance: none;
+  padding-right: 2.4rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 10'%3E%3Cpath d='M1 1 L7 8 L13 1' fill='none' stroke='%23000036' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  background-size: 12px 9px;
+}
+
+/* --------------------------------------------------------------------------
+   REVISION TABLE — the drawing device this world was missing
+   REV / STAGE / WHAT CHANGES / BY. It describes how an engagement is revised,
+   which is real; it is not a fabricated history of this website.
+   -------------------------------------------------------------------------- */
+.revtable {
+  width: 100%;
+  border-collapse: collapse;
+  border: var(--w-key) solid var(--ink);
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+  text-align: left;
+}
+.revtable caption {
+  text-align: left;
+  font: 600 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--graphite);
+  padding-bottom: 0.6rem;
+}
+.revtable th {
+  font: 600 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--stock);
+  background: var(--ink);
+  padding: 0.65rem 0.9rem;
+  white-space: nowrap;
+}
+.revtable td {
+  padding: 0.75rem 0.9rem;
+  border-bottom: var(--w-hair) solid var(--rule);
+  border-right: var(--w-hair) solid var(--rule);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  vertical-align: top;
+  color: var(--graphite);
+}
+.revtable td:last-child {
+  border-right: 0;
+}
+.revtable tr:last-child td {
+  border-bottom: 0;
+}
+.revtable .rev {
+  font: 600 0.8125rem/1.45 var(--f-tech);
+  color: var(--red-ink);
+  width: 4.5rem;
+}
+.revtable .stage {
+  color: var(--ink);
+  font-weight: 700;
+  width: 15rem;
+}
+.revtable .by {
+  font: 500 0.8125rem/1.45 var(--f-tech);
+  white-space: nowrap;
+  width: 1%;
+}
+
+@media (max-width: 52rem) {
+  .revtable,
+  .revtable tbody,
+  .revtable tr,
+  .revtable td {
+    display: block;
+    width: auto;
+  }
+  .revtable thead {
+    display: none;
+  }
+  .revtable tr {
+    border-bottom: var(--w-key) solid var(--ink);
+    padding: 0.5rem 0;
+  }
+  .revtable tr:last-child {
+    border-bottom: 0;
+  }
+  .revtable td {
+    border: 0;
+    padding: 0.2rem 0.9rem;
+  }
+  .revtable .stage {
+    padding-top: 0.5rem;
+  }
+}
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--graphite);
+  opacity: 0.8;
+}
+.field:focus-within {
+  background: var(--stock-2);
+}
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible {
+  outline: none;
+}
+.field:focus-within label {
+  color: var(--red-ink);
+}
+
+.form__submit {
+  padding: 0.9rem;
+  border-top: var(--w-div) solid var(--ink);
+}
+.form__submit .stamp {
+  width: 100%;
+  justify-content: center;
+  border: 0;
+}
+
+/* A form that is not wired up says so, in the sheet's own voice. */
+.notice {
+  display: grid;
+  gap: 0.45rem;
+  border: var(--w-key) solid var(--red);
+  padding: 0.85rem 0.9rem;
+  margin: 0.9rem;
+  font: 500 0.8125rem/1.5 var(--f-tech);
+  color: var(--red-ink);
+}
+.notice__tag {
+  justify-self: start;
+  background: var(--red-ink);
+  color: var(--stock);
+  font: 700 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.45rem;
+}
+.notice code {
+  font-family: var(--f-tech);
+  background: var(--stock-2);
+  padding: 0 0.25rem;
+}
+
+.gotcha input,
+.gotcha label {
+  width: 1px;
+  height: 1px;
+  padding: 0;
+}
+.gotcha {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The direct-contact plate beside the form. */
+.plate {
+  border: var(--w-key) solid var(--ink);
+}
+.plate__head {
+  font: 600 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  padding: 0.85rem 1rem;
+  border-bottom: var(--w-div) solid var(--ink);
+  background: var(--stock-2);
+}
+.plate__row {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.85rem 1rem;
+  border-bottom: var(--w-hair) solid var(--rule);
+}
+.plate__row:last-child {
+  border-bottom: 0;
+}
+.plate__key {
+  font: 500 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--graphite);
+}
+.plate__val {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+.plate__val a {
+  color: var(--ink);
+  text-underline-offset: 3px;
+}
+.plate__val a:hover {
+  color: var(--red-ink);
+}
+
+/* --------------------------------------------------------------------------
+   404 — a sheet that is not in the set
+   -------------------------------------------------------------------------- */
+.void {
+  min-height: min(72vh, 42rem);
+  display: grid;
+  align-content: center;
+  gap: 1.4rem;
+  padding: clamp(2.5rem, 6vw, 5rem) var(--gutter);
+  border-bottom: var(--w-div) solid var(--ink);
+}
+.void__stamp {
+  justify-self: start;
+  border: var(--w-div) solid var(--red);
+  color: var(--red-ink);
+  font: 700 0.75rem/1.5 var(--f-tech);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.6rem 0.8rem;
+  transform: rotate(-3deg);
+}
+
+/* --------------------------------------------------------------------------
+   COMMAND PALETTE — "find on sheet"
+   A drawing set has an index. This is it: ruled rows, mono labels, no radius,
+   no blur. It runs on <dialog>, so focus and Escape come from the platform.
+   -------------------------------------------------------------------------- */
+.cmdk {
+  width: min(40rem, calc(100vw - 2rem));
+  padding: 0;
+  border: var(--w-edge) solid var(--ink);
+  background: var(--stock);
+  color: var(--ink);
+  margin: 12vh auto auto;
+}
+.cmdk::backdrop {
+  background: rgba(0, 0, 54, 0.34);
+}
+.cmdk__search {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.9rem 1rem;
+  border-bottom: var(--w-div) solid var(--ink);
+  color: var(--red);
+}
+.cmdk__input {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--f-sheet);
+  font-size: 1.0625rem;
+  padding: 0;
+  caret-color: var(--red-ink);
+}
+.cmdk__input:focus-visible {
+  outline: none;
+}
+.cmdk__input::placeholder {
+  color: var(--graphite);
+}
+.cmdk__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: min(52vh, 26rem);
+  overflow-y: auto;
+}
+.cmdk__group {
+  font: 600 0.625rem/1 var(--f-tech);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--graphite);
+  padding: 0.85rem 1rem 0.45rem;
+}
+.cmdk__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1rem;
+  border-top: var(--w-hair) solid var(--rule);
+  cursor: pointer;
+  font-size: 0.9375rem;
+}
+.cmdk__item svg {
+  width: 15px;
+  height: 15px;
+  color: var(--graphite);
+  flex: none;
+}
+.cmdk__item[aria-selected='true'] {
+  background: var(--ink);
+  color: var(--stock);
+}
+.cmdk__item[aria-selected='true'] svg {
+  color: var(--red);
+}
+.cmdk__hint {
+  margin-left: auto;
+  font: 500 0.6875rem/1 var(--f-tech);
+  color: var(--graphite);
+}
+.cmdk__item[aria-selected='true'] .cmdk__hint {
+  color: var(--stock);
+}
+.cmdk__empty {
+  padding: 1.5rem 1rem;
+  color: var(--graphite);
+  font: 500 0.8125rem/1 var(--f-tech);
+}
+.cmdk__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.2rem;
+  padding: 0.7rem 1rem;
+  border-top: var(--w-div) solid var(--ink);
+  background: var(--stock-2);
+  font: 500 0.6875rem/1.6 var(--f-tech);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--graphite);
+}
+.cmdk__foot kbd {
+  margin-right: 0.2rem;
+}
+
+/* --------------------------------------------------------------------------
+   ADAPT
+   -------------------------------------------------------------------------- */
+@media (max-width: 66rem) {
+  .detail__grid,
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (pointer: coarse) {
+  .ts__find {
+    padding-block: 0.95rem;
+  }
+  /* A link in a ruled data row is still a tap target; padding alone left these
+     at 35px, so the floor is stated rather than approximated. */
+  .facts dd a,
+  .plate__val a,
+  .direct__val {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   MARKUP ON AN INNER SHEET
+   The hero lays its note out in a grid; an inner sheet is a normal block, so
+   the note needs its own room and the sheet needs to be a positioning context
+   for the overlay.
+   -------------------------------------------------------------------------- */
+.void {
+  position: relative;
+}
+.sh > .note,
+.void > .note {
+  margin-top: 1.5rem;
+  max-width: 40ch;
+}
+/* Same stacking on an inner sheet: the overlay is behind every text block. */
+.sh > .markup,
+.void > .markup {
+  z-index: 4;
+}
+.sh > .sh__head,
+.sh > .sh__lede,
+.sh > .note,
+.sh > .detail__grid,
+.sh > .prose,
+.sh > .facts,
+.void > *:not(.markup) {
+  position: relative;
+  z-index: 1;
+}
+.sh[data-stage] {
+  cursor: crosshair;
+}
+
+
+/* --------------------------------------------------------------------------
+   DIRECT CONTACT — what the enquiry sheet shows while the form has no
+   endpoint. Not a notice about a missing form: the actual way through.
+   -------------------------------------------------------------------------- */
+.direct {
+  border: var(--w-key) solid var(--ink);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+.direct__head {
+  font-size: clamp(1.5rem, 2.6vw, 2.35rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  max-width: 20ch;
+}
+.direct__lede {
+  color: var(--graphite);
+  max-width: 56ch;
+  line-height: 1.55;
+}
+.direct__list {
+  list-style: none;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  border-top: var(--w-div) solid var(--ink);
+}
+.direct__row {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: 0.5rem 1rem;
+  align-items: baseline;
+  padding: 0.85rem 0;
+  border-bottom: var(--w-hair) solid var(--rule);
+}
+.direct__key {
+  font: 500 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--graphite);
+}
+.direct__val {
+  font: 600 1.0625rem/1.3 var(--f-tech);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-decoration-thickness: var(--w-hair);
+  text-underline-offset: 0.28em;
+}
+.direct .stamp {
+  justify-self: start;
+  margin-top: 0.35rem;
+}
+
+@media (max-width: 40rem) {
+  .direct__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.3rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Touch: the audit measured inputs at 35px and the select at 39px.
+   -------------------------------------------------------------------------- */
+@media (pointer: coarse) {
+  .field input,
+  .field select {
+    min-height: 44px;
+  }
+}
+
+/* The result list scrolls; say so, rather than clipping a group header at the
+   boundary with no affordance that there is more below. */
+.cmdk__list {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule) transparent;
+  overscroll-behavior: contain;
+}
+.cmdk__list::-webkit-scrollbar {
+  width: 10px;
+}
+.cmdk__list::-webkit-scrollbar-thumb {
+  background: var(--rule);
+  border: 3px solid var(--stock);
+}
+.cmdk__list::-webkit-scrollbar-track {
+  background: var(--stock);
+}

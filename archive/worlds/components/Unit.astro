@@ -1,0 +1,44 @@
+---
+/**
+ * BRETON ORNAMENT PROGRAM — one plate unit.
+ *
+ * The plate book's whole argument is that a region's ornament can be reduced
+ * to a small set of numbered, repeatable units that anyone can build borders
+ * from. So these are generated on one 60×60 module with one stroke weight and
+ * one interlace logic, not drawn as six unrelated illustrations.
+ *
+ * Variants are the six plates: knot, chevron, lozenge, spiral, comb, cross.
+ */
+interface Props {
+  variant?: 'knot' | 'chevron' | 'lozenge' | 'spiral' | 'comb' | 'cross';
+  size?: number;
+  plate?: string;
+  class?: string;
+  label?: string;
+}
+
+const { variant = 'knot', size = 72, plate, class: className = '', label } = Astro.props;
+
+// Every path is laid on the same 60×60 module with the same 4-unit stroke, so
+// units butt together into a continuous border without adjustment.
+const PATHS: Record<string, string[]> = {
+  knot: [
+    'M10 30 A20 20 0 0 1 30 10 A20 20 0 0 1 50 30 A20 20 0 0 1 30 50 A20 20 0 0 1 10 30Z',
+    'M30 10 L30 50 M10 30 L50 30',
+  ],
+  chevron: ['M8 44 L20 20 L32 44 L44 20', 'M8 30 L20 6 L32 30 L44 6', 'M16 54 L52 54'],
+  lozenge: ['M30 6 L54 30 L30 54 L6 30Z', 'M30 18 L42 30 L30 42 L18 30Z'],
+  spiral: ['M30 8 A22 22 0 1 1 8 30 A15 15 0 1 1 30 45 A8 8 0 1 1 38 30'],
+  comb: ['M8 46 L52 46', 'M14 46 L14 14', 'M24 46 L24 20', 'M36 46 L36 20', 'M46 46 L46 14'],
+  cross: ['M30 6 L30 54 M6 30 L54 30', 'M18 18 L42 42 M42 18 L18 42'],
+};
+
+const paths = PATHS[variant] || PATHS.knot;
+---
+
+<figure class={`unit ${className}`}>
+  <svg viewBox="0 0 60 60" width={size} height={size} role={label ? 'img' : undefined} aria-label={label} aria-hidden={label ? undefined : 'true'}>
+    {paths.map((d) => <path d={d} />)}
+  </svg>
+  {plate && <figcaption>{plate}</figcaption>}
+</figure>

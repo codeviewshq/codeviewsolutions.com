@@ -20,7 +20,7 @@ type Command = {
   group: string;
   icon: 'page' | 'service' | 'mail' | 'copy';
   href?: string;
-  action?: 'copy-email';
+  action?: 'copy';
   value?: string;
   hint?: string;
   keywords?: string;
@@ -62,26 +62,49 @@ if (!isPlaceholder(site.email)) {
       label: 'Copy email address',
       group: 'Actions',
       icon: 'copy',
-      action: 'copy-email',
+      action: 'copy',
       value: site.email,
       keywords: `copy email clipboard ${site.email}`,
     }
   );
 }
 
+// Only offer the phone actions once a real number has been filled in.
+if (!isPlaceholder(site.phone)) {
+  const tel = site.phone.replace(/[^+\d]/g, '');
+  commands.push(
+    {
+      id: 'action-call',
+      label: 'Call us',
+      group: 'Actions',
+      icon: 'mail',
+      href: `tel:${tel}`,
+      hint: site.phone,
+      keywords: `call phone telephone ring ${site.phone} ${tel}`,
+    },
+    {
+      id: 'action-copy-phone',
+      label: 'Copy phone number',
+      group: 'Actions',
+      icon: 'copy',
+      action: 'copy',
+      value: site.phone,
+      keywords: `copy phone number clipboard ${site.phone}`,
+    }
+  );
+}
+
 commands.push({
   id: 'action-start',
-  label: 'Start a project',
+  label: 'Get a free website review',
   group: 'Actions',
   icon: 'mail',
   href: withBase('/contact/'),
-  keywords: 'start project contact hire enquiry inquiry brief',
+  keywords: 'free website review contact audit help enquiry inquiry',
 });
 ---
 
 <dialog class="cmdk" data-cmdk aria-label="Command palette">
-  <div class="cmdk__spectrum" aria-hidden="true"></div>
-
   <div class="cmdk__search">
     <svg
       width="17"
@@ -237,7 +260,7 @@ commands.push({
     const run = async (cmd: Command | undefined) => {
       if (!cmd) return;
 
-      if (cmd.action === 'copy-email' && cmd.value) {
+      if (cmd.action === 'copy' && cmd.value) {
         try {
           await navigator.clipboard.writeText(cmd.value);
           if (status) status.textContent = 'Copied';
@@ -253,14 +276,31 @@ commands.push({
       }
     };
 
+    // Whatever had focus when the palette opened gets it back on close, so a
+    // keyboard visitor is returned to their place instead of to <body>.
+    let opener: HTMLElement | null = null;
+
     const open = () => {
       if (dialog.open) return;
+      opener = document.activeElement as HTMLElement | null;
       input.value = '';
       active = 0;
       render();
       dialog.showModal();
       input.focus();
     };
+
+    dialog.addEventListener('close', () => {
+      // Opened from a control: give that control its focus back. Opened from
+      // the keyboard with nothing focused: land on the Find button so the tab
+      // order resumes in the header rather than restarting at the top.
+      const target =
+        opener && opener.isConnected && opener !== document.body
+          ? opener
+          : document.querySelector<HTMLElement>('[data-cmdk-open]');
+      target?.focus();
+      opener = null;
+    });
 
     // ⌘K on Mac, Ctrl+K elsewhere. "/" opens it too, the way search boxes do,
     // but not while the visitor is typing in a form.

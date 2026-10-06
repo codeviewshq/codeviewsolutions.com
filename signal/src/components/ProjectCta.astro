@@ -1,0 +1,9 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site.js';
+import { url } from '../utils/url.js';
+const { title = 'One partner for what comes next.', body = 'Tell us what you want to improve. We’ll help you find a sensible starting point.', label = 'Discuss your project', href = '/contact/' } = Astro.props;
+---
+<section class="project-cta">
+  <div class="wrap cta-grid"><div><h2>{title}</h2><p>{body}</p></div><div class="cta-actions"><a class="button" href={url(href)}>{label} <Icon /></a><a class="text-link" href={site.phoneHref}>Or call {site.phone} <Icon name="phone" size={18} /></a></div></div>
+</section>

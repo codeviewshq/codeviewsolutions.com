@@ -1,0 +1,16 @@
+---
+const { name = 'arrow', size = 24, class: className = '' } = Astro.props;
+const paths = {
+  arrow: 'M4 12h15m-6-6 6 6-6 6',
+  code: 'm8 6-6 6 6 6m8-12 6 6-6 6M14 3l-4 18',
+  compass: 'm16 8-3 5-5 3 3-5 5-3M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20',
+  workflow: 'M9 5H4v5h5V5Zm11 9h-5v5h5v-5ZM9 7h7v7M6 10v7h9',
+  check: 'm5 12 4 4L19 6',
+  shield: 'm12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4Zm-5 10 3 3 7-7',
+  lock: 'M6 10h12v11H6V10Zm2 0V6a4 4 0 0 1 8 0v4m-4 5v2',
+  phone: 'M7 3H4c-2 8 9 19 17 17v-3l-5-3-3 2-5-5 2-3-3-5Z',
+  plus: 'M12 5v14M5 12h14',
+  globe: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20M2 12h20M12 2c-5 6-5 14 0 20 5-6 5-14 0-20',
+};
+---
+<svg class={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d={paths[name] || paths.arrow} /></svg>

@@ -26,3 +26,6 @@ Thumbs.db
 # deploy tooling
 .vercel/
 .netlify/
+
+# design review scratch (screenshots, sidecar is committed separately)
+.impeccable/review/

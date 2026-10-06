@@ -1,10 +1,10 @@
 /**
- * Palette guard. The site is dark-only, so every pairing below has to clear
- * WCAG AA against the near-black surfaces. Run: npm run check:contrast
+ * Palette guard. THE REDLINE: drafting stock, the logo's navy as ink, one spot
+ * revision red, one graphite. Run: npm run check:contrast
  *
- * The accent is a refraction spectrum — violet through cyan into amber. All
- * three stops are checked independently, because gradient text is only as
- * readable as its darkest stop.
+ * The red is split by role on purpose — bright enough for a rule or a stroke,
+ * not quite bright enough for small text — so `--red` and `--red-ink` are
+ * checked separately at the thresholds each one actually has to meet.
  *
  * Keep these values in sync with the token block in src/styles/global.css.
  */
@@ -28,43 +28,46 @@ const ratio = (a, b) => {
 };
 
 const T = {
-  bg: '#0A0A0D',
-  surface: '#121217',
-  surface2: '#17171E',
-  border: '#1F1F27',
-  border2: '#2E2E3A',
-  text: '#F5F6F7',
-  muted: '#9B9BA6',
-  faint: '#82828E',
-  violet: '#A855F7',
-  cyan: '#22D3EE',
-  amber: '#FBBF24',
+  stock: '#EFEEE7',
+  stock2: '#E6E5DC',
+  ink: '#000036',
+  red: '#D8261B',
+  redInk: '#C21B12',
+  graphite: '#4E4E47',
+  rule: '#C6C5BA',
+  // Reversed out on the one dark field: the closing "issued for review" block.
+  // These are tokens in :root (--on-ink, --on-ink-dim, --red-lit), not literals.
+  issueBody: '#B9B9C9',
+  issueSeal: '#FF6A5E',
+  signoffKey: '#9A9AB4',
 };
 
 // [foreground, background, minimum ratio, label]
 // 4.5 = body text, 3.0 = large text (>=24px) and UI borders/graphics.
 const CHECKS = [
-  [T.text, T.bg, 4.5, 'primary text on page'],
-  [T.text, T.surface, 4.5, 'primary text on panel'],
-  [T.text, T.surface2, 4.5, 'primary text on raised panel'],
-  [T.muted, T.bg, 4.5, 'secondary text on page'],
-  [T.muted, T.surface, 4.5, 'secondary text on panel'],
-  [T.faint, T.bg, 4.5, 'small meta labels on page'],
-  [T.faint, T.surface, 4.5, 'small meta labels on panel'],
+  // Ink on stock — the body of every sheet.
+  [T.ink, T.stock, 4.5, 'ink on drafting stock'],
+  [T.ink, T.stock2, 4.5, 'ink on the tinted cell'],
+  [T.graphite, T.stock, 4.5, 'secondary text on stock'],
+  [T.graphite, T.stock2, 4.5, 'secondary text on the tinted cell'],
 
-  // Every spectrum stop, as small text and as a graphic.
-  [T.violet, T.bg, 4.5, 'spectrum stop 1 (violet) as text'],
-  [T.cyan, T.bg, 4.5, 'spectrum stop 2 (cyan) as text'],
-  [T.amber, T.bg, 4.5, 'spectrum stop 3 (amber) as text'],
-  [T.violet, T.surface, 4.5, 'violet as text on panel'],
-  [T.cyan, T.surface, 4.5, 'cyan as text on panel'],
-  [T.amber, T.surface, 4.5, 'amber as text on panel'],
-  [T.cyan, T.bg, 3.0, 'cyan focus ring against page'],
+  // The revision red, split by the job it is doing.
+  [T.redInk, T.stock, 4.5, 'red as small text (clause numbers, notes)'],
+  [T.redInk, T.stock2, 4.5, 'red as small text on the tinted cell'],
+  [T.red, T.stock, 3, 'red as a rule, stroke, or focus ring'],
 
-  [T.bg, T.text, 4.5, 'dark label on the light primary button'],
-  [T.border, T.bg, 1.15, 'hairline visible against page'],
-  [T.border2, T.surface, 1.15, 'stronger border visible against panel'],
+  // Reversed out: stamps and the issue block.
+  [T.stock, T.ink, 4.5, 'stock label on a stamped action'],
+  // Red behind text is always the darker red; the bright red is stroke-only.
+  [T.stock, T.redInk, 4.5, 'stock label on a red stamp'],
+  [T.issueBody, T.ink, 4.5, 'body copy on the issue block'],
+  [T.signoffKey, T.ink, 4.5, 'sign-off field labels on the issue block'],
+  [T.issueSeal, T.ink, 4.5, 'the issued-for-review seal'],
+
+  // Rules have to be visible without becoming decoration.
+  [T.rule, T.stock, 1.15, 'hairline visible against stock'],
 ];
+
 
 let failed = 0;
 for (const [fg, bg, min, label] of CHECKS) {

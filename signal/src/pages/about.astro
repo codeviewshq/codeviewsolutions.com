@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectCta from '../components/ProjectCta.astro';
+import Icon from '../components/Icon.astro';
+import { url } from '../utils/url.js';
+---
+<Layout title="About CodeView Solutions" description="A practical software and technology partner for small and midsize businesses. Clear decisions, useful software, and ownership from the start.">
+  <section class="inner-hero"><div class="wrap"><h1>Technology, with<br />the business in mind.</h1><p class="lede">CodeView Solutions helps small and midsize businesses build useful software, make better technical decisions, and bring AI into the work where it belongs.</p></div></section>
+  <section class="section"><div class="wrap section-split"><h2>A practical partner.<br />From idea to handover.</h2><div class="prose"><p>You do not need an in-house software department to make progress. You need someone who understands the problem, explains the options, and takes responsibility for the agreed work.</p><p>We connect software development, technical consulting, and AI integration around that need. The technology follows the business case, and the scope follows what is useful.</p><p>Good work leaves you in control: of the code, the accounts, the documentation, and the next decision.</p></div></div></section>
+  <section class="section section--tint"><div class="wrap"><div class="section-heading"><h2>What you can expect.</h2><p>The way we work matters as much as what we build.</p></div><div class="principles"><article><Icon name="compass" size={32} /><h3>Clarity before commitment.</h3><p>We explain options and tradeoffs in plain English, and agree the work and cost before it begins.</p></article><article><Icon name="code" size={32} /><h3>Useful over complicated.</h3><p>We choose the tools and approach around the problem. Complexity has to earn its place.</p></article><article><Icon name="lock" size={32} /><h3>Ownership stays with you.</h3><p>Your code and accounts remain yours. A clear handover is part of delivering the work.</p></article></div></div></section>
+  <section class="section"><div class="wrap section-split"><div><h2>Built around<br />your next step.</h2></div><div><p class="lede">A new application, an existing system that needs attention, or an idea that needs a second look. We help you work out where to begin.</p><a class="text-link" href={url('/services/')}>See how we can help <Icon size={20} /></a></div></div></section>
+  <ProjectCta title="Let’s make the next step clear." />
+</Layout>

@@ -1,0 +1,105 @@
+---
+/**
+ * THE REFRACTION TEST — examination-room shell. Self-contained; no global.css.
+ */
+import '@fontsource-variable/chivo/wght.css';
+import '@fontsource-variable/chivo-mono/wght.css';
+import '../styles/world-chart.css';
+
+import { withBase } from '../utils/url.js';
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#000036" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+  </head>
+  <body>
+    <!--
+      THESIS: The free website review, staged as an eye examination. It refuses
+      the category default — a gradient hero above three equal service cards —
+      by making the offer itself the thing being read: the headline IS the top
+      line of the chart, and the fine print IS the fine print.
+      OWN-WORLD: The scene sets the light. An exam happens in a dimmed room
+      with a lit chart on the far wall, so the chart panel is a committed navy
+      field (#000036, the logo's own) with white optotypes and a lit teal
+      acuity column, and the room around it is clinical near-white with a deep
+      teal signal. Chivo for the optotypes, Chivo Mono for the notation. Square
+      corners, hairline rules, no shadows.
+      STORY: A non-technical owner reads the offer down a legibility ramp,
+      answers "which is clearer, one or two?" on their own site, and books.
+      FIRST VIEWPORT: The chart wall, full bleed. Six ruled rows descending
+      from 20/200 to 20/20, acuity notation in the left margin, every row a
+      real line of the offer. Rows resolve from blur to sharp in sequence as
+      the lens settles. The action sits on the chart's own left margin line.
+      FORM: Ophthalmic examination — Snellen chart, phoropter, trial lens set;
+      candidate 1 of the grounded list, presented as the pick; seed key
+      685831a9.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with
+      the finish review, the verdict, DESIGN.md, and every shipping raster
+      carrying its provenance.
+    -->
+    <a class="skip" href="#chart">Skip to content</a>
+    <slot />
+    <script>
+      import { initBilling } from '../scripts/billing.js';
+      initBilling();
+
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* The lens settles: rows resolve from blur to sharp, largest first, the
+         way acuity comes back as the correction is dialled in. */
+      const chart = document.querySelector<HTMLElement>('#chart');
+      const rows = [...document.querySelectorAll<HTMLElement>('.row')];
+
+      if (chart && rows.length) {
+        if (reduced) {
+          chart.classList.add('is-focused');
+        } else {
+          // Only the lower rows carry blur, so the stagger starts at row 3.
+          rows.forEach((r, i) => {
+            r.style.transitionDelay = `${Math.max(0, i - 2) * 150}ms`;
+          });
+          // Once a row has resolved, drop its filter rather than holding a
+          // blur(0) compositing layer alive for the life of the page.
+          rows.forEach((r) =>
+            r.addEventListener('transitionend', () => { r.style.filter = 'none'; }, { once: true })
+          );
+          requestAnimationFrame(() => {
+            setTimeout(() => chart.classList.add('is-focused'), 200);
+          });
+        }
+      }
+
+      /* The phoropter: the same copy, the way it reads before and after. */
+      const refract = document.querySelector<HTMLElement>('[data-refract]');
+      if (refract) {
+        const buttons = [...refract.querySelectorAll<HTMLButtonElement>('.dial__btn')];
+        const label = refract.querySelector<HTMLElement>('.lens__label');
+        const setOption = (value: string) => {
+          refract.dataset.option = value;
+          buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.value === value)));
+          if (label) {
+            label.textContent =
+              value === '1' ? 'Option one — the site you have' : 'Option two — the site you could have';
+          }
+        };
+        buttons.forEach((b) => b.addEventListener('click', () => setOption(b.value)));
+        setOption('1');
+      }
+    </script>
+  </body>
+</html>
