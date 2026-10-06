@@ -1,0 +1,14 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { site, services } from '../data/site.js';
+import { url } from '../utils/url.js';
+---
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div class="footer-intro"><a href={url('/')} aria-label="CodeView Solutions — home"><Logo /></a><p>Better software.<br />Stronger business.</p><span>Working with businesses across the United States.</span></div>
+    <div class="footer-links"><h2>What we do</h2>{services.map(s => <a href={url(`/services/${s.slug}/`)}>{s.name}</a>)}<a href={url('/website-care/')}>Website redesign & care</a></div>
+    <div class="footer-links"><h2>Start a conversation</h2><a class="footer-phone" href={site.phoneHref}>{site.phone} <Icon size={18} /></a>{site.email && <a href={`mailto:${site.email}`}>{site.email}</a>}<a href={url('/contact/')}>Discuss your project</a><span>Reply within one business day.</span></div>
+  </div>
+  <div class="wrap footer-bottom"><span>© {new Date().getFullYear()} {site.legalName}</span><a href={url('/about/')}>About CodeView</a><span>Clear scope. Your code. A practical next step.</span></div>
+</footer>

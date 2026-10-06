@@ -1,0 +1,16 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import ProjectCta from '../components/ProjectCta.astro';
+import { plans } from '../data/site.js';
+import { url } from '../utils/url.js';
+---
+<Layout title="Website Redesign & Monthly Care Plans — CodeView Solutions" description="Modernize your website and keep it healthy with Care, Improve, and Grow monthly plans. Start with a free website review.">
+  <section class="inner-hero"><div class="wrap"><h1>A better website.<br />Looked after.</h1><p class="lede">Modernize the site you have. Keep it reliable, clear, and useful with one dependable partner for ongoing care.</p><a class="button" href={url('/contact/?service=website-review')}>Get a free website review <Icon /></a><p class="quiet-note">Free, plain-English review. No obligation.</p></div></section>
+  <section class="section"><div class="wrap"><div class="section-heading"><h2>Improve it. Care for it. Grow on it.</h2></div><div class="use-cases"><article><h3>Website refresh</h3><p>Clear messaging, responsive design, improved performance, and a launch that reflects the quality of your business.</p></article><article><h3>Monthly care</h3><p>Updates, monitoring, backups, and practical improvements that keep a useful website healthy.</p></article><article><h3>Reliable foundations</h3><p>Sensible hosting, integrations, and capacity planning as your website becomes more important to the business.</p></article></div></div></section>
+  <section class="section section--tint" id="plans"><div class="wrap" data-billing data-cycle="monthly"><div class="section-heading plans-heading"><div><h2>A plan you can plan around.</h2><p>Free consultation and first website design on every plan.</p></div><div class="billing-toggle" role="group" aria-label="Billing period" hidden><button type="button" data-cycle-btn="monthly" aria-pressed="true">Monthly</button><button type="button" data-cycle-btn="annual" aria-pressed="false">Yearly</button></div></div>
+  <div class="plans-grid">{plans.map(plan => <article class="plan"><h3>{plan.name}</h3><p>{plan.tagline}</p><div class="plan-price"><div data-price="monthly"><strong>{plan.monthly}</strong><span>/ month</span></div><div data-price="annual"><strong>{plan.annual}</strong><span>/ year</span><small>{plan.saving}</small></div></div><ul>{plan.includes.map(item => <li><Icon name="check" size={18} />{item}</li>)}</ul><a class="button button--outline" href={url(`/contact/?service=website-care&plan=${plan.id}`)}>Discuss {plan.name} <Icon size={20} /></a></article>)}</div>
+  <noscript><p class="quiet-note">Annual prices: Care $90, Improve $540, Grow $1,080. Ask us about yearly billing.</p></noscript>
+  <p class="pricing-note">These plans are for website care. Custom software, consulting, AI work, and larger projects are scoped separately. We agree the included work before starting; hosting and third-party costs are confirmed during scoping. You own your website, domain, accounts, and content. Website refreshes include a 90-day warranty on the agreed work.</p></div></section>
+  <ProjectCta title="Start with a free website review." body="Tell us the website address and what feels outdated, frustrating, or unreliable." label="Get a free website review" href="/contact/?service=website-review" />
+</Layout>

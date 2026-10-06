@@ -11,6 +11,17 @@ monthly care, and reliable growth infrastructure for businesses across the US.
 Built with [Astro](https://astro.build). It compiles to plain static HTML and CSS
 with roughly 2 KB of JavaScript, so it will run on any static host.
 
+## Standalone redesign options
+
+Two complete websites are available in their own independent folders:
+
+- [Signal](signal/README.md): navy and citron, angular CV logo; `cd signal` then `npm install` and `npm run dev` (http://localhost:4322).
+- [Evergreen](evergreen/README.md): ivory and forest, clay accents, curved CV logo; `cd evergreen` then `npm install` and `npm run dev` (http://localhost:4323).
+
+Both promote software development, consulting, and AI integration alongside website care. Each includes its own source, assets, lockfile, design system, and deployment configuration. They require Node.js 22.12 or newer. Choose the relevant folder as the deployment project root; the existing root website remains a separate application.
+
+The standalone versions use phone contact and a local project-brief composer by default. Configure and verify a real HTTPS contact endpoint before enabling enquiry delivery. See the folder READMEs for setup.
+
 ---
 
 ## Quick start
