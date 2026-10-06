@@ -2,40 +2,77 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ServiceDetail from '../components/ServiceDetail.astro';
 import Cta from '../components/Cta.astro';
-import { meta, services, sections, ctas } from '../data/site.js';
+import { meta, services, sections, ctas, plans } from '../data/site.js';
+import { withBase } from '../utils/url.js';
 
 const intro = sections.servicesIntro;
+
 ---
 
 <BaseLayout title={meta.services.title} description={meta.services.description}>
-  <section class="section">
-    <div class="container">
-      <div class="section__head">
-        <p class="label">{intro.label}</p>
-        <h1 class="display-l">
-          {intro.headingLead}<br /><span class="spectrum">{intro.headingAccent}</span>
-        </h1>
-        <p class="lede">{intro.lede}</p>
-      </div>
+  <!-- TITLE SHEET -->
+  <section class="sh" id="scope" data-sheet="00" data-mark data-stage>
+        <!-- The review, performed on this sheet too: the claim is clouded and
+             the finding is tied back to it, measured off the live elements. -->
+        <svg class="markup" data-markup aria-hidden="true">
+          <path class="mk-cloud" data-draw></path>
+          <path class="mk-leader" data-draw></path>
+          <circle class="mk-dot" r="3.5"></circle>
+        </svg>
 
+    <header class="sh__head">
+      <h1 class="sh__h1">{intro.headingLead} <em data-cloud>{intro.headingAccent}</em></h1>
+      <p class="sh__no">Scope of work · {intro.label}</p>
+    </header>
+    <p class="note" data-note data-tag="REV A · STANDING">
+      Every engagement here ends with you holding the code, the accounts, and
+      the documentation.
+    </p>
+
+    <p class="sh__lede">{intro.lede}</p>
+
+    <!-- The contents of the set, so the reader knows what is on this sheet. -->
+    <dl class="facts">
       {
-        services.map((service) => (
-          <ServiceDetail
-            id={service.id}
-            name={service.name}
-            body={service.body}
-            includes={service.includes}
-            meta={service.meta}
-          />
+        services.map((service, i) => (
+          <div>
+            <dt>Clause {i + 1}.0</dt>
+            <dd>
+              <a href={`#${service.id}`}>{service.name}</a>
+            </dd>
+          </div>
         ))
       }
-    </div>
+      <div>
+        <dt>Rates</dt>
+        <dd>
+          <a href={withBase('/#sheet-05')}>{plans.tiers[0].monthly.amount} a month and up</a>
+        </dd>
+      </div>
+    </dl>
   </section>
+
+  <!-- THE CLAUSES -->
+  <div class="sh" style="padding-block:0">
+    {
+      services.map((service, i) => (
+        <ServiceDetail
+          id={service.id}
+          index={i}
+          name={service.name}
+          body={service.body}
+          includes={service.includes}
+          meta={service.meta}
+        />
+      ))
+    }
+  </div>
 
   <Cta
     heading={ctas.services.heading}
     headingAccent={ctas.services.accent}
     body={ctas.services.body}
     label={ctas.services.label}
+    sheet="99"
   />
 </BaseLayout>

@@ -1,0 +1,139 @@
+---
+import AsciiLayout from '../../layouts/AsciiLayout.astro';
+import { site, nav, hero, services, process, credibility, sections, ctas, meta } from '../../data/site.js';
+import { withBase } from '../../utils/url.js';
+---
+
+<AsciiLayout title={meta.home.title} description={meta.home.description}>
+  <div class="term">
+    <header class="bar">
+      <a class="bar__brand" href={withBase('/')}>{site.legalName}</a>
+      <nav aria-label="Main">
+        {nav.map((item) => <a href={withBase(item.href)}>{item.label}</a>)}
+      </nav>
+    </header>
+
+    <!-- THE SCENE -->
+    <section class="scene" id="scene">
+      <pre class="ascii" data-ascii aria-hidden="true"></pre>
+
+      <div>
+        <h1 class="title">{hero.headlineLead} {hero.headlineAccent}</h1>
+        <p class="sub">{hero.body}</p>
+        <p class="assure">{hero.assurance}</p>
+
+        <div class="actions">
+          <a class="key key--solid" href={withBase(hero.primaryCta.href)}>{hero.primaryCta.label}</a>
+          <a class="key" href={withBase(hero.secondaryCta.href)}>{hero.secondaryCta.label}</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="rule" aria-hidden="true"></div>
+
+    <dl class="readout">
+      {
+        hero.facts.map((fact) => (
+          <div>
+            <dt>{fact.key}</dt>
+            <dd>{fact.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <!-- SERVICES -->
+    <div class="rule" aria-hidden="true"></div>
+    <section>
+      <div class="head">
+        <span>{sections.homeServices.label}</span>
+        <b>{sections.homeServices.heading}</b>
+      </div>
+      <p class="sub" style="margin-top:0">{sections.homeServices.lede}</p>
+
+      <div class="blocks" style="margin-top:1.75rem">
+        {
+          services.map((service, i) => (
+            <a class="block" href={withBase(`/services/#${service.id}`)}>
+              <span class="block__n">{String(i + 1).padStart(2, '0')}</span>
+              <span>
+                <span class="block__name">{service.name}</span>
+                <span class="block__desc">{service.summary}</span>
+              </span>
+              <span class="block__meta">
+                {
+                  service.meta.map((m) => (
+                    <span>
+                      {m.key}
+                      <b>{m.value}</b>
+                    </span>
+                  ))
+                }
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <div class="rule" aria-hidden="true"></div>
+    <section>
+      <div class="head">
+        <span>{process.label}</span>
+        <b>{process.heading}</b>
+      </div>
+      <p class="sub" style="margin-top:0">{process.intro}</p>
+
+      <ol class="seq" style="margin-top:1.75rem">
+        {
+          process.steps.map((step, i) => (
+            <li>
+              <span class="seq__n">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="seq__t">{step.title}</h3>
+              <p class="seq__b">{step.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <!-- NOTES -->
+    <div class="rule" aria-hidden="true"></div>
+    <section>
+      <div class="head">
+        <span>{credibility.label}</span>
+        <b>{credibility.heading}</b>
+      </div>
+      <p class="sub" style="margin-top:0">{credibility.intro}</p>
+
+      <div class="notes" style="margin-top:1.75rem">
+        {
+          credibility.items.map((item) => (
+            <div class="note">
+              <h3>{item.q}</h3>
+              <p>{item.a}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- CLOSE -->
+    <section class="close">
+      <h2 class="close__t">{ctas.home.heading} {ctas.home.accent}</h2>
+      <p class="close__b">{ctas.home.body}</p>
+      <div class="actions">
+        <a class="key key--solid" href={withBase('/contact/')}>{hero.primaryCta.label}</a>
+        <a class="key" href={withBase('/services/')}>See the services</a>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <span>{site.legalName}</span>
+      <span>{site.location}</span>
+      <span>Reply within one business day</span>
+      {nav.map((item) => <a href={withBase(item.href)}>{item.label}</a>)}
+    </footer>
+  </div>
+</AsciiLayout>

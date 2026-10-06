@@ -1,167 +1,193 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { meta, contact, site } from '../data/site.js';
+import { meta, contact, site, plans } from '../data/site.js';
 import { isPlaceholder } from '../utils/placeholder.js';
 
-// The form only points at a real endpoint once a Formspree ID has been set in
-// src/data/site.js. Until then it refuses to submit and says so on the page —
-// a form that silently swallows enquiries is worse than one that admits it is
-// not wired up yet.
+// The form only points at a real endpoint once a form ID has been set in
+// src/data/site.js. Until then the form is not rendered at all: a form that
+// cannot send is worse than no form, because the visitor spends the effort of
+// writing before finding out. The live channels are offered instead, and the
+// form returns on its own the moment an ID is set — nothing here needs editing.
 const formConnected = !isPlaceholder(site.formspreeId);
 const formAction = formConnected ? `https://formspree.io/f/${site.formspreeId}` : undefined;
 
-const emailReady = !isPlaceholder(site.email);
-const phoneReady = site.phone && !isPlaceholder(site.phone);
+const emailReady = Boolean(site.email) && !isPlaceholder(site.email);
+const phoneReady = Boolean(site.phone) && !isPlaceholder(site.phone);
+const telHref = phoneReady ? `tel:${site.phone.replace(/[^+\d]/g, '')}` : undefined;
+
+// What the fallback can honestly point at, named explicitly rather than
+// gestured at — "the details beside it" is false on a phone, where the panel
+// is stacked a long way below rather than beside anything.
+const channels = [
+  phoneReady ? { key: 'Phone', value: site.phone, href: telHref } : null,
+  emailReady ? { key: 'Email', value: site.email, href: `mailto:${site.email}` } : null,
+].filter(Boolean);
+
 ---
 
 <BaseLayout title={meta.contact.title} description={meta.contact.description}>
-  <section class="section">
-    <div class="container">
-      <div class="section__head">
-        <p class="label">{contact.label}</p>
-        <h1 class="display-l">
-          {contact.headingLead}<br /><span class="spectrum">{contact.headingAccent}</span>
-        </h1>
-        <p class="lede">{contact.intro}</p>
-      </div>
+  <section class="sh" id="enquiry" data-sheet="01" data-mark data-stage>
+        <!-- The review, performed on this sheet too: the claim is clouded and
+             the finding is tied back to it, measured off the live elements. -->
+        <svg class="markup" data-markup aria-hidden="true">
+          <path class="mk-cloud" data-draw></path>
+          <path class="mk-leader" data-draw></path>
+          <circle class="mk-dot" r="3.5"></circle>
+        </svg>
 
-      <div class="split">
-        <form
-          class="form"
-          method="POST"
-          action={formAction}
-          data-form-live={String(formConnected)}
-        >
-          {
-            !formConnected && (
-              <p class="notice">
-                <span class="notice__tag">Placeholder</span>
-                <span>
-                  This form isn't connected yet, so it won't send anything. Add your
-                  Formspree ID to <code>src/data/site.js</code> to switch it on — see the
-                  README. Visitors can still reach you by email.
-                </span>
+    <header class="sh__head">
+      <h1 class="sh__h1">{contact.headingLead} <em data-cloud>{contact.headingAccent}</em></h1>
+      <p class="sh__no">Enquiry sheet · {contact.label}</p>
+    </header>
+    <p class="note" data-note data-tag="REV A · COMMITTED">
+      We reply within one business day. The review itself carries no obligation.
+    </p>
+
+    <p class="sh__lede">{contact.intro}</p>
+
+    <div class="form-grid" style="margin-top:clamp(1.75rem,3vw,2.75rem)">
+      {
+        formConnected ? (
+          <form class="form" method="POST" action={formAction} data-form-live="true">
+            <div class="field">
+              <label for="name">Name <span class="req">*</span></label>
+              <input id="name" name="name" type="text" autocomplete="name" required />
+            </div>
+
+            <div class="field">
+              <label for="email">Email <span class="req">*</span></label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </div>
+
+            <div class="field">
+              <label for="website">Website address</label>
+              <input id="website" name="website" type="url" inputmode="url" placeholder="example.com" />
+            </div>
+
+            <div class="field">
+              <label for="company">Company</label>
+              <input id="company" name="company" type="text" autocomplete="organization" />
+            </div>
+
+            <div class="field">
+              <label for="project">What do you need?</label>
+              <select id="project" name="project">
+                {contact.projectTypes.map((type) => <option value={type}>{type}</option>)}
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="message">Message <span class="req">*</span></label>
+              <textarea
+                id="message"
+                name="message"
+                rows="7"
+                required
+                placeholder="Tell us what feels outdated, frustrating, or unreliable."></textarea>
+            </div>
+
+            <div class="gotcha" aria-hidden="true">
+              <label for="_gotcha">Leave this field empty</label>
+              <input id="_gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <input type="hidden" name="_subject" value="New enquiry from codeviewsolutions.com" />
+
+            <div class="form__submit">
+              <button class="stamp" type="submit">
+                Get a free website review
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+                  <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="square"></path>
+                </svg>
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div class="direct">
+            <h2 class="direct__head">
+              {channels.length ? 'Call and ask for a free review' : 'How to reach us'}
+            </h2>
+
+            {channels.length ? (
+              <p class="direct__lede">
+                The enquiry form is being rebuilt, so the quickest route right now is to
+                get in touch directly. Tell us the website address and what feels wrong
+                with it — that is enough to start a free review.
               </p>
-            )
-          }
+            ) : (
+              <p class="direct__lede">
+                The enquiry form is being rebuilt and no direct channel is published yet.
+                Please check back shortly.
+              </p>
+            )}
 
-          <div class="field-row">
-            <label class="field-row__label" for="name">Name <span class="req">*</span></label>
-            <input id="name" name="name" type="text" autocomplete="name" required />
+            {channels.length > 0 && (
+              <ul class="direct__list">
+                {channels.map((c) => (
+                  <li class="direct__row">
+                    <span class="direct__key">{c.key}</span>
+                    <a class="direct__val" href={c.href}>
+                      {c.value}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {phoneReady && (
+              <a class="stamp" href={telHref}>
+                Call {site.phone}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+                  <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="square"></path>
+                </svg>
+              </a>
+            )}
           </div>
+        )
+      }
 
-          <div class="field-row">
-            <label class="field-row__label" for="email">Email <span class="req">*</span></label>
-            <input id="email" name="email" type="email" autocomplete="email" required />
-          </div>
+      <div class="plate">
+        <p class="plate__head">{contact.directLabel}</p>
 
-          <div class="field-row">
-            <label class="field-row__label" for="company">Company</label>
-            <input id="company" name="company" type="text" autocomplete="organization" />
-          </div>
-
-          <div class="field-row">
-            <label class="field-row__label" for="project">What do you need?</label>
-            <select id="project" name="project">
-              {contact.projectTypes.map((type) => <option value={type}>{type}</option>)}
-            </select>
-          </div>
-
-          <div class="field-row">
-            <label class="field-row__label" for="message">
-              Message <span class="req">*</span>
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows="7"
-              required
-              placeholder="What are you trying to build, and what's in the way?"></textarea>
-          </div>
-
-          <!-- Formspree spam trap. Hidden from people, tempting to bots. -->
-          <div class="gotcha" aria-hidden="true">
-            <label for="_gotcha">Leave this field empty</label>
-            <input id="_gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
-          </div>
-
-          <input
-            type="hidden"
-            name="_subject"
-            value="New enquiry from codeviewsolutions.com"
-          />
-
-          <div style="margin-top:0.35rem">
-            <button class="btn btn--primary" type="submit">Send message</button>
-          </div>
-
-          <p class="notice" data-form-error hidden role="status">
-            <span class="notice__tag">Not sent</span>
-            <span>
-              The contact form hasn't been connected to a form service yet. Please email
-              instead — the address is listed beside this form.
-            </span>
-          </p>
-        </form>
-
-        <aside class="card">
-          <h2 class="footer__title" style="margin-bottom:1.35rem">{contact.directLabel}</h2>
-
-          <div class="contact-list">
-            <div>
-              <span class="contact-list__key">Email</span>
-              <span class="contact-list__val">
-                {emailReady ? <a href={`mailto:${site.email}`}>{site.email}</a> : site.email}
+        {
+          phoneReady && (
+            <div class="plate__row">
+              <span class="plate__key">Phone</span>
+              <span class="plate__val">
+                <a href={telHref}>{site.phone}</a>
               </span>
             </div>
+          )
+        }
 
-            {
-              site.phone && (
-                <div>
-                  <span class="contact-list__key">Phone</span>
-                  <span class="contact-list__val">
-                    {phoneReady ? (
-                      <a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a>
-                    ) : (
-                      site.phone
-                    )}
-                  </span>
-                </div>
-              )
-            }
-
-            <div>
-              <span class="contact-list__key">Based in</span>
-              <span class="contact-list__val">{site.location}</span>
+        {
+          emailReady && (
+            <div class="plate__row">
+              <span class="plate__key">Email</span>
+              <span class="plate__val">
+                <a href={`mailto:${site.email}`}>{site.email}</a>
+              </span>
             </div>
+          )
+        }
 
-            <div>
-              <span class="contact-list__key">Service area</span>
-              <span class="contact-list__val">{site.serviceArea}</span>
-            </div>
+        <div class="plate__row">
+          <span class="plate__key">Service area</span>
+          <span class="plate__val">{site.serviceArea}</span>
+        </div>
 
-            <div>
-              <span class="contact-list__key">Response time</span>
-              <span class="contact-list__val">Within one business day</span>
-            </div>
-          </div>
-        </aside>
+        <div class="plate__row">
+          <span class="plate__key">Response time</span>
+          <span class="plate__val">Within one business day</span>
+        </div>
+
+        <div class="plate__row">
+          <span class="plate__key">Plans start at</span>
+          <span class="plate__val">
+            {plans.tiers[0].monthly.amount} a month, after a free design
+          </span>
+        </div>
       </div>
     </div>
   </section>
-
-  <script>
-    // Block submission while the form has no endpoint, so a visitor never
-    // types out an enquiry and watches it disappear into a 404.
-    const form = document.querySelector<HTMLFormElement>('[data-form-live]');
-    const error = document.querySelector<HTMLElement>('[data-form-error]');
-
-    if (form && form.dataset.formLive !== 'true') {
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        error?.removeAttribute('hidden');
-        error?.scrollIntoView({ block: 'center', behavior: 'smooth' });
-      });
-    }
-  </script>
 </BaseLayout>

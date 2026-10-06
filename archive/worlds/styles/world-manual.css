@@ -1,0 +1,853 @@
+/* ==========================================================================
+   THE INSTRUCTION BOOK
+   The engagement as a numbered assembly sequence.
+
+   The page is a printed instruction booklet: a committed colour field edge to
+   edge, ruled cells rather than floating cards, one radius, one keyline
+   weight, and every illustration drawn from the same isometric part system.
+   Nothing here is a stock icon and nothing floats on a shadow.
+   ========================================================================== */
+
+:root {
+  /* --- The declared inks. --- */
+  --sky: #8fcdec;
+  --sky-2: #c2e5f6;
+  --ink: #000036;
+  --paper: #ffffff;
+  --brick: #d8232a;
+  --stud: #f5c518;
+
+  --line: 2px;
+  --line-heavy: 3px;
+  --r: 6px;
+
+  --pad: clamp(1.15rem, 3vw, 2.75rem);
+  --gap: clamp(0.75rem, 1.4vw, 1.15rem);
+
+  --f: 'Schibsted Grotesk Variable', system-ui, sans-serif;
+
+  /* Manual motion: a part travels its arrow and seats. Nothing drifts. */
+  --seat: cubic-bezier(0.16, 0.84, 0.3, 1);
+
+  color-scheme: light;
+  accent-color: var(--brick);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--sky);
+  color: var(--ink);
+  font-family: var(--f);
+  font-size: clamp(1rem, 0.96rem + 0.22vw, 1.0625rem);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* --- Browser surfaces --- */
+::selection {
+  background: var(--ink);
+  color: var(--stud);
+}
+:focus-visible {
+  outline: var(--line-heavy) solid var(--brick);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+::-webkit-scrollbar {
+  width: 14px;
+}
+::-webkit-scrollbar-track {
+  background: var(--sky-2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ink);
+  border: 3px solid var(--sky-2);
+  border-radius: 7px;
+}
+
+.skip {
+  position: fixed;
+  top: 0.6rem;
+  left: 0.6rem;
+  z-index: 90;
+  transform: translateY(-160%);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.7rem 1.1rem;
+  border-radius: var(--r);
+  font-weight: 700;
+  text-decoration: none;
+}
+.skip:focus-visible {
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   THE PART SYSTEM
+   -------------------------------------------------------------------------- */
+.plate__top {
+  fill: var(--plate);
+}
+.plate__right {
+  fill: color-mix(in srgb, var(--plate) 78%, var(--ink));
+}
+.plate__left {
+  fill: color-mix(in srgb, var(--plate) 58%, var(--ink));
+}
+.plate__stud-wall {
+  fill: color-mix(in srgb, var(--plate) 80%, var(--ink));
+}
+.plate__stud-top {
+  fill: color-mix(in srgb, var(--plate) 118%, var(--paper));
+}
+.plate__g > * {
+  stroke: var(--ink);
+  stroke-width: 2.4;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* --------------------------------------------------------------------------
+   THE BOOKLET SHELL
+   -------------------------------------------------------------------------- */
+.book {
+  position: relative;
+  display: grid;
+  grid-template-columns: 13.5rem minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+/* The contents column is a page edge, so it runs the full height of the
+   booklet rather than stopping where the sticky panel ends. */
+.book::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 13.5rem;
+  background: var(--paper);
+  border-right: var(--line-heavy) solid var(--ink);
+}
+
+/* The booklet's own contents spine — a real index, and the step tracker. */
+.spine {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  background: var(--paper);
+  border-right: var(--line-heavy) solid var(--ink);
+  padding: 1.15rem;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 1.25rem;
+  z-index: 20;
+}
+.spine__brand {
+  color: inherit;
+  text-decoration: none;
+  display: grid;
+  gap: 0.55rem;
+  justify-items: start;
+  border: var(--line) solid var(--ink);
+  border-radius: var(--r);
+  padding: 0.75rem;
+}
+.spine__mark {
+  width: 40px;
+  height: auto;
+  color: var(--ink);
+}
+.spine__name {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+}
+.spine__nav {
+  display: grid;
+  gap: 0.3rem;
+  align-content: start;
+  min-width: 0;
+}
+.spine__link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--r);
+  text-decoration: none;
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: var(--line) solid transparent;
+}
+.spine__link b {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 4px;
+  background: var(--sky-2);
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex: none;
+}
+.spine__link:hover,
+.spine__link:focus-visible,
+.spine__link[aria-current='true'] {
+  border-color: var(--ink);
+  background: var(--sky-2);
+}
+.spine__link[aria-current='true'] b {
+  background: var(--brick);
+  color: var(--paper);
+}
+.spine__foot {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  border-top: var(--line) solid var(--ink);
+  padding-top: 0.75rem;
+}
+
+.pages {
+  min-width: 0;
+}
+
+/* --------------------------------------------------------------------------
+   PAGES
+   -------------------------------------------------------------------------- */
+.page {
+  padding: clamp(2rem, 4.5vw, 4rem) var(--pad);
+  border-bottom: var(--line-heavy) solid var(--ink);
+}
+.page--paper {
+  background: var(--paper);
+}
+
+/* The stud grid: the alignment the whole manual is drawn against. */
+.page--grid {
+  background-image: radial-gradient(circle at center, rgba(0, 0, 54, 0.13) 2px, transparent 2.5px);
+  background-size: 34px 34px;
+}
+
+.page__head {
+  display: grid;
+  gap: 0.8rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+.page__title {
+  max-width: 19ch;
+  font-size: clamp(1.9rem, 4vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+.page__lede {
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.1875rem);
+  max-width: 52ch;
+}
+
+/* --------------------------------------------------------------------------
+   COVER
+   -------------------------------------------------------------------------- */
+.cover {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+  padding-block: clamp(2.5rem, 5vw, 5rem);
+}
+.cover__title {
+  font-size: clamp(2.75rem, 7vw, 6rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+  text-wrap: balance;
+  max-width: 13ch;
+}
+.cover__sub {
+  font-size: clamp(1.0625rem, 1rem + 0.5vw, 1.375rem);
+  max-width: 44ch;
+  margin-top: 1.35rem;
+}
+.cover__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: clamp(1.5rem, 2.6vw, 2.25rem);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.95rem 1.4rem;
+  border-radius: var(--r);
+  border: var(--line) solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 800;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  transition: transform 130ms var(--seat), background 130ms linear;
+}
+.btn:hover,
+.btn:focus-visible {
+  background: var(--brick);
+  transform: translateY(-2px);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn--quiet {
+  background: var(--paper);
+  color: var(--ink);
+}
+.btn--quiet:hover,
+.btn--quiet:focus-visible {
+  background: var(--stud);
+}
+.btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* The parts panel: what is actually in the set. */
+.parts {
+  background: var(--paper);
+  border: var(--line-heavy) solid var(--ink);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.parts__head {
+  padding: 0.85rem 1.1rem;
+  border-bottom: var(--line) solid var(--ink);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.parts__row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.75rem 1.1rem;
+  border-bottom: var(--line) solid rgba(0, 0, 54, 0.14);
+}
+.parts__row:last-child {
+  border-bottom: 0;
+}
+.parts__row svg {
+  flex: none;
+}
+.parts__key {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 54, 0.66);
+}
+.parts__val {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+/* --------------------------------------------------------------------------
+   STEPS
+   -------------------------------------------------------------------------- */
+/* Four steps, so the run never orphans one onto a second row. */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap);
+}
+@media (max-width: 78rem) {
+  .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 40rem) {
+  .steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.step {
+  background: var(--paper);
+  border: var(--line-heavy) solid var(--ink);
+  border-radius: var(--r);
+  padding: 1.15rem;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 0.85rem;
+  position: relative;
+  overflow: hidden;
+}
+.step__no {
+  font-size: clamp(2.75rem, 5vw, 4.25rem);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+}
+
+/* The call-out: the part, at size, before it is placed. */
+.step__callout {
+  border: var(--line) solid var(--ink);
+  border-radius: var(--r);
+  background: var(--sky-2);
+  padding: 0.9rem;
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  position: relative;
+}
+/* Armed by script only: with no JS, every part is simply in place. */
+.step__part {
+  transition: transform 520ms var(--seat), opacity 200ms linear;
+}
+.is-armed .step__part {
+  transform: translateY(-26px);
+  opacity: 0;
+}
+.is-armed.is-seated .step__part {
+  transform: none;
+  opacity: 1;
+}
+.step__arrow {
+  width: 20px;
+  height: 34px;
+  color: var(--brick);
+  justify-self: center;
+}
+.step__arrow path {
+  stroke: currentColor;
+  stroke-width: 3;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.step__title {
+  font-size: 1.1875rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.step__body {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   SETS (the services)
+   -------------------------------------------------------------------------- */
+.sets {
+  display: grid;
+  gap: var(--gap);
+}
+.set {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: clamp(1rem, 2.4vw, 2.25rem);
+  align-items: start;
+  background: var(--paper);
+  border: var(--line-heavy) solid var(--ink);
+  border-radius: var(--r);
+  padding: clamp(1.15rem, 2.2vw, 1.9rem);
+}
+.set__name {
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-bottom: 0.55rem;
+}
+.set__name a {
+  color: inherit;
+  text-decoration: none;
+}
+.set__name a:hover,
+.set__name a:focus-visible {
+  color: var(--brick);
+}
+.set__summary {
+  font-size: 0.9375rem;
+}
+.set__list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0;
+  border-top: var(--line) solid rgba(0, 0, 54, 0.16);
+}
+.set__list li {
+  display: grid;
+  grid-template-columns: 1.75rem 1fr;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  border-bottom: var(--line) solid rgba(0, 0, 54, 0.16);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+.set__list b {
+  font-weight: 800;
+  color: var(--brick);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------------------
+   BUILDER'S QUESTIONS
+   -------------------------------------------------------------------------- */
+.qs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+  gap: var(--gap);
+}
+.q {
+  background: var(--sky-2);
+  border: var(--line) solid var(--ink);
+  border-radius: var(--r);
+  padding: 1.05rem 1.15rem;
+}
+.q h3 {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  margin-bottom: 0.4rem;
+}
+.q p {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   FINISHED MODEL (the close)
+   -------------------------------------------------------------------------- */
+.finish {
+  background: var(--ink);
+  color: var(--paper);
+  border-bottom: 0;
+}
+.finish__title {
+  font-size: clamp(2.1rem, 5.4vw, 4.25rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.96;
+  max-width: 15ch;
+  text-wrap: balance;
+}
+.finish__body {
+  max-width: 50ch;
+  margin-top: 1.1rem;
+  color: #cfe6f4;
+  font-size: clamp(1rem, 0.95rem + 0.35vw, 1.1875rem);
+}
+.finish .btn {
+  background: var(--stud);
+  color: var(--ink);
+  border-color: var(--stud);
+}
+.finish .btn:hover,
+.finish .btn:focus-visible {
+  background: var(--paper);
+  border-color: var(--paper);
+}
+.finish .btn--quiet {
+  background: transparent;
+  color: var(--paper);
+  border-color: var(--paper);
+}
+.finish .btn--quiet:hover,
+.finish .btn--quiet:focus-visible {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.colophon {
+  background: var(--paper);
+  padding: 1.1rem var(--pad);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.4rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.colophon a {
+  color: var(--ink);
+  text-underline-offset: 3px;
+}
+.colophon a:hover {
+  color: var(--brick);
+}
+
+/* --------------------------------------------------------------------------
+   ADAPT
+   -------------------------------------------------------------------------- */
+@media (max-width: 68rem) {
+  .cover {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .set {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .set__list {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 56rem) {
+  .book {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .book::before {
+    display: none;
+  }
+  .spine {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: var(--line-heavy) solid var(--ink);
+    grid-template-rows: none;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+  }
+  .spine {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  /* The contents strip scrolls inside its own track rather than pushing the
+     page wider than the viewport. */
+  .spine__nav {
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    overflow-x: auto;
+    gap: 0.4rem;
+    min-width: 0;
+    max-width: 100%;
+    padding-bottom: 0.25rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .spine__link {
+    white-space: nowrap;
+  }
+  .spine__foot {
+    display: none;
+  }
+  .set {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .set > .plate {
+    justify-self: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .step__part {
+    transform: none;
+    opacity: 1;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (pointer: coarse) {
+  .spine__link {
+    min-height: 44px;
+  }
+  .colophon a {
+    display: inline-block;
+    padding-block: 0.8rem;
+  }
+  .set__name a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
+/* The home link is a tap target like any other. */
+@media (pointer: coarse) {
+  .spine__brand {
+    min-height: 44px;
+    align-items: center;
+  }
+}
+
+/* The switch decides which figure shows; CSS does the showing, so the monthly
+   column is still correct with no script at all. */
+[data-billing][data-cycle='monthly'] [data-when='annual'],
+[data-billing][data-cycle='annual'] [data-when='monthly'] {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   PLANS — the sets you can buy, priced on the box
+   -------------------------------------------------------------------------- */
+.cycle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
+}
+.cycle__group {
+  display: flex;
+  border: var(--line-heavy) solid var(--ink);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.cycle__btn {
+  font-family: var(--f);
+  font-size: 0.9375rem;
+  font-weight: 800;
+  padding: 0.75rem 1.25rem;
+  border: 0;
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.cycle__btn + .cycle__btn {
+  border-left: var(--line) solid var(--ink);
+}
+.cycle__btn[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--paper);
+}
+.cycle__hint {
+  font-weight: 700;
+  color: var(--brick);
+  font-size: 0.9375rem;
+}
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap);
+}
+.plan {
+  background: var(--paper);
+  border: var(--line-heavy) solid var(--ink);
+  border-radius: var(--r);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.plan__box {
+  border: var(--line) solid var(--ink);
+  border-radius: var(--r);
+  background: var(--sky-2);
+  padding: 0.9rem;
+  display: grid;
+  justify-items: center;
+}
+.plan__name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+.plan__tag {
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+.plan__price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  border-top: var(--line) solid var(--ink);
+  border-bottom: var(--line) solid var(--ink);
+  padding: 0.8rem 0;
+}
+.plan__price b {
+  font-size: clamp(2rem, 3.4vw, 2.85rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+.plan__price i {
+  font-style: normal;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.plan__save {
+  background: var(--stud);
+  border: var(--line) solid var(--ink);
+  border-radius: 4px;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  justify-self: start;
+  width: fit-content;
+}
+.plan__list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0;
+}
+.plan__list li {
+  display: grid;
+  grid-template-columns: 1.4rem 1fr;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  padding: 0.45rem 0;
+  border-bottom: var(--line) solid rgba(0, 0, 54, 0.14);
+}
+.plan__list li::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border: var(--line) solid var(--brick);
+  border-radius: 3px;
+  margin-top: 0.28rem;
+}
+.plan .btn {
+  margin-top: auto;
+  justify-content: center;
+}
+.plan__foot {
+  grid-column: 1 / -1;
+  font-size: 0.875rem;
+  max-width: 80ch;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 68rem) {
+  .plans {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

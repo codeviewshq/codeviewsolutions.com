@@ -1,0 +1,109 @@
+---
+/**
+ * THE INSTRUCTION BOOK — booklet shell. Self-contained; no global.css.
+ */
+import '@fontsource-variable/schibsted-grotesk/wght.css';
+import '../styles/world-manual.css';
+
+import { withBase } from '../utils/url.js';
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#8FCDEC" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+  </head>
+  <body>
+    <!--
+      THESIS: The engagement as a numbered assembly sequence. It refuses the
+      category default — a gradient hero above three equal service cards —
+      because this buyer's real fear is not being able to follow what happens
+      next, and an instruction book is the most legible answer to that fear
+      ever printed.
+      OWN-WORLD: A committed instruction-page sky field #8FCDEC edge to edge,
+      the logo's navy #000036 as line and type, white plates, brick red for
+      arrows and counts, one stud yellow. One 6px radius, one 2/3px keyline,
+      no shadows. Schibsted Grotesk at 800 for everything structural. Every
+      illustration is generated from one isometric part system; no stock icons.
+      STORY: A non-technical owner reads four numbered steps, sees exactly
+      which piece goes where, and books the free review.
+      FIRST VIEWPORT: Cover spread. Contents spine locked left with numbered
+      page links; the title set enormous across the left two thirds of the sky
+      field; a white PARTS IN THIS SET panel on the right listing what the
+      engagement actually contains, each row with its own drawn part.
+      FORM: Brick build-instruction booklet; dealt challenger
+      games-toys-physics-play-brick-build-instructions, verdict competitive on
+      product clarity; seed key 685831a9.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with
+      the finish review, the verdict, DESIGN.md, and every shipping raster
+      carrying its provenance.
+    -->
+    <a class="skip" href="#page-1">Skip to content</a>
+    <slot />
+    <script>
+      import { initBilling } from '../scripts/billing.js';
+      initBilling();
+
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* The manual's one authored motion: a part travels its arrow and seats.
+         It happens once per step, when that step is actually being read. */
+      if (!reduced) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (!e.isIntersecting) return;
+              const el = e.target as HTMLElement;
+              const delay = Number(el.dataset.seat || 0) * 110;
+              setTimeout(() => el.classList.add('is-seated'), delay);
+              io.unobserve(el);
+            });
+          },
+          { threshold: 0.35 }
+        );
+        document.querySelectorAll('[data-seat]').forEach((el) => {
+          el.classList.add('is-armed');
+          io.observe(el);
+        });
+      } else {
+        // Reduced motion: nothing is armed, so the parts are already placed.
+      }
+
+      /* The spine is a contents page, so it has to know which page you are on. */
+      const links = [...document.querySelectorAll<HTMLAnchorElement>('.spine__link')];
+      const pages = links
+        .map((l) => document.querySelector<HTMLElement>(l.getAttribute('href') || ''))
+        .filter(Boolean) as HTMLElement[];
+
+      if (pages.length) {
+        let frame = 0;
+        const mark = () => {
+          frame = 0;
+          const line = innerHeight * 0.35;
+          let index = 0;
+          pages.forEach((p, i) => {
+            if (p.getBoundingClientRect().top <= line) index = i;
+          });
+          links.forEach((l, i) => l.setAttribute('aria-current', String(i === index)));
+        };
+        addEventListener('scroll', () => {
+          if (!frame) frame = requestAnimationFrame(mark);
+        }, { passive: true });
+        mark();
+      }
+    </script>
+  </body>
+</html>

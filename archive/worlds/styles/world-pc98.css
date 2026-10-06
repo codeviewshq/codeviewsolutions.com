@@ -1,0 +1,711 @@
+/* ==========================================================================
+   PC-98 SIXTEEN-COLOUR FIELD
+   A Japanese 16-colour computer screen at 640×400.
+
+   The palette is hard-limited to sixteen entries, declared here and never
+   exceeded — that constraint is the whole aesthetic. Gradients do not exist:
+   every tonal transition is a crosshatch of two palette entries, laid down as
+   a 2px dither. Everything sizes in integer multiples of one pixel unit, the
+   text window is docked low with a double border, and a full-height portrait
+   holds the right of the frame.
+   ========================================================================== */
+
+:root {
+  /* --- The sixteen. --- */
+  --c00: #000000;
+  --c01: #000036; /* the logo's navy, entry 1 */
+  --c02: #202088;
+  --c03: #2b6fd6;
+  --c04: #58a8f0;
+  --c05: #a8d8f8;
+  --c06: #106848;
+  --c07: #38b878;
+  --c08: #78e0a0;
+  --c09: #705020;
+  --c10: #c89020;
+  --c11: #f8d038;
+  --c12: #a02030;
+  --c13: #e85868;
+  --c14: #b0b0c0;
+  --c15: #ffffff;
+
+  /* One pixel unit. Every size on this page is an integer multiple of it. */
+  --px: 2px;
+  --pad: clamp(12px, 3vw, 32px);
+
+  --f: 'DotGothic16', ui-monospace, monospace;
+
+  color-scheme: dark;
+  accent-color: var(--c11);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-color: var(--c03) var(--c00);
+}
+
+body {
+  background: var(--c00);
+  color: var(--c15);
+  font-family: var(--f);
+  font-size: clamp(15px, 1rem + 0.15vw, 18px);
+  line-height: 1.7;
+  overflow-x: hidden;
+  image-rendering: pixelated;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--c11);
+  color: var(--c00);
+}
+:focus-visible {
+  outline: var(--px) solid var(--c11);
+  outline-offset: var(--px);
+}
+::-webkit-scrollbar {
+  width: 16px;
+}
+::-webkit-scrollbar-track {
+  background: var(--c01);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--c03);
+  border: var(--px) solid var(--c01);
+}
+
+.skip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 90;
+  transform: translateY(-140%);
+  background: var(--c11);
+  color: var(--c00);
+  padding: 8px 16px;
+  text-decoration: none;
+}
+.skip:focus-visible {
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   DITHER — tonal transition without a gradient
+   Two palette entries crosshatched at the pixel unit. This is the only way
+   this world blends anything.
+   -------------------------------------------------------------------------- */
+.dither {
+  background-color: var(--to, var(--c01));
+  background-image:
+    linear-gradient(45deg, var(--from, var(--c02)) 25%, transparent 25% 75%, var(--from, var(--c02)) 75%),
+    linear-gradient(45deg, var(--from, var(--c02)) 25%, transparent 25% 75%, var(--from, var(--c02)) 75%);
+  background-size: calc(var(--px) * 2) calc(var(--px) * 2);
+  background-position: 0 0, var(--px) var(--px);
+}
+
+/* A three-band dithered sky: solid, crosshatch, solid. */
+.sky {
+  background-color: var(--c01);
+  background-image:
+    linear-gradient(45deg, var(--from, var(--c02)) 25%, transparent 25% 75%, var(--from, var(--c02)) 75%),
+    linear-gradient(45deg, var(--from, var(--c02)) 25%, transparent 25% 75%, var(--from, var(--c02)) 75%),
+    linear-gradient(to bottom, var(--from, var(--c02)) 0 22%, transparent 22% 62%, var(--c00) 62% 100%);
+  background-size:
+    calc(var(--px) * 2) calc(var(--px) * 2),
+    calc(var(--px) * 2) calc(var(--px) * 2),
+    100% 100%;
+  background-position: 0 0, var(--px) var(--px), 0 0;
+}
+
+/* --------------------------------------------------------------------------
+   THE WINDOW SYSTEM — every box is a double-bordered panel
+   -------------------------------------------------------------------------- */
+.win {
+  border: var(--px) solid var(--c15);
+  outline: var(--px) solid var(--c01);
+  background: var(--c01);
+  position: relative;
+}
+.win__bar {
+  background: var(--c03);
+  color: var(--c15);
+  padding: calc(var(--px) * 2) calc(var(--px) * 5);
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: var(--px) solid var(--c15);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+.win__body {
+  padding: calc(var(--px) * 8);
+}
+
+/* --------------------------------------------------------------------------
+   SHELL
+   -------------------------------------------------------------------------- */
+.crt {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--pad);
+  display: grid;
+  gap: calc(var(--px) * 8);
+}
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border: var(--px) solid var(--c15);
+  background: var(--c01);
+}
+.menu__brand {
+  padding: calc(var(--px) * 3) calc(var(--px) * 6);
+  background: var(--c15);
+  color: var(--c01);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+}
+.menu nav {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+.menu nav a {
+  padding: calc(var(--px) * 3) calc(var(--px) * 6);
+  color: var(--c05);
+  text-decoration: none;
+  border-left: var(--px) solid var(--c02);
+}
+.menu nav a:hover,
+.menu nav a:focus-visible {
+  background: var(--c11);
+  color: var(--c00);
+}
+
+/* --------------------------------------------------------------------------
+   THE FRAME — portrait right, text window docked low
+   -------------------------------------------------------------------------- */
+.frame {
+  position: relative;
+  min-height: 460px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  border: var(--px) solid var(--c15);
+  overflow: hidden;
+}
+
+.frame__stage {
+  padding: calc(var(--px) * 10);
+  display: grid;
+  align-content: start;
+  gap: calc(var(--px) * 6);
+}
+
+.title {
+  font-size: clamp(30px, 5.2vw, 60px);
+  line-height: 1.12;
+  color: var(--c15);
+  text-shadow: var(--px) var(--px) 0 var(--c12);
+  max-width: 16ch;
+}
+.title em {
+  font-style: normal;
+  color: var(--c11);
+}
+.sub {
+  max-width: 42ch;
+  color: var(--c05);
+  line-height: 1.75;
+}
+
+/* The portrait column: a dithered plate holding the mark, full height. */
+.portrait {
+  border-left: var(--px) solid var(--c15);
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: calc(var(--px) * 8);
+}
+.portrait__mark {
+  width: 168px;
+  height: auto;
+  color: var(--c15);
+  filter: drop-shadow(var(--px) var(--px) 0 var(--c12));
+}
+.portrait__cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--c01);
+  border-top: var(--px) solid var(--c15);
+  color: var(--c05);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: calc(var(--px) * 2) calc(var(--px) * 4);
+  text-align: center;
+}
+
+/* The docked text window — the classic low-slung dialogue box. */
+.dock {
+  border: var(--px) solid var(--c15);
+  background: var(--c00);
+  padding: calc(var(--px) * 7);
+  display: grid;
+  gap: calc(var(--px) * 5);
+}
+.dock__line {
+  color: var(--c11);
+  max-width: 62ch;
+}
+.dock__line::before {
+  content: '\25b6  ';
+  color: var(--c13);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--px) * 4);
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--px) * 3);
+  padding: calc(var(--px) * 4) calc(var(--px) * 8);
+  border: var(--px) solid var(--c15);
+  background: var(--c03);
+  color: var(--c15);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  box-shadow: calc(var(--px) * 2) calc(var(--px) * 2) 0 var(--c02);
+  transition: none;
+}
+.btn:hover,
+.btn:focus-visible {
+  background: var(--c11);
+  color: var(--c00);
+  box-shadow: calc(var(--px) * 2) calc(var(--px) * 2) 0 var(--c09);
+}
+.btn:active {
+  transform: translate(var(--px), var(--px));
+  box-shadow: var(--px) var(--px) 0 var(--c02);
+}
+.btn--ghost {
+  background: var(--c01);
+}
+
+/* --------------------------------------------------------------------------
+   STATUS STRIP
+   -------------------------------------------------------------------------- */
+.status {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  border: var(--px) solid var(--c15);
+  background: var(--c15);
+  gap: var(--px);
+}
+.status > div {
+  background: var(--c01);
+  padding: calc(var(--px) * 5);
+}
+.status dt {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--c04);
+}
+.status dd {
+  color: var(--c15);
+  margin-top: calc(var(--px) * 1);
+}
+
+/* --------------------------------------------------------------------------
+   LIST PANELS
+   -------------------------------------------------------------------------- */
+.heading {
+  font-size: clamp(22px, 3.2vw, 36px);
+  line-height: 1.2;
+  color: var(--c15);
+  text-shadow: var(--px) var(--px) 0 var(--c02);
+  max-width: 20ch;
+}
+.lede {
+  color: var(--c05);
+  max-width: 54ch;
+  margin-top: calc(var(--px) * 4);
+}
+
+.items {
+  display: grid;
+  gap: calc(var(--px) * 6);
+  margin-top: calc(var(--px) * 8);
+}
+.item {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) minmax(0, 250px);
+  gap: calc(var(--px) * 6);
+  align-items: start;
+  border: var(--px) solid var(--c02);
+  background: var(--c01);
+  padding: calc(var(--px) * 6);
+  text-decoration: none;
+  color: inherit;
+}
+.item:hover,
+.item:focus-visible {
+  border-color: var(--c11);
+}
+.item__n {
+  color: var(--c13);
+  font-size: 1.25rem;
+}
+.item__name {
+  display: block;
+  font-size: clamp(19px, 2.2vw, 27px);
+  line-height: 1.2;
+  color: var(--c15);
+  margin-bottom: calc(var(--px) * 2);
+}
+.item:hover .item__name,
+.item:focus-visible .item__name {
+  color: var(--c11);
+}
+.item__desc {
+  display: block;
+  color: var(--c05);
+  max-width: 52ch;
+}
+.item__meta {
+  display: grid;
+  gap: calc(var(--px) * 1);
+  font-size: 0.75rem;
+}
+.item__meta span {
+  display: flex;
+  gap: 8px;
+  color: var(--c04);
+  border-bottom: var(--px) solid var(--c02);
+  padding-bottom: calc(var(--px) * 1);
+}
+.item__meta b {
+  color: var(--c15);
+  font-weight: 400;
+  margin-left: auto;
+  text-align: right;
+}
+
+/* --------------------------------------------------------------------------
+   STEPS
+   -------------------------------------------------------------------------- */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: calc(var(--px) * 5);
+  list-style: none;
+  padding: 0;
+  margin-top: calc(var(--px) * 8);
+}
+.step {
+  border: var(--px) solid var(--c02);
+  background: var(--c01);
+  padding: calc(var(--px) * 6);
+}
+.step__n {
+  display: inline-block;
+  background: var(--c12);
+  color: var(--c15);
+  padding: 0 calc(var(--px) * 3);
+  font-size: 0.8125rem;
+  letter-spacing: 0.1em;
+}
+.step__t {
+  color: var(--c11);
+  margin: calc(var(--px) * 3) 0 calc(var(--px) * 2);
+  font-size: 1.0625rem;
+  line-height: 1.3;
+}
+.step__b {
+  color: var(--c05);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+/* --------------------------------------------------------------------------
+   QUESTION PANELS
+   -------------------------------------------------------------------------- */
+.qs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: calc(var(--px) * 5);
+  margin-top: calc(var(--px) * 8);
+}
+.q {
+  border: var(--px) solid var(--c02);
+  padding: calc(var(--px) * 6);
+  background: var(--c01);
+}
+.q h3 {
+  color: var(--c08);
+  font-size: 1rem;
+  line-height: 1.35;
+  margin-bottom: calc(var(--px) * 2);
+}
+.q p {
+  color: var(--c05);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+/* --------------------------------------------------------------------------
+   CLOSE
+   -------------------------------------------------------------------------- */
+.close {
+  border: var(--px) solid var(--c15);
+  padding: calc(var(--px) * 12);
+}
+.close__t {
+  font-size: clamp(28px, 4.6vw, 52px);
+  line-height: 1.1;
+  color: var(--c15);
+  text-shadow: var(--px) var(--px) 0 var(--c12);
+  max-width: 16ch;
+}
+.close__b {
+  color: var(--c05);
+  max-width: 52ch;
+  margin-top: calc(var(--px) * 5);
+}
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c04);
+  border-top: var(--px) solid var(--c02);
+  padding-top: calc(var(--px) * 5);
+}
+.foot a {
+  color: var(--c05);
+  text-decoration: none;
+}
+.foot a:hover {
+  color: var(--c11);
+}
+
+/* --------------------------------------------------------------------------
+   ADAPT — integer scaling only; the pixel unit never lands on a fraction
+   -------------------------------------------------------------------------- */
+@media (max-width: 60rem) {
+  .frame {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+  .portrait {
+    border-left: 0;
+    border-top: var(--px) solid var(--c15);
+    padding-bottom: 40px;
+    order: -1;
+  }
+  .portrait__mark {
+    width: 120px;
+  }
+  .item {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+  .item__meta {
+    grid-column: 2;
+    margin-top: calc(var(--px) * 3);
+  }
+  .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 40rem) {
+  :root {
+    --px: 2px;
+  }
+  .steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .menu nav {
+    margin-left: 0;
+    width: 100%;
+    border-top: var(--px) solid var(--c02);
+  }
+  .menu nav a {
+    flex: 1 0 auto;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (pointer: coarse) {
+  .menu nav a,
+  .menu__brand {
+    padding-block: calc(var(--px) * 6);
+  }
+  .foot a {
+    display: inline-block;
+    padding-block: calc(var(--px) * 3);
+  }
+  .btn {
+    padding-block: calc(var(--px) * 6);
+  }
+}
+
+/* The switch decides which figure shows; CSS does the showing, so the monthly
+   column is still correct with no script at all. */
+[data-billing][data-cycle='monthly'] [data-when='annual'],
+[data-billing][data-cycle='annual'] [data-when='monthly'] {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   PLANS — three bordered panels in the window system
+   -------------------------------------------------------------------------- */
+.cycle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: calc(var(--px) * 4);
+  margin-bottom: calc(var(--px) * 8);
+}
+.cycle__btn {
+  font-family: var(--f);
+  font-size: 1rem;
+  padding: calc(var(--px) * 4) calc(var(--px) * 7);
+  border: var(--px) solid var(--c15);
+  background: var(--c01);
+  color: var(--c05);
+  cursor: pointer;
+  box-shadow: calc(var(--px) * 2) calc(var(--px) * 2) 0 var(--c02);
+}
+.cycle__btn[aria-pressed='true'] {
+  background: var(--c11);
+  color: var(--c00);
+  box-shadow: calc(var(--px) * 2) calc(var(--px) * 2) 0 var(--c09);
+}
+.cycle__hint {
+  color: var(--c13);
+  font-size: 0.875rem;
+}
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: calc(var(--px) * 5);
+}
+.plan {
+  border: var(--px) solid var(--c02);
+  background: var(--c01);
+  padding: calc(var(--px) * 6);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--px) * 4);
+}
+.plan__name {
+  font-size: 1.75rem;
+  line-height: 1.1;
+  color: var(--c15);
+  text-shadow: var(--px) var(--px) 0 var(--c12);
+}
+.plan__tag {
+  color: var(--c05);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.plan__price {
+  border-top: var(--px) solid var(--c02);
+  border-bottom: var(--px) solid var(--c02);
+  padding: calc(var(--px) * 4) 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.plan__price b {
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--c11);
+  font-weight: 400;
+  text-shadow: var(--px) var(--px) 0 var(--c09);
+}
+.plan__price i {
+  font-style: normal;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c04);
+}
+.plan__save {
+  background: var(--c12);
+  color: var(--c15);
+  padding: calc(var(--px) * 1) calc(var(--px) * 3);
+  font-size: 0.8125rem;
+  width: fit-content;
+}
+.plan__list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+}
+.plan__list li {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--c05);
+  padding: calc(var(--px) * 2) 0;
+  border-bottom: var(--px) solid var(--c02);
+}
+.plan__list li::before {
+  content: 'b8  ';
+  color: var(--c08);
+}
+.plan .btn {
+  margin-top: auto;
+  justify-content: center;
+}
+.plan__foot {
+  color: var(--c04);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  margin-top: calc(var(--px) * 6);
+}
+
+@media (max-width: 60rem) {
+  .plans {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

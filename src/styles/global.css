@@ -1,1258 +1,1289 @@
 /* ==========================================================================
-   CodeView Solutions — global stylesheet
+   THE REDLINE
+   A technical specification sheet for the visitor's own website.
 
-   Concept: REFRACTION.
-   The company is called CodeView. Light through glass splits into a spectrum,
-   and that single idea drives everything here — the palette is dispersion
-   (violet through cyan into amber), the hero is a field of light filaments
-   bending through a flow field, and the command palette is the lens you look
-   through to find things.
-
-   Colour appears only where the spectrum does. Everything else is grey.
-
-   Contents
-     01  Tokens
-     02  Reset & base
-     03  Typography & the spectrum
-     04  Layout primitives & full-bleed rules
-     05  Hero + light field
-     06  Buttons & links
-     07  Header & navigation
-     08  Command palette
-     09  Service rows
-     10  Cards, features, meta
-     11  Question grid
-     12  Forms
-     13  Footer
-     14  Motion
+   The ink list is declared here and never exceeded: drafting stock, the
+   logo's navy, one spot revision red, one graphite. Everything a spec sheet
+   does not have — shadows, corner radii, gradients, glass — is absent by
+   rule, not by omission. Every division on the page draws its thickness from
+   the ISO line-weight hierarchy below.
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   01  TOKENS
-   Verified by `npm run check:contrast` — every spectrum stop is legible as
-   small text, not just as decoration.
-   -------------------------------------------------------------------------- */
+@import './inner.css';
+
 :root {
-  --bg: #0a0a0d;
-  --surface: #121217;
-  --surface-2: #17171e;
-  --border: #1f1f27;
-  --border-2: #2e2e3a;
+  /* --- The four inks. Declared, enumerated, never exceeded. --- */
+  --stock: #efeee7;
+  --ink: #000036;
+  --red: #d8261b;
+  --graphite: #4e4e47;
 
-  --text: #f5f6f7;
-  --muted: #9b9ba6;
-  --faint: #82828e;
+  /* Working tints of the declared inks — not new colours. */
+  --stock-2: #e6e5dc;
+  --rule: #c6c5ba;
+  --rule-2: #d8d7cd;
 
-  /* The spectrum. Three stops, always in this order. */
-  --violet: #a855f7;
-  --cyan: #22d3ee;
-  --amber: #fbbf24;
+  /* One red at three levels, by the job it is doing:
+     --red      strokes, rules, and large type on stock
+     --red-ink  small red text on stock (clears AA)
+     --red-lit  the same red lifted to read on the ink field */
+  --red-ink: #c21b12;
+  --red-lit: #ff6a5e;
 
-  --spectrum: linear-gradient(100deg, var(--violet) 0%, var(--cyan) 52%, var(--amber) 100%);
+  /* Reversed out on the one dark field: the stock, cooled. Tints of the
+     declared inks, named so nothing on the site hard-codes a literal. */
+  --on-ink: #b9b9c9;
+  --on-ink-dim: #9a9ab4;
+  --rule-on-ink: rgba(239, 238, 231, 0.3);
 
-  --r-sm: 8px;
-  --r-md: 12px;
-  --r-lg: 18px;
+  /* --- ISO line weights, translated to screen ---
+     0.13 hairline · 0.25 keyline · 0.5 division · 0.7 sheet edge */
+  --w-hair: 1px;
+  --w-key: 1px;
+  --w-div: 2px;
+  --w-edge: 3px;
 
-  --gutter: clamp(1.25rem, 4.5vw, 3.5rem);
-  --measure: 64ch;
-  --section-y: clamp(5rem, 10vw, 9rem);
-  --max: 84rem;
+  /* --- The modular grid. Every element occupies whole cells. --- */
+  --pad: clamp(1rem, 2.6vw, 2.25rem);
 
-  --ease: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --fast: 180ms;
-  --slow: 620ms;
+  /* The measure of the drawing. Rules, grounds, and the sheet edge still run
+     the full width of the window; the content sits in a column of its own so
+     the eye never has to travel the whole monitor to read a line. --gutter is
+     that column expressed as padding: the page gutter on a narrow screen, and
+     whatever it takes to centre the column on a wide one. */
+  --container: 78rem;
+  --gutter: max(var(--pad), (100% - var(--container)) / 2);
+  --cell: clamp(4.5rem, 7.2vw, 7.5rem);
 
-  color-scheme: dark;
+  --f-sheet: 'Archivo Variable', system-ui, sans-serif;
+  --f-tech: 'Martian Mono Variable', ui-monospace, monospace;
+
+  /* Drafting motion: things draw, rule, and stamp. Nothing eases softly. */
+  --draw: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --snap: cubic-bezier(0.9, 0, 0.1, 1);
+
+  color-scheme: light;
+  accent-color: var(--red);
 }
 
-/* --------------------------------------------------------------------------
-   02  RESET & BASE
-   -------------------------------------------------------------------------- */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
-
 * {
   margin: 0;
 }
 
 html {
-  -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+  scrollbar-color: var(--ink) var(--stock-2);
 }
 
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family:
-    'Inter Variable',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
-  font-size: 1rem;
-  line-height: 1.65;
-  font-synthesis-weight: none;
+  background: var(--stock);
+  color: var(--ink);
+  font-family: var(--f-sheet);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   overflow-x: hidden;
+
+  /* The stock itself: 8mm field grid, the way drafting paper is ruled. */
+  background-image:
+    repeating-linear-gradient(to right, var(--rule-2) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(to bottom, var(--rule-2) 0 1px, transparent 1px 44px);
 }
 
 img,
-svg,
-canvas {
+svg {
   display: block;
   max-width: 100%;
 }
 
+/* Layout modes below set `display`, which would otherwise beat the attribute. */
 [hidden] {
   display: none !important;
 }
 
-:focus-visible {
-  outline: 2px solid var(--cyan);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
-
+/* --- Browser surfaces belong to the design system too. --- */
 ::selection {
-  background: rgba(34, 211, 238, 0.3);
-  color: var(--text);
+  background: var(--red-ink);
+  color: var(--stock);
+}
+:focus-visible {
+  outline: var(--w-div) solid var(--red);
+  outline-offset: 3px;
+}
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--stock-2);
+  border-left: var(--w-hair) solid var(--rule);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ink);
 }
 
-main {
-  flex: 1;
-}
-
-.skip-link {
-  position: absolute;
-  left: var(--gutter);
+.skip {
+  position: fixed;
   top: 0;
+  left: 0;
+  z-index: 90;
   transform: translateY(-120%);
-  z-index: 200;
-  background: var(--surface);
-  color: var(--text);
-  border: 1px solid var(--border-2);
-  border-radius: var(--r-sm);
+  background: var(--ink);
+  color: var(--stock);
   padding: 0.7rem 1.1rem;
-  font-size: 0.875rem;
-  text-decoration: none;
-  transition: transform var(--fast) var(--ease);
-}
-
-.skip-link:focus {
-  transform: translateY(0.75rem);
-}
-
-/* --------------------------------------------------------------------------
-   03  TYPOGRAPHY & THE SPECTRUM
-
-   Inter, pushed hard: heavy weights, very tight tracking, and sizes that run
-   to the edge of the viewport. The tightness is what makes it read as
-   engineered rather than as a default heading.
-   -------------------------------------------------------------------------- */
-h1,
-h2,
-h3,
-h4 {
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-}
-
-.display-xl {
-  font-size: clamp(2.75rem, 8vw, 7rem);
-  font-weight: 800;
-  line-height: 0.94;
-  letter-spacing: -0.045em;
-}
-
-.display-l {
-  font-size: clamp(2.4rem, 6.4vw, 5rem);
-  font-weight: 800;
-  line-height: 0.97;
-  letter-spacing: -0.042em;
-}
-
-.display-m {
-  font-size: clamp(1.7rem, 3.4vw, 2.75rem);
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.032em;
-}
-
-/* Text painted with the refraction spectrum. Guarded, because without
-   background-clip support transparent text would simply vanish. */
-.spectrum {
-  color: var(--cyan);
-}
-
-@supports (background-clip: text) or (-webkit-background-clip: text) {
-  .spectrum {
-    background-image: var(--spectrum);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-}
-
-.label {
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
+  font: 600 0.75rem/1 var(--f-tech);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--faint);
-  margin-bottom: 1.25rem;
+  text-decoration: none;
 }
-
-.lede {
-  font-size: clamp(1.0625rem, 1.35vw, 1.25rem);
-  line-height: 1.6;
-  color: var(--muted);
-  max-width: 44rem;
-  letter-spacing: -0.012em;
-}
-
-.prose p {
-  color: var(--muted);
-  max-width: var(--measure);
-}
-
-.prose p + p {
-  margin-top: 1.25rem;
+.skip:focus-visible {
+  transform: none;
 }
 
 /* --------------------------------------------------------------------------
-   04  LAYOUT PRIMITIVES & FULL-BLEED RULES
+   THE SHEET — edge and registration marks
    -------------------------------------------------------------------------- */
-.container {
-  width: 100%;
-  max-width: var(--max);
-  margin-inline: auto;
-  padding-inline: var(--gutter);
-}
-
-.container--narrow {
-  max-width: 60rem;
-}
-
-.section {
-  padding-block: var(--section-y);
-}
-
-.section__head {
-  max-width: 52rem;
-  margin-bottom: clamp(2.75rem, 5vw, 4.5rem);
-}
-
-.section__head .lede {
-  margin-top: 1.35rem;
-}
-
-/* Hairlines run the full width of the viewport, not the container. The page
-   is built out of bands rather than boxes. */
-.rule {
-  height: 1px;
-  background: var(--border);
-  border: 0;
-}
-
-.rule--spectrum {
-  background: var(--spectrum);
-  opacity: 0.5;
-}
-
-.split {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(2.5rem, 5vw, 4.5rem);
-}
-
-@media (min-width: 900px) {
-  .split {
-    grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.9fr);
-    align-items: start;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   05  HERO + LIGHT FIELD
-   -------------------------------------------------------------------------- */
-.hero {
+.sheet {
   position: relative;
-  overflow: hidden;
-  padding-block: clamp(4.5rem, 11vw, 9rem) clamp(3.5rem, 7vw, 6rem);
-  border-bottom: 1px solid var(--border);
+  min-height: 100vh;
+  border: var(--w-edge) solid var(--ink);
+  margin: 0;
+  /* A short page (the 404) must still put the foot at the sheet's bottom
+     margin, the way a drawing pins its title block to the sheet edge, rather
+     than leaving it afloat mid-sheet. */
+  display: flex;
+  flex-direction: column;
 }
 
-/* The canvas. Masked so the filaments dissolve into the page rather than
-   ending at a hard rectangle. */
-.field {
+/* Corner registration marks, drawn into the sheet's own margin. */
+.sheet::before,
+.sheet::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+.sheet::before {
+  top: 10px;
+  right: 10px;
+  border-top: var(--w-key) solid var(--red);
+  border-right: var(--w-key) solid var(--red);
+}
+.sheet::after {
+  bottom: 10px;
+  left: 10px;
+  border-bottom: var(--w-key) solid var(--red);
+  border-left: var(--w-key) solid var(--red);
+}
+
+.body {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.body > main {
+  flex: 1 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   SHEETS
+   -------------------------------------------------------------------------- */
+.sh {
+  position: relative;
+  border-bottom: var(--w-div) solid var(--ink);
+  padding: clamp(2.75rem, 5.5vw, 5rem) var(--gutter);
+}
+.sh--tight {
+  padding-block: clamp(2rem, 3.6vw, 3.25rem);
+}
+
+/* The section head is a ruled sheet header, not an eyebrow above a heading:
+   the label is the sheet's own name in the header band, set as a field. */
+.sh__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: var(--w-key) solid var(--ink);
+  padding-bottom: 0.5rem;
+  margin-bottom: clamp(1.75rem, 3vw, 2.75rem);
+  flex-wrap: wrap;
+}
+.sh__no {
+  font: 600 0.75rem/1.3 var(--f-tech);
+  letter-spacing: 0.02em;
+  color: var(--graphite);
+}
+.sh__title {
+  font-size: clamp(1.75rem, 3.4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  text-wrap: balance;
+  flex: 1 1 22ch;
+}
+.sh__lede {
+  max-width: 62ch;
+  color: var(--graphite);
+  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  margin-top: 1.1rem;
+}
+
+/* --------------------------------------------------------------------------
+   SHEET 01 — THE TITLE SHEET
+   -------------------------------------------------------------------------- */
+.title-sheet {
+  position: relative;
+  min-height: min(92vh, 54rem);
+  display: grid;
+  /* The markup layer is absolute, so the sheet has two rows in flow: the field
+     takes the slack and the fact strip keeps its natural height. Three tracks
+     handed the slack to the strip instead, leaving each cell half empty. */
+  grid-template-rows: 1fr auto;
+  padding: 0;
+  cursor: crosshair;
+  overflow: hidden;
+}
+
+/* Live pointer guides — the drafting table's rule, tracking the hand. */
+.title-sheet::before,
+.title-sheet::after {
+  content: '';
+  position: absolute;
+  background: var(--red);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+  transition: opacity 140ms linear;
+}
+.title-sheet::before {
+  top: 0;
+  bottom: 0;
+  width: var(--w-hair);
+  transform: translateX(var(--gx, -10px));
+}
+.title-sheet::after {
+  left: 0;
+  right: 0;
+  height: var(--w-hair);
+  transform: translateY(var(--gy, -10px));
+}
+.title-sheet[data-live='true']::before,
+.title-sheet[data-live='true']::after {
+  opacity: 0.42;
+}
+
+/* --------------------------------------------------------------------------
+   MASTHEAD — one row across the full sheet: the mark and name together on the
+   left, the routes on the right. The drawing keeps its ruled edge, but the
+   left margin is gone; this row carries the identity instead.
+   -------------------------------------------------------------------------- */
+.mast {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem clamp(1rem, 3vw, 2.5rem);
+  flex-wrap: wrap;
+  padding: 0.85rem var(--gutter);
+  background: var(--stock);
+  border-bottom: var(--w-key) solid var(--ink);
+}
+.mast__id {
+  display: block;
+  flex: 0 0 auto;
+  text-decoration: none;
+  /* The lockup is the only raster in the interface; keep its edges crisp
+     rather than letting the browser soften them on the way down. */
+  outline-offset: 6px;
+}
+.mast__logo {
+  height: 2rem;
+  width: auto;
+  max-width: 100%;
+}
+.mast__nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem clamp(0.85rem, 2vw, 1.75rem);
+  font: 500 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--graphite);
+}
+.mast__nav a {
+  color: inherit;
+  text-decoration: none;
+  padding: 0.5rem 0;
+  border-bottom: var(--w-key) solid transparent;
+}
+.mast__nav a[aria-current='page'] {
+  color: var(--ink);
+  border-bottom-color: var(--red);
+}
+.mast__nav a:hover,
+.mast__nav a:focus-visible {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+
+.ts__field {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: clamp(1.4rem, 2.4vw, 2.1rem);
+  padding: clamp(2.5rem, 5vw, 4.5rem) var(--gutter);
+  z-index: 2;
+}
+
+.ts__title {
+  font-size: clamp(2.9rem, 8.2vw, 7.25rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  max-width: 17ch;
+  text-wrap: balance;
+}
+.ts__title em {
+  font-style: normal;
+  position: relative;
+  white-space: nowrap;
+}
+
+.ts__sub {
+  max-width: 46ch;
+  font-size: clamp(1.0625rem, 1rem + 0.55vw, 1.375rem);
+  color: var(--graphite);
+  line-height: 1.5;
+}
+
+/* The free-review assurance is a revision note, drawn in the margin and tied
+   back to the headline by a leader line. */
+.note {
+  position: relative;
+  align-self: start;
+  justify-self: start;
+  max-width: 34ch;
+  border: var(--w-key) solid var(--red);
+  padding: 0.7rem 0.9rem;
+  color: var(--red-ink);
+  font: 500 0.8125rem/1.45 var(--f-tech);
+  background: var(--stock);
+}
+.note::before {
+  content: attr(data-tag);
+  position: absolute;
+  top: calc(var(--w-key) * -1);
+  left: -1px;
+  transform: translateY(-100%);
+  background: var(--red-ink);
+  color: var(--stock);
+  font: 700 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.1em;
+  padding: 0.3rem 0.45rem;
+}
+
+/* --------------------------------------------------------------------------
+   THE REDLINE OVERLAY — drawn markup, not decoration
+   -------------------------------------------------------------------------- */
+/* The markup draws BEHIND the lettering. A marker on a real print sits on top,
+   but on screen a cloud crossing a tightly-led headline reads as scribble and
+   costs legibility on the most important element on the page. Behind the
+   glyphs it still reads as a mark on the sheet and never obscures a word. */
+.markup {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
+  pointer-events: none;
+  /* Above the lettering, the way a marker is above the print. This was tried
+     underneath, to guarantee a mark could never sit on a word — but the
+     display face is set at 0.92 leading, so its lines overlap and a cloud
+     hugging one of them has its top and bottom edges buried in the ink of the
+     lines either side. It read as a stray arc in whatever corner happened to
+     be empty. A hairline over the type is legible and is what redlining
+     actually looks like; the leader is still routed around every word. */
+  z-index: 4;
+  overflow: visible;
+}
+.markup [data-draw] {
+  stroke: var(--red);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 900ms var(--draw);
+}
+[data-mark].is-drawn [data-draw] {
+  stroke-dashoffset: 0 !important;
+}
+/* The hero's markup: cloud, leader, terminator dot. The selectors carry the
+   [data-draw] attribute so they outrank the base stroke rule above — without
+   it the shared 900ms shorthand wins and the whole mark draws at once instead
+   of cloud, then leader, then dot. */
+.markup [data-draw].mk-cloud {
+  stroke-width: 2;
+  transition-duration: 1200ms;
+  transition-delay: 340ms;
+}
+.markup [data-draw].mk-leader {
+  stroke-width: 1.5;
+  transition-duration: 700ms;
+  transition-delay: 1250ms;
+}
+.mk-dot {
+  fill: var(--red);
+  stroke: none;
   opacity: 0;
-  transition: opacity 1.6s var(--ease-out);
-  -webkit-mask-image: radial-gradient(78% 76% at 66% 44%, #000 0%, rgba(0, 0, 0, 0.72) 52%, transparent 88%);
-  mask-image: radial-gradient(78% 76% at 66% 44%, #000 0%, rgba(0, 0, 0, 0.72) 52%, transparent 88%);
+  transition: opacity 160ms linear 1900ms;
 }
-
-.field.is-ready {
-  opacity: 0.85;
+[data-mark].is-drawn .mk-dot {
+  opacity: 1;
 }
-
-.hero__inner {
-  position: relative;
-  z-index: 1;
-}
-
-.hero__title {
-  max-width: 15ch;
-}
-
-.hero__sub {
-  font-size: clamp(1.0625rem, 1.4vw, 1.25rem);
-  line-height: 1.6;
-  letter-spacing: -0.012em;
-  color: var(--muted);
-  max-width: 42ch;
-  margin-top: 2rem;
-}
-
-/* Keyboard hint chip that also opens the palette. */
-.kbd-hint {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.4rem 0.7rem 0.4rem 0.85rem;
-  border: 1px solid var(--border-2);
-  border-radius: 999px;
-  background: rgba(18, 18, 23, 0.7);
-  backdrop-filter: blur(8px);
-  color: var(--muted);
-  font-size: 0.8125rem;
-  font-family: inherit;
-  cursor: pointer;
-  transition: border-color var(--fast) var(--ease), color var(--fast) var(--ease);
-}
-
-.kbd-hint:hover {
-  color: var(--text);
-  border-color: #40404f;
-}
-
-kbd {
-  font-family: inherit;
-  font-size: 0.75rem;
-  font-weight: 500;
-  padding: 0.1rem 0.4rem;
-  border: 1px solid var(--border-2);
-  border-radius: 5px;
-  background: var(--surface-2);
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-/* Editorial fact strip under the hero. */
-.facts {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 2rem 1.5rem;
-  margin-top: clamp(3.5rem, 7vw, 5.5rem);
-}
-
-@media (min-width: 860px) {
-  .facts {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-.facts__key {
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--faint);
-  margin-bottom: 0.5rem;
-}
-
-.facts__val {
-  font-size: 0.9375rem;
-  color: var(--text);
-  line-height: 1.45;
-  letter-spacing: -0.012em;
+/* The cloud marks a phrase; it does not change its voice. One face, one
+   posture, on every sheet. */
+.ts__title em,
+[data-cloud] {
+  font-style: normal;
 }
 
 /* --------------------------------------------------------------------------
-   06  BUTTONS & LINKS
+   STAMPS (the actions)
    -------------------------------------------------------------------------- */
-a {
-  color: var(--cyan);
-  text-underline-offset: 0.2em;
-  text-decoration-thickness: 1px;
-  transition: color var(--fast) var(--ease);
-}
-
-a:hover {
-  color: var(--text);
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.78rem 1.3rem;
-  border-radius: var(--r-sm);
-  border: 1px solid transparent;
-  font-family: inherit;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  letter-spacing: -0.012em;
-  line-height: 1.2;
-  text-decoration: none;
-  cursor: pointer;
-  white-space: nowrap;
-  transition:
-    opacity var(--fast) var(--ease),
-    background-color var(--fast) var(--ease),
-    border-color var(--fast) var(--ease);
-}
-
-.btn--primary {
-  background: var(--text);
-  color: var(--bg);
-}
-
-.btn--primary:hover {
-  opacity: 0.86;
-  color: var(--bg);
-}
-
-.btn--secondary {
-  background: rgba(18, 18, 23, 0.6);
-  color: var(--text);
-  border-color: var(--border-2);
-  backdrop-filter: blur(8px);
-}
-
-.btn--secondary:hover {
-  border-color: #40404f;
-  color: var(--text);
-}
-
-.btn--small {
-  padding: 0.5rem 0.85rem;
-  font-size: 0.875rem;
-}
-
-.btn-row {
+.stamp-row {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-  margin-top: 2.5rem;
+  gap: 0;
+  border: var(--w-div) solid var(--ink);
+  width: fit-content;
+  max-width: 100%;
 }
-
-.link-arrow {
+.stamp {
   display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: var(--cyan);
-  text-decoration: none;
-}
-
-.link-arrow svg {
-  transition: transform var(--fast) var(--ease);
-}
-
-.link-arrow:hover svg {
-  transform: translateX(3px);
-}
-
-/* --------------------------------------------------------------------------
-   07  HEADER & NAVIGATION
-   -------------------------------------------------------------------------- */
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 60;
-  background: rgba(10, 10, 13, 0.68);
-  backdrop-filter: saturate(160%) blur(16px);
-  -webkit-backdrop-filter: saturate(160%) blur(16px);
-  border-bottom: 1px solid var(--border);
-}
-
-.header__bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.25rem;
-  min-height: 3.75rem;
-}
-
-.wordmark {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  text-decoration: none;
-  color: var(--text);
-  font-size: 0.9375rem;
-  font-weight: 650;
-  letter-spacing: -0.024em;
-  /* Without this the name breaks onto two lines at 320px and the sticky
-     header grows to match. */
-  white-space: nowrap;
-}
-
-.wordmark:hover {
-  color: var(--text);
-}
-
-.wordmark__mark {
-  width: 1.4rem;
-  height: 1.4rem;
-  flex: none;
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  gap: 0.1rem;
-  margin-inline-start: auto;
-}
-
-.nav__link {
-  padding: 0.45rem 0.7rem;
-  border-radius: var(--r-sm);
-  font-size: 0.875rem;
-  font-weight: 450;
-  letter-spacing: -0.01em;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color var(--fast) var(--ease);
-}
-
-.nav__link:hover,
-.nav__link[aria-current='page'] {
-  color: var(--text);
-}
-
-.header__actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.icon-btn {
-  display: inline-grid;
-  place-items: center;
-  width: 2.2rem;
-  height: 2.2rem;
-  background: transparent;
-  color: var(--muted);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  cursor: pointer;
-  transition: color var(--fast) var(--ease), border-color var(--fast) var(--ease);
-}
-
-.icon-btn:hover {
-  color: var(--text);
-  border-color: var(--border-2);
-}
-
-.nav-toggle {
-  display: none;
-}
-
-@media (max-width: 860px) {
-  .nav-toggle {
-    display: inline-grid;
-  }
-
-  .header__cta {
-    display: none;
-  }
-
-  .nav {
-    position: fixed;
-    inset: 3.75rem 0 auto 0;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.1rem;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    padding: 0.75rem var(--gutter) 1.25rem;
-    margin: 0;
-    display: none;
-  }
-
-  .nav[data-open='true'] {
-    display: flex;
-  }
-
-  .nav__link {
-    padding: 0.8rem 0.6rem;
-    font-size: 1rem;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   08  COMMAND PALETTE
-
-   A real one — it searches, it navigates, it runs actions, it is fully
-   keyboard driven. Built on <dialog> so focus trapping and Escape come from
-   the platform rather than from hand-written JavaScript.
-   -------------------------------------------------------------------------- */
-.cmdk {
-  width: min(38rem, calc(100vw - 2rem));
-  max-height: min(30rem, 80vh);
-  padding: 0;
-  border: 1px solid var(--border-2);
-  border-radius: var(--r-lg);
-  background: var(--surface);
-  color: var(--text);
-  overflow: hidden;
-  margin: 0;
-  position: fixed;
-  top: 14vh;
-  left: 50%;
-  translate: -50% 0;
-  box-shadow: 0 24px 80px -12px rgba(0, 0, 0, 0.75);
-}
-
-.cmdk::backdrop {
-  background: rgba(5, 5, 8, 0.6);
-  backdrop-filter: blur(4px);
-}
-
-/* A thin spectrum line across the top — the lens edge. */
-.cmdk__spectrum {
-  height: 1px;
-  background: var(--spectrum);
-}
-
-.cmdk__search {
-  display: flex;
   align-items: center;
   gap: 0.7rem;
-  padding: 0.9rem 1.1rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.cmdk__search svg {
-  color: var(--faint);
-  flex: none;
-}
-
-.cmdk__input {
-  flex: 1;
-  min-width: 0;
-  background: none;
-  border: 0;
-  outline: none;
-  color: var(--text);
-  font-family: inherit;
-  font-size: 1rem;
-  letter-spacing: -0.012em;
-  padding: 0;
-}
-
-.cmdk__input::placeholder {
-  color: var(--faint);
-}
-
-.cmdk__list {
-  list-style: none;
-  margin: 0;
-  padding: 0.5rem;
-  overflow-y: auto;
-  max-height: 21rem;
-}
-
-.cmdk__group {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.13em;
+  padding: 0.95rem 1.5rem;
+  font: 700 0.8125rem/1 var(--f-tech);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--faint);
-  padding: 0.75rem 0.65rem 0.35rem;
+  text-decoration: none;
+  border: 0;
+  background: var(--ink);
+  color: var(--stock);
+  transition: background 80ms var(--snap), color 80ms var(--snap);
 }
-
-.cmdk__item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem 0.65rem;
-  border-radius: var(--r-sm);
-  cursor: pointer;
-  font-size: 0.9375rem;
-  letter-spacing: -0.012em;
-  color: var(--muted);
-  scroll-margin: 0.5rem;
+.stamp:hover,
+.stamp:focus-visible {
+  background: var(--red-ink);
+  color: var(--stock);
 }
-
-.cmdk__item[aria-selected='true'] {
-  background: var(--surface-2);
-  color: var(--text);
+.stamp--ghost {
+  background: transparent;
+  color: var(--ink);
+  border-left: var(--w-div) solid var(--ink);
 }
-
-/* The selected row gets a spectrum edge — the same mark as the lens top. */
-.cmdk__item[aria-selected='true'] .cmdk__icon {
-  background-image: var(--spectrum);
-  border-color: transparent;
-  color: var(--bg);
+.stamp--ghost:hover,
+.stamp--ghost:focus-visible {
+  background: var(--ink);
+  color: var(--stock);
 }
-
-.cmdk__icon {
-  display: grid;
-  place-items: center;
-  width: 1.6rem;
-  height: 1.6rem;
-  border-radius: 6px;
-  border: 1px solid var(--border-2);
-  color: var(--faint);
+.stamp svg {
+  width: 13px;
+  height: 13px;
   flex: none;
-}
-
-.cmdk__label {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.cmdk__hint {
-  font-size: 0.75rem;
-  color: var(--faint);
-  flex: none;
-}
-
-.cmdk__empty {
-  padding: 2rem 1rem;
-  text-align: center;
-  color: var(--faint);
-  font-size: 0.9375rem;
-}
-
-.cmdk__foot {
-  display: flex;
-  gap: 1.1rem;
-  align-items: center;
-  padding: 0.6rem 1.1rem;
-  border-top: 1px solid var(--border);
-  font-size: 0.75rem;
-  color: var(--faint);
-  background: rgba(10, 10, 13, 0.5);
-  flex-wrap: wrap;
-}
-
-.cmdk__foot span {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
 }
 
 /* --------------------------------------------------------------------------
-   09  SERVICE ROWS
-
-   Bold and typographic rather than a card grid. Each row is a full-bleed
-   band; pointing at one paints its name with the spectrum and draws a
-   spectrum rule underneath.
+   TITLE BLOCK — the ruled table every drawing signs off in
    -------------------------------------------------------------------------- */
-.srow {
-  display: block;
-  position: relative;
-  padding-block: clamp(2rem, 4vw, 3.25rem);
-  border-top: 1px solid var(--border);
+.tblock {
+  margin-inline: var(--gutter);
+  border-top: var(--w-key) solid var(--ink);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  background: var(--ink);
+  gap: var(--w-hair);
+  z-index: 2;
+}
+.tblock__cell {
+  background: var(--stock);
+  padding: 0.85rem clamp(0.9rem, 1.6vw, 1.4rem);
+  display: grid;
+  gap: 0.3rem;
+  align-content: start;
+}
+.tblock__key {
+  font: 500 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--graphite);
+}
+.tblock__val {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+
+/* --------------------------------------------------------------------------
+   SHEET 02 — SCOPE OF WORK (numbered clauses)
+   -------------------------------------------------------------------------- */
+.clauses {
+  border-top: var(--w-key) solid var(--ink);
+}
+.clause {
+  /* The heading's own first-line box. The clause number and the arrow are
+     given the same box so their optical centres line up with the heading at
+     every step of its clamp, rather than at the one width a nudge was tuned
+     for. */
+  --clause-lead: calc(clamp(1.5rem, 2.6vw, 2.35rem) * 1.04);
+
+  display: grid;
+  /* The figure column holds a four-character number, so it is sized for one
+     rather than left at a width that parked it 113px from the heading it
+     labels. The text column is capped at its own measure so the copy reaches
+     its column edge instead of stopping short and opening a channel, and the
+     parameters take whatever is left, which pulls them back toward the text.
+     The cue column is the width of the arrow. */
+  grid-template-columns: 2.75rem minmax(0, 44rem) minmax(0, 1fr) 1.5rem;
+  gap: clamp(0.85rem, 1.8vw, 1.75rem);
+  align-items: start;
+  padding: clamp(1.6rem, 2.8vw, 2.4rem) 0;
+  border-bottom: var(--w-key) solid var(--ink);
   text-decoration: none;
   color: inherit;
+  position: relative;
+  transition: background 90ms var(--snap);
 }
-
-.srow:last-of-type {
-  border-bottom: 1px solid var(--border);
-}
-
-.srow__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 1rem;
-  align-items: baseline;
-}
-
-@media (min-width: 900px) {
-  .srow__grid {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr) auto;
-    gap: clamp(1.5rem, 4vw, 4rem);
-  }
-}
-
-.srow__name {
-  color: var(--text);
-  transition: color var(--fast) var(--ease);
-}
-
-.srow__desc {
-  color: var(--muted);
-  font-size: 1rem;
-  line-height: 1.6;
-  max-width: 34rem;
-}
-
-.srow__go {
-  display: none;
-  color: var(--faint);
-  transition: color var(--fast) var(--ease), transform var(--fast) var(--ease);
-}
-
-@media (min-width: 900px) {
-  .srow__go {
-    display: block;
-  }
-}
-
-/* The spectrum rule that draws in from the left on hover. */
-.srow::after {
+.clause::after {
   content: '';
   position: absolute;
   left: 0;
-  bottom: -1px;
-  height: 1px;
-  width: 100%;
-  background: var(--spectrum);
+  top: 0;
+  bottom: 0;
+  width: var(--w-div);
+  background: var(--red);
   transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 420ms var(--ease-out);
+  transform-origin: left center;
+  transition: transform 160ms var(--snap);
 }
-
-.srow:hover::after,
-.srow:focus-visible::after {
+.clause:hover,
+.clause:focus-visible {
+  background: var(--stock-2);
+}
+.clause:hover::after,
+.clause:focus-visible::after {
   transform: scaleX(1);
 }
-
-.srow:hover .srow__go,
-.srow:focus-visible .srow__go {
-  color: var(--text);
-  transform: translate(3px, -3px);
+.clause__no {
+  font: 500 0.8125rem/1.4 var(--f-tech);
+  line-height: var(--clause-lead);
+  color: var(--red-ink);
+}
+.clause__name {
+  display: block;
+  font-size: clamp(1.5rem, 2.6vw, 2.35rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  margin-bottom: 0.6rem;
+}
+.clause__desc {
+  display: block;
+  color: var(--graphite);
+}
+/* A clause carries its parameters beside it, the way a spec entry does. */
+.clause__params {
+  display: grid;
+  gap: 0;
+  align-self: start;
+  /* The capping rule is this column's datum, and it sits on the same line the
+     figure, the heading and the arrow start from. A margin here pushed the
+     whole column 8px out of step with the other three. */
+  border-top: var(--w-hair) solid var(--rule);
+}
+.clause__param {
+  display: grid;
+  grid-template-columns: minmax(0, 6.5rem) minmax(0, 1fr);
+  gap: 0.2rem 0.9rem;
+  align-items: baseline;
+  padding: 0.45rem 0;
+  border-bottom: var(--w-hair) solid var(--rule);
+  font: 500 0.6875rem/1.35 var(--f-tech);
+  letter-spacing: 0.02em;
+}
+.clause__param dt {
+  color: var(--graphite);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.clause__param dd {
+  color: var(--ink);
 }
 
-@supports (background-clip: text) or (-webkit-background-clip: text) {
-  .srow:hover .srow__name,
-  .srow:focus-visible .srow__name {
-    background-image: var(--spectrum);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
+/* The sequence is dimensioned as one run, ticked at every step boundary. */
+.dimstring {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: clamp(1.75rem, 3vw, 2.75rem);
+}
+.dimstring svg {
+  width: 100%;
+  height: 20px;
+  overflow: visible;
+}
+.dimstring [data-draw] {
+  stroke: var(--red);
+  fill: none;
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+  transition: stroke-dashoffset 900ms var(--draw) 120ms;
+}
+.dimstring span {
+  font: 600 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--red-ink);
+}
+
+/* The drawing signs itself off, beside the actions on the closing row. The
+   issue block runs the foot's own four-column grid, so the sign-off's left
+   edge and its internal rule fall exactly on the rules of the revision table
+   beneath it — the columns read as one continuous grid, not a near miss. */
+.issue {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: var(--w-hair);
+}
+.issue > * {
+  grid-column: 1 / -1;
+}
+.issue .stamp-row {
+  grid-column: 1 / 3;
+  justify-self: start;
+  align-self: end;
+}
+.signoff {
+  grid-column: 3 / -1;
+  align-self: end;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--w-hair);
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  background: var(--rule-on-ink);
+  border: var(--w-key) solid var(--rule-on-ink);
+  /* The frame hangs its keyline outside the column so the cells inside start
+     exactly where the foot's cells start, not one keyline over. */
+  margin-inline: calc(-1 * var(--w-key));
+}
+.signoff > div {
+  background: var(--ink);
+  padding: 0.7rem 0.9rem;
+  display: grid;
+  gap: 0.28rem;
+}
+.signoff dt {
+  font: 500 0.6875rem/1 var(--f-tech);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--on-ink-dim);
+}
+.signoff dd {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--stock);
+}
+
+.clause__go {
+  align-self: start;
+  justify-self: end;
+  width: 24px;
+  /* Tall as the heading's first line; the glyph centres itself inside that box
+     (preserveAspectRatio) so it sits level with the heading, not with the row. */
+  height: var(--clause-lead);
+  color: var(--ink);
+  transition: transform 160ms var(--snap), color 160ms var(--snap);
+}
+.clause:hover .clause__go,
+.clause:focus-visible .clause__go {
+  transform: translateX(5px);
+  color: var(--red);
 }
 
 /* --------------------------------------------------------------------------
-   10  CARDS, FEATURES, META
+   SHEET 03 — SEQUENCE (dimensioned steps)
    -------------------------------------------------------------------------- */
-.card {
-  padding: 1.75rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  transition: background-color var(--fast) var(--ease), border-color var(--fast) var(--ease);
-}
-
-.card:hover,
-.card:focus-within {
-  background: var(--surface-2);
-  border-color: var(--border-2);
-}
-
-.features {
-  list-style: none;
+.seq {
   padding: 0;
-  margin: 0;
+  list-style: none;
   display: grid;
-  gap: 0.7rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  background: var(--ink);
+  gap: var(--w-key);
+  border: var(--w-key) solid var(--ink);
 }
-
-.features li {
+.step {
+  background: var(--stock);
+  padding: clamp(1.25rem, 2.2vw, 1.9rem);
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  gap: 0.35rem 0.9rem;
+  align-content: start;
   position: relative;
-  padding-left: 1.5rem;
+}
+/* Whole cells: side-by-side steps share one cell height. In a single column
+   the equalised height is just dead stock under short copy, so it only
+   applies once the sequence has columns to square up. */
+@media (min-width: 34rem) {
+  .step {
+    min-height: 15rem;
+  }
+}
+/* The figure sits in the cell's own margin, the way a clause number does. */
+.step__no {
+  grid-row: 1 / span 2;
+  font: 500 0.8125rem/1.35 var(--f-tech);
+  color: var(--red-ink);
+  white-space: nowrap;
+}
+.step__title {
+  font-size: 1.1875rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+}
+.step__body {
+  color: var(--graphite);
   font-size: 0.9375rem;
-  color: var(--muted);
-  line-height: 1.55;
+  line-height: 1.5;
 }
 
-.features li::before {
+/* --------------------------------------------------------------------------
+   SHEET 04 — NOTES (how drawing notes are actually set)
+   -------------------------------------------------------------------------- */
+.notes {
+  columns: 2;
+  column-gap: clamp(1.75rem, 4vw, 4rem);
+  column-rule: var(--w-hair) solid var(--rule);
+}
+.note-item {
+  break-inside: avoid;
+  padding: 1.1rem 0;
+  border-bottom: var(--w-hair) solid var(--rule);
+  display: grid;
+  grid-template-columns: 2.75rem 1fr;
+  gap: 0.9rem;
+}
+.note-item__no {
+  font: 500 0.75rem/1.6 var(--f-tech);
+  color: var(--red-ink);
+}
+.note-item__q {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin-bottom: 0.35rem;
+}
+.note-item__a {
+  color: var(--graphite);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  max-width: 72ch;
+}
+
+/* --------------------------------------------------------------------------
+   SHEET 05 — ISSUE (the close)
+   -------------------------------------------------------------------------- */
+.issue {
+  background: var(--ink);
+  color: var(--stock);
+  padding: clamp(3rem, 6vw, 5.5rem) var(--gutter);
+  position: relative;
+  border-bottom: 0;
+  isolation: isolate;
+}
+
+/* Section hatch. A cut face is poché'd on a drawing, and this is the only cut
+   face on the site — 45° hairlines at the same pitch as the stock's grid. */
+.issue::before {
   content: '';
   position: absolute;
-  left: 0.1rem;
-  top: 0.6em;
-  width: 0.45rem;
-  height: 0.45rem;
-  border-radius: 50%;
-  background: var(--spectrum);
+  inset: 0;
+  z-index: -1;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(239, 238, 231, 0.07) 0 1px,
+    transparent 1px 11px
+  );
+  pointer-events: none;
 }
-
-.meta {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
-  gap: 1.5rem;
-  margin-top: 2.5rem;
-  padding-top: 1.75rem;
-  border-top: 1px solid var(--border);
+.issue__title {
+  font-size: clamp(2.1rem, 5.4vw, 4.25rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  max-width: 17ch;
+  text-wrap: balance;
 }
-
-.meta__key {
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--faint);
-  margin-bottom: 0.4rem;
+.issue__body {
+  color: var(--on-ink);
+  max-width: 52ch;
+  margin-top: 1.2rem;
+  font-size: clamp(1rem, 0.95rem + 0.35vw, 1.1875rem);
 }
-
-.meta__val {
-  font-size: 0.9375rem;
-  color: var(--text);
-  letter-spacing: -0.012em;
+.issue .stamp-row {
+  border-color: var(--stock);
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
 }
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.issue .stamp {
+  background: var(--stock);
+  color: var(--ink);
 }
-
-.tags li {
-  font-size: 0.875rem;
-  color: var(--muted);
-  padding: 0.35rem 0.7rem;
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  background: var(--surface);
+.issue .stamp:hover,
+.issue .stamp:focus-visible {
+  background: var(--red-ink);
+  color: var(--stock);
 }
-
-.stack-group + .stack-group {
-  margin-top: 1.75rem;
+.issue .stamp--ghost {
+  background: transparent;
+  color: var(--stock);
+  border-left-color: var(--stock);
 }
-
-.stack-group__name {
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--faint);
-  margin-bottom: 0.75rem;
+.issue .stamp--ghost:hover,
+.issue .stamp--ghost:focus-visible {
+  background: var(--stock);
+  color: var(--ink);
 }
-
-.detail + .detail {
-  margin-top: clamp(3.5rem, 7vw, 6rem);
-  padding-top: clamp(3.5rem, 7vw, 6rem);
-  border-top: 1px solid var(--border);
-}
-
-.detail__title {
-  margin-bottom: 1.5rem;
-}
-
-/* --------------------------------------------------------------------------
-   11  QUESTION GRID
-   -------------------------------------------------------------------------- */
-.qa {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 2.5rem 3.5rem;
-}
-
-@media (min-width: 800px) {
-  .qa {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.qa__q {
-  font-size: 1.0625rem;
-  font-weight: 650;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.55rem;
-}
-
-.qa__a {
-  color: var(--muted);
-  font-size: 0.9375rem;
-  line-height: 1.65;
-}
-
-/* --------------------------------------------------------------------------
-   12  FORMS
-   -------------------------------------------------------------------------- */
-.form {
-  display: grid;
-  gap: 1.15rem;
-}
-
-.field-row {
-  display: grid;
-  gap: 0.45rem;
-}
-
-.field-row__label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text);
-  letter-spacing: -0.01em;
-}
-
-.field-row__label .req {
-  color: var(--faint);
-  font-weight: 400;
-}
-
-.field-row input,
-.field-row select,
-.field-row textarea {
-  width: 100%;
-  font-family: inherit;
-  font-size: 0.9375rem;
-  color: var(--text);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-sm);
-  padding: 0.72rem 0.9rem;
-  transition: border-color var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
-}
-
-.field-row textarea {
-  resize: vertical;
-  min-height: 8.5rem;
-  line-height: 1.6;
-}
-
-.field-row input::placeholder,
-.field-row textarea::placeholder {
-  color: var(--faint);
-}
-
-.field-row input:hover,
-.field-row select:hover,
-.field-row textarea:hover {
-  border-color: var(--border-2);
-}
-
-.field-row input:focus,
-.field-row select:focus,
-.field-row textarea:focus {
-  outline: none;
-  border-color: var(--cyan);
-  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.14);
-}
-
-.gotcha {
+.issue__seal {
   position: absolute;
-  left: -9999px;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-
-.notice {
-  display: flex;
-  gap: 0.75rem;
-  align-items: flex-start;
-  padding: 0.9rem 1rem;
-  border: 1px solid rgba(168, 85, 247, 0.35);
-  border-radius: var(--r-sm);
-  background: rgba(168, 85, 247, 0.08);
-  font-size: 0.875rem;
-  line-height: 1.55;
-  color: var(--muted);
-}
-
-.notice__tag {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  right: var(--gutter);
+  top: clamp(2rem, 5vw, 4rem);
   text-transform: uppercase;
-  color: var(--violet);
-  white-space: nowrap;
-  padding-top: 0.2rem;
-}
-
-.notice code {
-  font-size: 0.8125rem;
-  color: var(--text);
-}
-
-.contact-list {
-  display: grid;
-  gap: 1.35rem;
-}
-
-.contact-list__key {
-  font-size: 0.6875rem;
-  font-weight: 500;
+  border: var(--w-div) solid var(--red);
+  color: var(--red-lit);
+  font: 700 0.6875rem/1.5 var(--f-tech);
   letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--faint);
-  display: block;
-  margin-bottom: 0.3rem;
-}
-
-.contact-list__val {
-  font-size: 0.9375rem;
-  color: var(--text);
-  word-break: break-word;
-  letter-spacing: -0.012em;
+  padding: 0.75rem 0.9rem;
+  text-align: center;
+  transform: rotate(-4deg);
 }
 
 /* --------------------------------------------------------------------------
-   13  FOOTER
+   FOOT — the sheet's bottom margin: a revision table
    -------------------------------------------------------------------------- */
-.footer {
-  border-top: 1px solid var(--border);
-  padding-block: clamp(3rem, 6vw, 4.5rem) 2rem;
-}
-
-.footer__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 2.5rem;
-}
-
-@media (min-width: 640px) {
-  .footer__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 940px) {
-  .footer__grid {
-    grid-template-columns: 1.6fr repeat(3, minmax(0, 1fr));
-    gap: 3rem;
-  }
-}
-
-.footer__blurb {
-  margin-top: 0.9rem;
-  font-size: 0.9375rem;
-  color: var(--muted);
-  line-height: 1.6;
-  max-width: 22rem;
-}
-
-.footer__title {
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
+.foot {
+  border-top: var(--w-div) solid var(--ink);
+  padding-inline: var(--gutter);
+  font: 500 0.6875rem/1.6 var(--f-tech);
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--faint);
-  margin-bottom: 1rem;
-}
-
-.footer__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  color: var(--graphite);
   display: grid;
-  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  background: var(--ink);
+  gap: var(--w-hair);
 }
-
-.footer__list a,
-.footer__list span {
-  font-size: 0.9375rem;
-  color: var(--muted);
-  text-decoration: none;
+.foot > * {
+  background: var(--stock);
+  padding: 0.9rem clamp(0.9rem, 1.6vw, 1.4rem);
 }
-
-.footer__list a:hover {
-  color: var(--text);
+.foot a {
+  color: var(--ink);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
-
-.footer__base {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
-  justify-content: space-between;
-  margin-top: clamp(3rem, 6vw, 4rem);
-  padding-top: 1.75rem;
-  border-top: 1px solid var(--border);
-  font-size: 0.8125rem;
-  color: var(--faint);
+.foot a:hover {
+  color: var(--red-ink);
 }
 
 /* --------------------------------------------------------------------------
-   14  MOTION
-
-   Two gestures. On load, hero content rises in sequence. On scroll, each
-   section settles once as it enters. Both disabled under reduced motion.
+   ADAPT
    -------------------------------------------------------------------------- */
-[data-rise] > * {
-  animation: rise 900ms var(--ease-out) both;
-  animation-delay: calc(var(--i, 0) * 90ms + 120ms);
-}
-
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
+@media (max-width: 60rem) {
+  .notes {
+    columns: 1;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .clause {
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+  }
+  /* No room for two columns of parameters in a phone-width sheet. */
+  .clause__param {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.15rem;
+  }
+  .clause__params {
+    grid-column: 2;
+  }
+  .clause__go {
+    display: none;
   }
 }
 
-[data-reveal] {
-  opacity: 0;
-  translate: 0 14px;
-  transition: opacity var(--slow) var(--ease-out), translate var(--slow) var(--ease-out);
+
+@media (max-width: 30rem) {
+  .clause {
+    grid-template-columns: 3rem minmax(0, 1fr);
+  }
+  .note-item {
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    gap: 0.6rem;
+  }
 }
 
-[data-reveal].is-visible {
-  opacity: 1;
-  translate: 0 0;
-}
-
-.no-js [data-reveal] {
-  opacity: 1;
-  translate: 0 0;
+@media (max-width: 44rem) {
+  .issue__seal {
+    position: static;
+    justify-self: start;
+    width: fit-content;
+    transform: none;
+    margin-bottom: 1.25rem;
+  }
+  .mast__nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .ts__find {
+    flex: 0 0 auto;
+  }
+  .title-sheet {
+    min-height: auto;
+  }
+  /* The cloud fits any width, so it stays; the leader needs a margin to run
+     through and there isn't one at this size. */
+  .mk-leader,
+  .mk-dot {
+    display: none;
+  }
+  .note {
+    max-width: none;
+  }
+  .stamp-row {
+    width: 100%;
+    flex-direction: column;
+  }
+  .stamp--ghost {
+    border-left: 0;
+    border-top: var(--w-div) solid var(--ink);
+  }
+  .issue .stamp--ghost {
+    border-top-color: var(--stock);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
+}
 
-  [data-reveal] {
-    opacity: 1;
-    translate: 0 0;
+/* --------------------------------------------------------------------------
+   TOUCH — a pointer that cannot hit a 20px row needs a 44px one. Density is
+   kept for fine pointers rather than lowered for everybody.
+   -------------------------------------------------------------------------- */
+@media (pointer: coarse) {
+  .foot a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
   }
+  .mast__nav a,
+  .mast__id,
+  .ts__find {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .stamp {
+    padding-block: 1.05rem;
+  }
+  .clause {
+    padding-block: 1.5rem;
+  }
+}
 
-  [data-rise] > * {
-    animation: none;
+/* --------------------------------------------------------------------------
+   SHEET 05 — SCHEDULE OF RATES
+   A rate schedule is a table, so this is one: ruled cells, clause numbers,
+   figures set in the technical face because they are measurements.
+   -------------------------------------------------------------------------- */
+
+/* The switch decides which figure is on the sheet. CSS does the showing, so
+   the monthly column is still correct with no script at all. */
+[data-billing][data-cycle='monthly'] [data-when='annual'],
+[data-billing][data-cycle='annual'] [data-when='monthly'] {
+  display: none;
+}
+
+.cycle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+.cycle__btn {
+  font: 700 0.75rem/1 var(--f-tech);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  padding: 0.8rem 1.2rem;
+  border: var(--w-key) solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 80ms var(--snap), color 80ms var(--snap);
+}
+.cycle__btn + .cycle__btn {
+  border-left: 0;
+}
+.cycle__btn:hover {
+  background: var(--stock-2);
+}
+.cycle__btn[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--stock);
+}
+.cycle__hint {
+  font: 500 0.75rem/1.4 var(--f-tech);
+  color: var(--red-ink);
+}
+
+.rates {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--w-key);
+  background: var(--ink);
+  border: var(--w-key) solid var(--ink);
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+}
+.rate {
+  background: var(--stock);
+  padding: clamp(1.15rem, 2.2vw, 1.85rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.rate__cta {
+  margin-top: auto;
+}
+.rate__no {
+  font: 500 0.75rem/1 var(--f-tech);
+  color: var(--red-ink);
+}
+.rate__name {
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  margin: 0.5rem 0 0.35rem;
+}
+.rate__tag {
+  color: var(--graphite);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+.rate__price {
+  border-top: var(--w-key) solid var(--ink);
+  border-bottom: var(--w-key) solid var(--ink);
+  padding: 0.85rem 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+.rate__price b {
+  font-size: clamp(2.1rem, 3.6vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.rate__price i {
+  font: 500 0.75rem/1 var(--f-tech);
+  font-style: normal;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--graphite);
+}
+.rate__save {
+  font: 600 0.75rem/1 var(--f-tech);
+  color: var(--red-ink);
+  border: var(--w-key) solid var(--red);
+  padding: 0.4rem 0.55rem;
+  justify-self: start;
+}
+.rate__list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  border-top: var(--w-hair) solid var(--rule);
+}
+.rate__list li {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--graphite);
+  padding: 0.55rem 0 0.55rem 1.35rem;
+  border-bottom: var(--w-hair) solid var(--rule);
+  position: relative;
+}
+.rate__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1.05em;
+  width: 8px;
+  height: var(--w-key);
+  background: var(--red);
+}
+.rate__cta {
+  justify-self: stretch;
+  justify-content: center;
+  border: var(--w-div) solid var(--ink);
+}
+.rate__foot {
+  margin-top: 1.25rem;
+  max-width: 78ch;
+  color: var(--graphite);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 66rem) {
+  .rates {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Below this the stamped actions no longer fit beside the sign-off without
+   wrapping inside their own frame; the sign-off drops under the stamps and
+   keeps the full-width column grid. */
+@media (max-width: 74rem) {
+  .issue .stamp-row,
+  .signoff {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   ISSUE BLOCK, WIDE
+   -------------------------------------------------------------------------- */
+@media (min-width: 90rem) {
+  .issue__title {
+    max-width: 20ch;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   TOUCH FLOOR — the last controls measured under 44px: the billing switch and
+   the skip link, which is small but is still a link once it is focused.
+   -------------------------------------------------------------------------- */
+@media (pointer: coarse) {
+  .cycle__btn,
+  .skip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   MASTHEAD, NARROW — the row cannot hold the lockup, four routes and the
+   finder at once, so it becomes two: identity and finder on top, routes
+   beneath. It stops sticking here; a masthead worth 20% of a phone screen is
+   not worth keeping on screen.
+   -------------------------------------------------------------------------- */
+@media (max-width: 52rem) {
+  .mast {
+    position: static;
+    row-gap: 0;
+    padding-block: 0.6rem;
+  }
+  .mast__id {
+    order: 1;
+  }
+  .ts__find {
+    order: 2;
+    margin-left: auto;
+  }
+  .mast__nav {
+    order: 3;
+    width: 100%;
+    margin-left: 0;
+    justify-content: space-between;
+    gap: 0.25rem 0.5rem;
+    border-top: var(--w-hair) solid var(--rule);
+    margin-top: 0.55rem;
+    padding-top: 0.15rem;
+  }
+  .mast__logo {
+    height: 1.75rem;
+  }
+}
+
+@media (max-width: 23rem) {
+  .mast__logo {
+    height: 1.5rem;
+  }
+  .mast__nav {
+    letter-spacing: 0.02em;
+    gap: 0.25rem;
+  }
+}
+
+@media (max-width: 52rem) {
+  .ts__find {
+    border-left: 0;
+  }
+}
+
+
+/* --------------------------------------------------------------------------
+   TITLE SHEET, WIDE — below a certain width everything stacks in one column,
+   which on a large monitor leaves the right half of the opening view empty.
+   From here the sheet reads as a drawing does: the statement across the top,
+   the explanation and the margin note side by side beneath it, the actions
+   along the bottom. The note moving to the right also shortens its leader,
+   which no longer has to travel the width of the sheet to reach the cloud.
+   -------------------------------------------------------------------------- */
+@media (min-width: 64rem) {
+  .ts__field {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    column-gap: clamp(2rem, 4vw, 4.5rem);
+    align-content: center;
+  }
+  .ts__title,
+  .ts__field .stamp-row {
+    grid-column: 1 / -1;
+  }
+  .ts__sub {
+    grid-column: 1;
+    align-self: start;
+    max-width: none;
+  }
+  .ts__field .note {
+    grid-column: 2;
+    align-self: start;
+    justify-self: end;
+    max-width: 38ch;
   }
 }

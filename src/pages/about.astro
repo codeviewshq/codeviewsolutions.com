@@ -1,61 +1,43 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Cta from '../components/Cta.astro';
-import { meta, about, ctas } from '../data/site.js';
+import { meta, about, ctas, process, site } from '../data/site.js';
+
 ---
 
 <BaseLayout title={meta.about.title} description={meta.about.description}>
-  <section class="section">
-    <div class="container">
-      <div class="section__head">
-        <p class="label">{about.label}</p>
-        <h1 class="display-l">
-          {about.headingLead}<br /><span class="spectrum">{about.headingAccent}</span>
-        </h1>
+  <!-- SHEET 01 — THE RECORD -->
+  <section class="sh" id="record" data-sheet="01" data-mark data-stage>
+        <!-- The review, performed on this sheet too: the claim is clouded and
+             the finding is tied back to it, measured off the live elements. -->
+        <svg class="markup" data-markup aria-hidden="true">
+          <path class="mk-cloud" data-draw></path>
+          <path class="mk-leader" data-draw></path>
+          <circle class="mk-dot" r="3.5"></circle>
+        </svg>
+
+    <header class="sh__head">
+      <h1 class="sh__h1">{about.headingLead} <em data-cloud>{about.headingAccent}</em></h1>
+      <p class="sh__no">Sheet 01 · {about.label}</p>
+    </header>
+
+    <p class="note" data-note data-tag="REV A · FIRST FINDING">
+      Support continues after launch. Every refresh carries a 90-day warranty
+      on the agreed work.
+    </p>
+
+    <div class="detail__grid" style="margin-top:clamp(1.5rem,3vw,2.5rem)">
+      <div class="prose">
+        {about.story.map((paragraph) => <p>{paragraph}</p>)}
       </div>
 
-      <div class="split">
-        <div class="prose">
-          {about.story.map((paragraph) => <p>{paragraph}</p>)}
-        </div>
-
-        <aside class="card">
-          <h2 class="footer__title" style="margin-bottom:1.25rem">Company details</h2>
-          <dl>
-            {
-              about.facts.map((fact, i) => (
-                <div style={i === 0 ? '' : 'margin-top:1.25rem'}>
-                  <dt class="meta__key">{fact.key}</dt>
-                  <dd class="meta__val">{fact.value}</dd>
-                </div>
-              ))
-            }
-          </dl>
-        </aside>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" style="padding-top:0">
-    <div class="container">
-      <hr class="rule" style="margin-bottom:clamp(3.5rem,7vw,5.5rem)" />
-
-      <div class="section__head" data-reveal>
-        <p class="label">{about.toolsLabel}</p>
-        <h2 class="display-m">{about.toolsHeading}</h2>
-        <p class="lede">{about.toolsLede}</p>
-      </div>
-
-      <div data-reveal>
+      <div class="plate">
+        <p class="plate__head">Company record</p>
         {
-          about.stack.map((group) => (
-            <div class="stack-group">
-              <h3 class="stack-group__name">{group.group}</h3>
-              <ul class="tags">
-                {group.items.map((item) => (
-                  <li>{item}</li>
-                ))}
-              </ul>
+          about.facts.map((fact) => (
+            <div class="plate__row">
+              <span class="plate__key">{fact.key}</span>
+              <span class="plate__val">{fact.value}</span>
             </div>
           ))
         }
@@ -63,5 +45,70 @@ import { meta, about, ctas } from '../data/site.js';
     </div>
   </section>
 
-  <Cta heading={ctas.about.heading} headingAccent={ctas.about.accent} body={ctas.about.body} />
+  <!-- SHEET 02 — SCOPE OF CARE -->
+  <section class="sh" id="scope-of-care" data-sheet="02" data-mark>
+    <header class="sh__head">
+      <h2 class="sh__title">{about.toolsHeading}</h2>
+      <p class="sh__no">Sheet 02 · {about.toolsLabel}</p>
+    </header>
+    <p class="sh__lede">{about.toolsLede}</p>
+
+    <div class="groups" style="margin-top:clamp(1.75rem,3vw,2.75rem)">
+      {
+        about.stack.map((group) => (
+          <div class="group">
+            <h3 class="group__name">{group.group}</h3>
+            <ul>
+              {group.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- SHEET 03 · HOW AN ENGAGEMENT IS REVISED -->
+  <section class="sh" id="revisions" data-sheet="03" data-mark>
+    <header class="sh__head">
+      <h2 class="sh__title">Every change is a revision, and every revision is recorded.</h2>
+      <p class="sh__no">Sheet 03 · Revision schedule</p>
+    </header>
+    <p class="sh__lede">
+      A drawing is never finished, it is revised — and each revision says what
+      changed and who is answerable for it. An engagement runs the same way.
+    </p>
+
+    <table class="revtable">
+      <caption>Revision schedule · one engagement</caption>
+      <thead>
+        <tr>
+          <th scope="col">Rev</th>
+          <th scope="col">Stage</th>
+          <th scope="col">What changes</th>
+          <th scope="col">By</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          process.steps.map((step, i) => (
+            <tr>
+              <td class="rev">{String.fromCharCode(65 + i)}</td>
+              <td class="stage">{step.title}</td>
+              <td>{step.body}</td>
+              <td class="by">{site.name}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </section>
+
+  <Cta
+    heading={ctas.about.heading}
+    headingAccent={ctas.about.accent}
+    body={ctas.about.body}
+    sheet="04"
+  />
 </BaseLayout>

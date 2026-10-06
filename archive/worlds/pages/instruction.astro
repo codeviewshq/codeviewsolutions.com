@@ -1,0 +1,209 @@
+---
+import ManualLayout from '../../layouts/ManualLayout.astro';
+import Logo from '../../components/Logo.astro';
+import Plate from '../../components/Plate.astro';
+import { site, nav, hero, services, process, credibility, sections, ctas, meta } from '../../data/site.js';
+import { withBase } from '../../utils/url.js';
+
+// One part per thing in the set. The shape and colour are the part's identity
+// and stay attached to it everywhere it appears in the booklet.
+const factParts = [
+  { w: 1, d: 2, color: '#D8232A' },
+  { w: 2, d: 2, color: '#2B6FD6' },
+  { w: 1, d: 1, color: '#F5C518' },
+  { w: 1, d: 3, color: '#3EA86B' },
+];
+const stepParts = [
+  { w: 1, d: 1, color: '#D8232A' },
+  { w: 1, d: 2, color: '#F5C518' },
+  { w: 2, d: 2, color: '#2B6FD6' },
+  { w: 1, d: 3, color: '#3EA86B' },
+];
+const setParts = [
+  { w: 2, d: 2, color: '#D8232A' },
+  { w: 1, d: 3, color: '#2B6FD6' },
+  { w: 2, d: 3, color: '#3EA86B' },
+];
+
+const pages = [
+  { id: 'page-1', label: 'Start here' },
+  { id: 'page-2', label: 'The steps' },
+  { id: 'page-3', label: 'What you get' },
+  { id: 'page-4', label: 'Questions' },
+  { id: 'page-5', label: 'Begin' },
+];
+---
+
+<ManualLayout title={meta.home.title} description={meta.home.description}>
+  <div class="book">
+    <!-- CONTENTS SPINE -->
+    <aside class="spine">
+      <a class="spine__brand" href={withBase('/')}>
+        <Logo class="spine__mark" />
+        <span class="spine__name">{site.name}<br />{site.tagline}</span>
+      </a>
+
+      <nav class="spine__nav" aria-label="Contents">
+        {
+          pages.map((p, i) => (
+            <a class="spine__link" href={`#${p.id}`}>
+              <b>{i + 1}</b>
+              {p.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <p class="spine__foot">
+        {site.location}<br />
+        Reply within one business day
+      </p>
+    </aside>
+
+    <div class="pages">
+      <!-- ============================ COVER ============================ -->
+      <section class="page cover" id="page-1">
+        <div>
+          <h1 class="cover__title">{hero.headlineLead} {hero.headlineAccent}</h1>
+          <p class="cover__sub">{hero.body}</p>
+          <p class="cover__sub" style="font-weight:700;max-width:38ch">{hero.assurance}</p>
+
+          <div class="cover__actions">
+            <a class="btn" href={withBase(hero.primaryCta.href)}>
+              {hero.primaryCta.label}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 12h14M12 5l7 7-7 7"></path>
+              </svg>
+            </a>
+            <a class="btn btn--quiet" href={withBase(hero.secondaryCta.href)}>{hero.secondaryCta.label}</a>
+          </div>
+        </div>
+
+        <div class="parts">
+          <p class="parts__head">What is in this set</p>
+          {
+            hero.facts.map((fact, i) => (
+              <div class="parts__row">
+                <Plate w={factParts[i].w} d={factParts[i].d} color={factParts[i].color} size={62} />
+                <span>
+                  <span class="parts__key">{fact.key}</span>
+                  <span class="parts__val">{fact.value}</span>
+                </span>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- ============================ STEPS ============================ -->
+      <section class="page page--paper page--grid" id="page-2">
+        <header class="page__head">
+          <h2 class="page__title">{process.heading}</h2>
+          <p class="page__lede">{process.intro}</p>
+        </header>
+
+        <ol class="steps">
+          {
+            process.steps.map((step, i) => (
+              <li class="step" data-seat={i}>
+                <span class="step__no">{i + 1}</span>
+
+                <div class="step__callout">
+                  <Plate
+                    class="step__part"
+                    w={stepParts[i].w}
+                    d={stepParts[i].d}
+                    color={stepParts[i].color}
+                    size={92}
+                  />
+                  <svg class="step__arrow" viewBox="0 0 20 34" aria-hidden="true">
+                    <path d="M10 2v26M3 22l7 8 7-8" />
+                  </svg>
+                </div>
+
+                <div>
+                  <h3 class="step__title">{step.title}</h3>
+                  <p class="step__body">{step.body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <!-- ============================ SETS ============================ -->
+      <section class="page" id="page-3">
+        <header class="page__head">
+          <h2 class="page__title">{sections.homeServices.heading}</h2>
+          <p class="page__lede">{sections.homeServices.lede}</p>
+        </header>
+
+        <div class="sets">
+          {
+            services.map((service, i) => (
+              <article class="set">
+                <Plate w={setParts[i].w} d={setParts[i].d} color={setParts[i].color} size={118} />
+                <div>
+                  <h3 class="set__name">
+                    <a href={withBase(`/services/#${service.id}`)}>{service.name}</a>
+                  </h3>
+                  <p class="set__summary">{service.summary}</p>
+                </div>
+                <ul class="set__list">
+                  {
+                    service.includes.map((item, n) => (
+                      <li>
+                        <b>{String(n + 1).padStart(2, '0')}</b>
+                        {item}
+                      </li>
+                    ))
+                  }
+                </ul>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- ========================= QUESTIONS ========================= -->
+      <section class="page page--paper" id="page-4">
+        <header class="page__head">
+          <h2 class="page__title">{credibility.heading}</h2>
+          <p class="page__lede">{credibility.intro}</p>
+        </header>
+
+        <div class="qs">
+          {
+            credibility.items.map((item) => (
+              <div class="q">
+                <h3>{item.q}</h3>
+                <p>{item.a}</p>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- ============================ FINISH ============================ -->
+      <section class="page finish" id="page-5">
+        <h2 class="finish__title">{ctas.home.heading} {ctas.home.accent}</h2>
+        <p class="finish__body">{ctas.home.body}</p>
+        <div class="cover__actions">
+          <a class="btn" href={withBase('/contact/')}>
+            {hero.primaryCta.label}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
+          <a class="btn btn--quiet" href={withBase('/services/')}>See what you get</a>
+        </div>
+      </section>
+
+      <footer class="colophon">
+        <span>{site.legalName}</span>
+        <span>{site.location} · {site.serviceArea}</span>
+        {nav.map((item) => <a href={withBase(item.href)}>{item.label}</a>)}
+      </footer>
+    </div>
+  </div>
+</ManualLayout>

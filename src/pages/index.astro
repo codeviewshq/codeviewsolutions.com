@@ -1,111 +1,215 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import LightField from '../components/LightField.astro';
 import Cta from '../components/Cta.astro';
-import { meta, hero, services, credibility, sections, ctas } from '../data/site.js';
+import { hero, services, process, credibility, sections, ctas, plans, meta } from '../data/site.js';
 import { withBase } from '../utils/url.js';
+
+
+// The headline is one sentence pair; "an asset" is the phrase the review
+// clouds, so it is split out of the lead rather than re-typed.
+const [leadBefore, leadAfter] = hero.headlineLead.split('an asset');
 ---
 
 <BaseLayout title={meta.home.title} description={meta.home.description}>
-  <!-- HERO -->
-  <section class="hero">
-    <LightField />
+      <!-- ============================ SHEET 01 ============================ -->
+      <section class="sh title-sheet" id="sheet-01" data-sheet="01" data-mark data-stage>
+        <!-- The review, performed on the sheet: a revision cloud round the
+             claim and a leader line tying the first finding back to it. Both
+             are measured off the live elements, so they survive any reflow. -->
+        <svg class="markup" data-markup aria-hidden="true">
+          <path class="mk-cloud" data-draw></path>
+          <path class="mk-leader" data-draw></path>
+          <circle class="mk-dot" r="3.5"></circle>
+        </svg>
 
-    <div class="container hero__inner">
-      <div data-rise>
-        <p class="label" style="--i:0">{hero.eyebrow}</p>
+        <div class="ts__field">
+          <h1 class="ts__title">
+            {leadBefore}<em data-cloud>an asset</em>{leadAfter}<br />{hero.headlineAccent}
+          </h1>
 
-        <button class="kbd-hint" data-cmdk-open type="button" style="--i:1">
-          Search this site
-          <kbd>⌘</kbd><kbd>K</kbd>
-        </button>
+          <p class="ts__sub">{hero.body}</p>
 
-        <h1 class="display-xl hero__title" style="--i:2">
-          {hero.headlineLead}<br /><span class="spectrum">{hero.headlineAccent}</span>
-        </h1>
+          <p class="note" data-note data-tag="REV A · FIRST FINDING">{hero.assurance}</p>
 
-        <p class="hero__sub" style="--i:3">{hero.body}</p>
-
-        <div class="btn-row" style="--i:4">
-          <a class="btn btn--primary" href={withBase(hero.primaryCta.href)}>{hero.primaryCta.label}</a>
-          <a class="btn btn--secondary" href={withBase(hero.secondaryCta.href)}>
-            {hero.secondaryCta.label}
-          </a>
+          <div class="stamp-row">
+            <a class="stamp" href={withBase(hero.primaryCta.href)}>
+              {hero.primaryCta.label}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+                <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="square"></path>
+              </svg>
+            </a>
+            <a class="stamp stamp--ghost" href={withBase(hero.secondaryCta.href)}>
+              {hero.secondaryCta.label}
+            </a>
+          </div>
         </div>
 
-        <dl class="facts" style="--i:5">
+        <!-- TITLE BLOCK -->
+        <dl class="tblock">
           {
             hero.facts.map((fact) => (
-              <div>
-                <dt class="facts__key">{fact.key}</dt>
-                <dd class="facts__val">{fact.value}</dd>
+              <div class="tblock__cell">
+                <dt class="tblock__key">{fact.key}</dt>
+                <dd class="tblock__val">{fact.value}</dd>
               </div>
             ))
           }
+          <div class="tblock__cell">
+            <dt class="tblock__key">Plans from</dt>
+            <dd class="tblock__val">{plans.tiers[0].monthly.amount} a month</dd>
+          </div>
         </dl>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- SERVICES -->
-  <section class="section">
-    <div class="container">
-      <div class="section__head" data-reveal>
-        <p class="label">{sections.homeServices.label}</p>
-        <h2 class="display-l">{sections.homeServices.heading}</h2>
-        <p class="lede">{sections.homeServices.lede}</p>
-      </div>
-    </div>
+      <!-- ============================ SHEET 02 ============================ -->
+      <section class="sh" id="sheet-02" data-sheet="02" data-mark>
+        <header class="sh__head">
+          <h2 class="sh__title">{sections.homeServices.heading}</h2>
+          <p class="sh__no">Sheet 02 · {sections.homeServices.label}</p>
+        </header>
+        <p class="sh__lede">{sections.homeServices.lede}</p>
 
-    <div class="container" data-reveal>
-      {
-        services.map((service) => (
-          <a class="srow" href={withBase(`/services/#${service.id}`)}>
-            <div class="srow__grid">
-              <h3 class="display-m srow__name">{service.name}</h3>
-              <p class="srow__desc">{service.summary}</p>
-              <svg
-                class="srow__go"
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M7 17 17 7M9 7h8v8" />
-              </svg>
-            </div>
-          </a>
-        ))
-      }
-    </div>
-  </section>
+        <div class="clauses" style="margin-top:clamp(1.75rem,3vw,2.75rem)">
+          {
+            services.map((service, i) => (
+              <a class="clause" href={withBase(`/services/#${service.id}`)}>
+                <span class="clause__no">2.{i + 1}</span>
+                <span>
+                  <span class="clause__name">{service.name}</span>
+                  <span class="clause__desc">{service.summary}</span>
+                </span>
+                <dl class="clause__params">
+                  {
+                    service.meta.map((m) => (
+                      <div class="clause__param">
+                        <dt>{m.key}</dt>
+                        <dd>{m.value}</dd>
+                      </div>
+                    ))
+                  }
+                </dl>
+                <svg
+                  class="clause__go"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="square" />
+                </svg>
+              </a>
+            ))
+          }
+        </div>
+      </section>
 
-  <!-- WHY WORK WITH ME -->
-  <section class="section">
-    <div class="container">
-      <div class="section__head" data-reveal>
-        <p class="label">{credibility.label}</p>
-        <h2 class="display-l">{credibility.heading}</h2>
-        <p class="lede">{credibility.intro}</p>
-      </div>
+      <!-- ============================ SHEET 03 ============================ -->
+      <section class="sh" id="process" data-sheet="03" data-mark>
+        <header class="sh__head">
+          <h2 class="sh__title">{process.heading}</h2>
+          <p class="sh__no">Sheet 03 · {process.label}</p>
+        </header>
+        <p class="sh__lede">{process.intro}</p>
 
-      <div class="qa" data-reveal>
-        {
-          credibility.items.map((item) => (
-            <div>
-              <h3 class="qa__q">{item.q}</h3>
-              <p class="qa__a">{item.a}</p>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </section>
+        <!-- The run is dimensioned once, ticked at every step boundary — a
+             dimension string, not four decorative arrows. -->
+        <div class="dimstring">
+          <span>Four steps · free review through ongoing care</span>
+          <svg viewBox="0 0 1000 20" preserveAspectRatio="none" aria-hidden="true">
+            <path data-draw d="M1 2v16M250 4v12M500 4v12M750 4v12M999 2v16"></path>
+            <path data-draw d="M1 11h998M9 7l-8 4 8 4M991 7l8 4-8 4"></path>
+          </svg>
+        </div>
 
-  <Cta heading={ctas.home.heading} headingAccent={ctas.home.accent} body={ctas.home.body} />
+        <ol class="seq">
+          {
+            process.steps.map((step, i) => (
+              <li class="step">
+                <span class="step__no">{String(i + 1).padStart(2, '0')}</span>
+                <h3 class="step__title">{step.title}</h3>
+                <p class="step__body">{step.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <!-- ============================ SHEET 04 ============================ -->
+      <section class="sh" id="sheet-04" data-sheet="04" data-mark>
+        <header class="sh__head">
+          <h2 class="sh__title">{credibility.heading}</h2>
+          <p class="sh__no">Sheet 04 · {credibility.label}</p>
+        </header>
+        <p class="sh__lede">{credibility.intro}</p>
+
+        <div class="notes" style="margin-top:clamp(1.75rem,3vw,2.75rem)">
+          {
+            credibility.items.map((item, i) => (
+              <div class="note-item">
+                <span class="note-item__no">4.{i + 1}</span>
+                <div>
+                  <h3 class="note-item__q">{item.q}</h3>
+                  <p class="note-item__a">{item.a}</p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- ============================ SHEET 05 ============================ -->
+      <section class="sh" id="sheet-05" data-sheet="05" data-mark data-billing data-cycle="monthly">
+        <header class="sh__head">
+          <h2 class="sh__title">{plans.heading}</h2>
+          <p class="sh__no">Sheet 05 · Schedule of rates</p>
+        </header>
+        <p class="sh__lede">{plans.intro}</p>
+
+        <div class="cycle" role="group" aria-label="Billing period">
+          <button class="cycle__btn" type="button" data-cycle-btn="monthly" aria-pressed="true">{plans.cycles.monthly}</button>
+          <button class="cycle__btn" type="button" data-cycle-btn="annual" aria-pressed="false">{plans.cycles.annual}</button>
+          <span class="cycle__hint">{plans.cycleHint}</span>
+        </div>
+
+        <div class="rates">
+          {
+            plans.tiers.map((tier, i) => (
+              <article class="rate">
+                <span class="rate__no">5.{i + 1}</span>
+                <div>
+                  <h3 class="rate__name">{tier.name}</h3>
+                  <p class="rate__tag">{tier.tagline}</p>
+                </div>
+                <p class="rate__price">
+                  <span data-when="monthly">
+                    <b>{tier.monthly.amount}</b> <i>{tier.monthly.period}</i>
+                  </span>
+                  <span data-when="annual">
+                    <b>{tier.annual.amount}</b> <i>{tier.annual.period}</i>
+                  </span>
+                </p>
+                <p class="rate__save" data-when="annual">{tier.annual.note}</p>
+                <ul class="rate__list">
+                  {tier.includes.map((item) => <li>{item}</li>)}
+                </ul>
+                <a class="stamp rate__cta" href={withBase('/contact/')}>
+                  {plans.cta}
+                </a>
+              </article>
+            ))
+          }
+        </div>
+
+        <p class="rate__foot">{plans.footnote}</p>
+      </section>
+
+      <!-- ============================ SHEET 06 ============================ -->
+      <Cta
+        heading={ctas.home.heading}
+        headingAccent={ctas.home.accent}
+        body={ctas.home.body}
+        sheet="06"
+        id="sheet-06"
+      />
 </BaseLayout>
