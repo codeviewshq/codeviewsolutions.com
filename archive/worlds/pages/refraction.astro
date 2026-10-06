@@ -1,0 +1,190 @@
+---
+import ChartLayout from '../../layouts/ChartLayout.astro';
+import Logo from '../../components/Logo.astro';
+import { site, nav, hero, services, process, credibility, sections, ctas, meta } from '../../data/site.js';
+import { withBase } from '../../utils/url.js';
+
+// The chart is the offer, set down a real acuity ramp: the headline is the top
+// line, the fine print is the fine print. Nothing here is invented copy.
+const chartRows = [
+  { acuity: '20/200', text: hero.headlineLead.replace(/\.$/, '') },
+  { acuity: '20/100', text: hero.headlineAccent },
+  { acuity: '20/70', text: sections.homeServices.heading },
+  { acuity: '20/40', text: hero.body },
+  { acuity: '20/25', text: hero.assurance },
+  {
+    acuity: '20/20',
+    text: `${site.location}. ${site.serviceArea}. Every refresh includes a 90-day warranty for the agreed work, and you own the website, domain, hosting accounts, content, and access throughout.`,
+  },
+];
+---
+
+<ChartLayout title={meta.home.title} description={meta.home.description}>
+  <header class="top">
+    <a class="top__brand" href={withBase('/')}>
+      <Logo class="top__mark" />
+      <span class="top__name">{site.legalName}</span>
+    </a>
+    <nav aria-label="Main">
+      {nav.map((item) => <a href={withBase(item.href)}>{item.label}</a>)}
+    </nav>
+  </header>
+
+  <!-- ============================ THE CHART ============================ -->
+  <section class="chart" id="chart">
+    <div class="chart__rows">
+      <!-- The top two lines are the page's heading; the ramp continues into
+           real body copy rather than into filler set at heading sizes. -->
+      <h1 class="chart__h1">
+        {
+          chartRows.slice(0, 2).map((row, i) => (
+            <span class={`row row--${i + 1}`}>
+              <span class="row__acuity">{row.acuity}</span>
+              <span class="row__line">{row.text}</span>
+            </span>
+          ))
+        }
+      </h1>
+
+      <h2 class="row row--3">
+        <span class="row__acuity">{chartRows[2].acuity}</span>
+        <span class="row__line">{chartRows[2].text}</span>
+      </h2>
+
+      {
+        chartRows.slice(3).map((row, i) => (
+          <p class={`row row--${i + 4}`}>
+            <span class="row__acuity">{row.acuity}</span>
+            <span class="row__line">{row.text}</span>
+          </p>
+        ))
+      }
+    </div>
+
+    <div class="chart__actions">
+      <a class="btn" href={withBase(hero.primaryCta.href)}>
+        {hero.primaryCta.label}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 12h14M12 5l7 7-7 7"></path>
+        </svg>
+      </a>
+      <a class="btn btn--quiet" href="#refract">Take the test</a>
+    </div>
+  </section>
+
+  <!-- ========================= THE COMPARISON ========================= -->
+  <section class="section" id="refract">
+    <h2 class="section__title">Which is clearer — one, or two?</h2>
+    <p class="section__lede">
+      This is the whole job, in one question. Most sites are not broken; they are just harder to read
+      than they need to be, and the business pays for that every day without seeing the bill.
+    </p>
+
+    <div class="refract" data-refract data-option="1">
+      <div class="lens">
+        <p class="lens__label">Option one — the site you have</p>
+        <p class="lens__copy">{process.intro}</p>
+      </div>
+
+      <div class="dial">
+        <p class="dial__q">Which is clearer?</p>
+        <div class="dial__opts">
+          <button class="dial__btn" type="button" value="1" aria-pressed="true">1</button>
+          <button class="dial__btn" type="button" value="2" aria-pressed="false">2</button>
+        </div>
+        <p class="dial__note">
+          Same words, same page, same visitor. Only the legibility changed. A free review tells you
+          which of these your customers are actually reading.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= PRESCRIPTIONS ========================= -->
+  <section class="section section--tint">
+    <h2 class="section__title">{sections.homeServices.heading}</h2>
+    <p class="section__lede">{sections.homeServices.lede}</p>
+
+    <div class="rx">
+      {
+        services.map((service) => (
+          <article class="rx__item">
+            <div>
+              <h3 class="rx__name">
+                <a href={withBase(`/services/#${service.id}`)}>{service.name}</a>
+              </h3>
+              <p class="rx__summary">{service.summary}</p>
+            </div>
+            <dl class="rx__table">
+              {
+                service.meta.map((m) => (
+                  <div>
+                    <dt>{m.key}</dt>
+                    <dd>{m.value}</dd>
+                  </div>
+                ))
+              }
+            </dl>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ========================= THE EXAMINATION ========================= -->
+  <section class="section">
+    <h2 class="section__title">{process.heading}</h2>
+    <p class="section__lede">{process.intro}</p>
+
+    <ol class="exam" style="list-style:none;padding:0">
+      {
+        process.steps.map((step, i) => (
+          <li class="exam__step">
+            <span class="exam__no">Stage {String(i + 1).padStart(2, '0')}</span>
+            <h3 class="exam__title">{step.title}</h3>
+            <p class="exam__body">{step.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- ========================= THE READING TEST ========================= -->
+  <section class="section section--tint">
+    <h2 class="section__title">{credibility.heading}</h2>
+    <p class="section__lede">{credibility.intro}</p>
+
+    <div class="reading">
+      {
+        credibility.items.map((item) => (
+          <div class="reading__item">
+            <h3 class="reading__q">{item.q}</h3>
+            <p class="reading__a">{item.a}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ============================ CLOSE ============================ -->
+  <section class="section close">
+    <h2 class="close__title">{ctas.home.heading} {ctas.home.accent}</h2>
+    <p class="close__body">{ctas.home.body}</p>
+    <div class="close__actions">
+      <a class="btn" href={withBase('/contact/')}>
+        {hero.primaryCta.label}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 12h14M12 5l7 7-7 7"></path>
+        </svg>
+      </a>
+      <a class="btn btn--quiet" href={withBase('/services/')}>See what we look at</a>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>{site.legalName}</span>
+    <span>{site.location}</span>
+    <span>Reply within one business day</span>
+    {nav.map((item) => <a href={withBase(item.href)}>{item.label}</a>)}
+  </footer>
+</ChartLayout>

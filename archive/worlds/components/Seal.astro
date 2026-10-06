@@ -1,0 +1,28 @@
+---
+/**
+ * AKARI — the vermilion stamp.
+ *
+ * A carved seal, drawn rather than typed: the block is cut with a slightly
+ * uneven edge the way a stone hanko prints, and the mark inside is the
+ * CodeView bracket motif reduced to two strokes. Authored so it renders
+ * identically everywhere, which a CJK glyph in a Latin webfont would not.
+ */
+interface Props {
+  class?: string;
+  size?: number;
+}
+const { class: className = 'stamp', size = 40 } = Astro.props;
+---
+
+<svg class={className} viewBox="0 0 40 40" width={size} height={size} aria-hidden="true">
+  <!-- The inked block: edges cut, not machined. -->
+  <path
+    class="seal__block"
+    d="M1.6 2.4 L20 1.2 L38.4 2.2 L39 20.5 L38.2 38.1 L20.4 39 L2 38.3 L1.2 20Z"
+  ></path>
+  <!-- The mark: the logo's angle brackets, carved out of the ink. -->
+  <path
+    class="seal__cut"
+    d="M15.2 12 L8.5 20 L15.2 28 M24.8 12 L31.5 20 L24.8 28 M22.5 10.5 L17.5 29.5"
+  ></path>
+</svg>

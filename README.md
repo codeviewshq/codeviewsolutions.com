@@ -1,7 +1,7 @@
 # CodeView Solutions LLC — website
 
 The marketing site for CodeView Solutions LLC — custom software development,
-technical consulting, and AI integration, based in Old Bridge, New Jersey.
+monthly care, and reliable growth infrastructure for businesses across the US.
 
 > **On voice:** the copy is written in the first person plural ("we") and is
 > deliberately **size-neutral** — it describes what the company delivers, never
@@ -34,8 +34,9 @@ npm run preview # serve dist/ locally to check the real output
 | `npm run dev` | Local dev server with live reload |
 | `npm run build` | Builds the static site into `dist/` |
 | `npm run preview` | Serves `dist/` so you can check the production build |
+| `npm run logo` | Rebuilds the logo assets in `public/brand/` from `first.jpg` |
 | `npm run og` | Regenerates the social share image, `public/og.png` |
-| `npm run check:contrast` | Verifies every text colour clears WCAG AA on the dark palette |
+| `npm run check:contrast` | Verifies every text colour clears WCAG AA on the sheet palette |
 
 ---
 
@@ -63,13 +64,17 @@ Work down this list and the site is finished.
 | `site.phone` | `[YOUR PHONE]` | Your number, or `''` to hide the row entirely |
 | `site.formspreeId` | `[YOUR_FORM_ID]` | Turns the contact form on — see below |
 | `site.links` | `[YOUR GITHUB URL]`, `[YOUR LINKEDIN URL]` | Delete any you do not want in the footer |
-| `hero.facts` | `[X]+ years delivering software` | Your real number |
 | `services[].body` | `[EDIT THIS: …]` ×3 | A sentence or two per service on the work you most want |
 | `services[].meta` | `[4–12 weeks]` etc. | Your real timelines, or delete the row |
-| `credibility.items` | `[EDIT THIS: …]` ×2 | Your pricing model and your post-launch support offer |
 | `about.story` | `[YOUR COMPANY STORY]` ×3 | Three paragraphs — guidance is written into each placeholder |
-| `about.facts` | `[YEAR]` | The year you founded the LLC |
 | `about.stack` | `[TypeScript]`, `[AWS]`, … | Your actual tools. A short honest list beats a long one |
+
+**Two things are deliberately not on that list.** There is no years-of-experience
+fact and no founded-in year anywhere on the site — nothing dates the company in
+either direction, by decision. And pricing carries no numbers: the copy commits
+to per-project scoping and a fixed agreed figure without publishing a rate. Both
+are recorded in [`PRODUCT.md`](PRODUCT.md); treat them as settled rather than as
+gaps to fill.
 
 Section headings, the calls to action, and the SEO titles live further down the
 same file under `sections`, `ctas`, and `meta`.
@@ -86,13 +91,14 @@ finished but be broken, which is worse.
 | Navigation links | `nav` in `src/data/site.js` |
 | Colours, type, spacing | The token block at the top of `src/styles/global.css` |
 | Page structure | `src/pages/*.astro` |
-| Header, footer, service rows | `src/components/*.astro` |
+| Plans and prices | `plans` in `src/data/site.js` |
+| Footer, closing block, service clauses | `src/components/*.astro` |
 
 If you change any colour, run `npm run check:contrast`. It re-checks every
 foreground/background pairing against WCAG AA and tells you exactly which one
-broke. Violet is bright enough to work as a border or a focus ring but not as
-small body text, which is why `--violet` (graphics) and `--accent-text` (links)
-are separate tokens.
+broke. The revision red is bright enough for a rule or a stroke but not quite
+for small text, which is why `--red` (strokes, large type) and `--red-ink`
+(small text) are separate tokens.
 
 ---
 
@@ -186,6 +192,37 @@ For GitHub Pages with a custom domain, also add a file called `CNAME` in
 
 ---
 
+## The logo
+
+`first.jpg` is the supplied artwork and the source of truth. It is a raster JPG
+on an off-white field, which cannot go on a near-black page as-is, so
+`npm run logo` derives everything the site actually uses:
+
+```bash
+npm run logo     # rewrites public/brand/
+```
+
+Two steps run in sequence. `build-logo.mjs` reads the JPG, converts luminance
+into an alpha mask (the artwork is two-tone, so how far a pixel travelled from
+the background toward the ink *is* its coverage), trims to the ink, splits the
+mark from the wordmark at the widest empty column, and writes transparent PNGs
+in both white and navy. `trace-logo.mjs` then vectorises them with marching
+squares plus Douglas–Peucker simplification, emitting one `fill-rule="evenodd"`
+path so the counters inside the circuit nodes fall out of the winding.
+
+The result is `public/brand/mark.svg` — 1.4 KB, inherits `currentColor`, sharp
+at 22 px and at any size. That path is inlined in three places, and they must
+stay in step: `src/components/Logo.astro` (header and footer),
+`public/favicon.svg`, and the share image, which reads the path out of
+`mark.svg` at build time so it cannot drift.
+
+**If you replace `first.jpg`,** run `npm run logo`, then paste the new `d`
+attribute from `public/brand/mark.svg` into `Logo.astro` and `favicon.svg`, then
+`npm run og`. The mark is **1.27:1, not square** — size it on one axis and leave
+the other `auto`, or it distorts.
+
+---
+
 ## The social share image
 
 `public/og.png` is what appears when the site is linked on LinkedIn, Slack, X, or
@@ -206,60 +243,68 @@ and commit the new PNG. Test how it looks with LinkedIn's
 
 ## Notes on the design
 
-**The whole site is one idea: refraction.** The company is called CodeView.
-Light through glass splits into a spectrum, and that drives every visual
-decision — so if you add something, ask whether it belongs to that idea before
-adding a new one.
+**The site is a specification sheet.** That is the whole idea, and every visual
+decision follows from it: a website that somebody looked at, wrote down, ruled,
+and signed. If you add something, ask whether it belongs on a drawing before
+adding a new idea. The direction is recorded in full in [`DESIGN.md`](DESIGN.md)
+and as an HTML comment at the top of `<body>` in `src/layouts/BaseLayout.astro`
+— that comment survives the production build on purpose, so the intent ships
+with the artifact.
 
-**The spectrum is the palette.** Violet `#A855F7` → cyan `#22D3EE` → amber
-`#FBBF24`, always in that order, exposed as the `--spectrum` token. It paints
-the second line of each page heading, the logo's split rays, the bullet dots,
-the line across the top of the command palette, and the rule that draws under a
-service row on hover. Everything else on the site is grey. All three stops are
-checked by `npm run check:contrast` as *small text*, not just as decoration, so
-the gradient stays legible wherever it lands.
+**Four inks, declared and never exceeded.** Drafting stock `#EFEEE7`, the
+logo's own navy `#000036` (sampled from `first.jpg`), one spot revision red
+`#D8261B`, and graphite `#4E4E47`. `--red-ink` is the same red darkened for
+small text; `--rule` and `--stock-2` are working tints, not new colours. There
+is no fifth hue anywhere. `npm run check:contrast` validates the pairings.
 
-**The hero is a live flow field**, not an image or a CSS gradient
-(`src/components/LightField.astro`, ~4 KB). Particles drift through a noise
-field drawing filaments, coloured by horizontal position so the field disperses
-across the spectrum. Two things there are worth knowing before you touch them:
+**Line weight carries every division.** The ISO drafting hierarchy, translated
+to screen: `--w-hair` (field grid), `--w-key` (unit keyline), `--w-div` (section
+division), `--w-edge` (sheet border). A border on this site picks one of those
+four — it never invents a thickness. There are no shadows, no corner radii, and
+no gradients; their absence is a rule, not an oversight.
 
-- *Trails come from an explicit ring buffer of past positions*, not from fading
-  the previous frame. Fading is the usual trick and it looks simpler, but it
-  couples trail length to alpha, line width, and antialiasing all at once — in
-  practice it produced short dashes at every setting tried. Length is now
-  exactly `TRAIL × EVERY × SPEED` pixels.
-- *The angle spread in `field()` is the whole look.* Map noise across a wide
-  range and neighbouring points aim in wildly different directions, so particles
-  knot up and scribble. The narrow spread is what makes the flow laminar.
+**The redline is real, and it is measured.** The free website review is
+performed on the page: a revision cloud is drawn around "an asset" in the
+headline and a leader line runs from the first-finding note back to it. Both are
+generated in `BaseLayout.astro` from the *live* bounding boxes of those
+elements and redrawn on resize and after fonts settle — so the cloud fits the
+phrase at any width instead of being a fixed path that drifts. The cloud walks
+the perimeter in outward arcs, which is how a real revision cloud is drawn.
 
-It pauses when scrolled out of view or when the tab is hidden, scales its
-particle count to the canvas area and the machine's core count, and composes a
-single dense still frame instead of animating under `prefers-reduced-motion`.
+**Motion is mechanical: things draw, rule, and stamp.** Nothing fades in and
+nothing drifts. Markup reveals by running its own stroke length
+(`stroke-dashoffset`), the sheet number in the margin stamps as you move down
+the page, and hover states snap on an ease that is nearly a step. Under
+`prefers-reduced-motion` every stroke is simply already drawn.
 
-**⌘K actually works.** `src/components/CommandPalette.astro` searches every page
-and service with subsequence matching (`aiint` finds "AI & AI Integration"),
-runs real actions, and is fully keyboard driven. It builds its own index from
-`site.js`, so adding a page or a service adds it to the palette with no extra
-work. It is built on `<dialog>`, which means focus trapping, the backdrop, and
-Escape-to-close come from the platform rather than from code that has to be
-maintained. The email actions only appear once a real address is filled in.
+**The sheet is live under the pointer.** On a fine pointer, two hairlines track
+the cursor across the title sheet and the title block reads out the position in
+sheet units. On touch that readout is hidden — it would be meaningless.
 
-**Inter, pushed hard.** One typeface doing everything: hierarchy comes from
-size, weight, and colour rather than a second family. The display sizes run to
-`8vw` with `-0.045em` tracking — that tightness at scale is most of what stops
-it reading as a default heading. Self-hosted through `@fontsource`, so no
-request to Google's servers blocks the first paint; the whole font payload is
-one 48 KB file.
+**⌘K is the drawing index.** `src/components/CommandPalette.astro` searches
+every page and service with subsequence matching, runs real actions, and is
+fully keyboard driven. It builds its index from `site.js`, so adding a page adds
+it to the palette. Built on `<dialog>`, so focus trapping, the backdrop, and
+Escape-to-close come from the platform.
 
-**Dark only, near-black.** `#0A0A0D`, never pure black. There is no light theme
-and no toggle; adding one would mean a second full palette and a re-tuned field,
-which is real work rather than a switch.
+**Archivo and Martian Mono, each with a job.** Archivo sets the sheet lettering,
+running to `8vw` at `-0.045em` — that tightness at scale is most of what stops
+it reading as a default heading. Martian Mono is reserved for title-block
+fields, clause numbers, figures, and dimensions: it is measurement, not a
+costume for "technical". Both self-hosted through `@fontsource`.
 
-**Restraint everywhere else.** Hover states lighten a border or shift opacity —
-nothing lifts, scales, or bounces. The bold type and the field are loud enough
-on their own. Sections are `clamp(5rem, 10vw, 9rem)` apart; if the page starts
-feeling dense, check that value first.
+**Light, because a drawing is.** Drafting stock, not a dark theme. There is no
+toggle.
+
+**Prices live in one place.** The `plans` export in `src/data/site.js` is the
+only place a figure appears. Both the monthly and yearly figures render, and CSS
+shows one based on a `data-cycle` attribute — so the monthly column is still
+correct with JavaScript disabled. `src/scripts/billing.js` only flips the
+attribute.
+
+**Other directions were considered.** Six other complete visual worlds were
+built and judged before this one was chosen; they are kept in
+[`archive/worlds/`](archive/worlds/) with restore notes.
 
 ---
 
@@ -268,18 +313,25 @@ feeling dense, check that value first.
 ```
 .
 ├── .github/workflows/deploy.yml   GitHub Pages CI
+├── first.jpg                      The supplied logo artwork (source of truth)
 ├── public/                        Copied to the site root as-is
+│   ├── brand/                     Logo assets (generated — npm run logo)
+│   │   ├── mark.svg               Traced mark, inherits currentColor
+│   │   ├── lockup.svg             Traced mark + wordmark
+│   │   └── logo-{lockup,mark}-{dark,light}.png
 │   ├── favicon.svg
 │   ├── og.png                     Social share image (generated)
 │   └── robots.txt
 ├── scripts/
+│   ├── build-logo.mjs             npm run logo — JPG to transparent PNGs
+│   ├── trace-logo.mjs             npm run logo — PNG to SVG
 │   ├── generate-og.mjs            npm run og
 │   └── check-contrast.mjs         npm run check:contrast
 ├── src/
 │   ├── components/
 │   │   ├── CommandPalette.astro   The ⌘K palette (builds its index from site.js)
 │   │   ├── LightField.astro       The hero's animated flow field
-│   │   ├── Logo.astro             The prism mark
+│   │   ├── Logo.astro             The mark (traced — do not hand-edit the path)
 │   │   └── Header, Footer, ServiceDetail, Cta
 │   ├── data/site.js               ← ALL YOUR CONTENT LIVES HERE
 │   ├── layouts/BaseLayout.astro   <head>, meta tags, page shell
@@ -296,7 +348,7 @@ feeling dense, check that value first.
 - Semantic HTML, one `<h1>` per page, skip-to-content link
 - Per-page `<title>`, meta description, canonical URL, Open Graph and Twitter
   card tags with **absolute** image URLs
-- `ProfessionalService` structured data with the New Jersey service area
+- `ProfessionalService` structured data with a US-wide service area
 - `sitemap-index.xml` generated on every build, referenced from `robots.txt`
 - A styled 404 page
 - Keyboard focus visible on every interactive element

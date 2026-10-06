@@ -1,0 +1,153 @@
+---
+/**
+ * ASCII LIVE SCENE — terminal shell. Self-contained; no global.css.
+ */
+import '@fontsource/vt323';
+import '@fontsource-variable/martian-mono/wght.css';
+import '../styles/world-ascii.css';
+
+import { withBase } from '../utils/url.js';
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+
+// The mark's own outline, shared with Logo.astro — the scene renders the
+// company's eye, not a stock demo shape.
+const MARK_PATH =
+  'M119.8 0L123 -0.1L128 0.8L132 2.9L136 6.5L140.3 13L141.4 18L141.3 23L140.4 27L137 33L132 37.3L128 39L126.9 41L110.4 98L106 111L105 112.6L104 112.8L89 112.7L88 113.1L86.4 116L84 118.4L79 121.4L74 122.2L69 121.3L67 120.3L63 116.7L60.5 113L59.6 110L59.6 105L60.7 101L62.6 98L65 95.6L71 92.7L77 92.5L82 94.6L88 100.6L96 100.6L96.6 100L109.2 58L114.2 39L108 35L103.7 29L101.8 21L102.8 14L105.8 8L110 3.8L116 0.7ZM117.7 12L122 11.1L125 11.8L128 14L129.3 16L130.2 20L129.4 24L127.1 27L125 28.4L121 29L118 28.2L115 26.1L113.6 24L112.7 20L113.7 16ZM91.5 40L93 39.6L93.5 41L86 64.7L73 71.6L61 79.6L45 91.8L27.6 107L43 121.3L61 135.3L76 145.2L92.5 154L87.2 172L86 174.4L74 169.1L67 165.3L54 157.2L43 149.3L28 137.3L3.6 115L-0.2 110L-0.4 107L1 103.3L10 93.8L29 76.7L43 65.6L56 56.7L68 49.6L78 44.7ZM149 40L151 39.6L155 40.5L163 43.6L172 48L188 57.6L205 69.7L224 85.8L240 101.3L242.5 105L242.9 108L242.4 111L240 114L217 135.3L192 155.2L179 163.3L167 169.4L161 172.2L149.5 176L149 175L149.6 173L157 150.4L173 141.2L183 134.5L203 118.4L214 108.4L214.6 107L202 95.7L186 82.8L173 73.8L163 67.7L162.5 68L161.7 69L124.4 191L122 191.5L102 191.2L106.8 174L126.3 112L143.7 54L146.8 44ZM71.6 102L76 101.6L79.2 104L79.9 108L79.4 110L77 112.5L75 113.2L73 113.1L71 112.3L68.7 110L68.1 107L68.5 105Z';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#060607" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+  </head>
+  <body data-mark-path={MARK_PATH}>
+    <!--
+      THESIS: The company mark, rendered live as typewriter characters, where
+      density of glyphs stands in for light. It refuses the category default —
+      a gradient hero above three service cards — by having no images and no
+      colour at all: everything you see is text you can select.
+      OWN-WORLD: Single-ink phosphor amber at four levels on #060607. No second
+      hue anywhere. One strict monospace grid is the whole composition; rules
+      are drawn from the character set; the luminance ramp " .:-=+*#%@" is also
+      the type scale. VT323 for the CRT voice, Martian Mono for the record.
+      STORY: A visitor sees the mark resolve out of characters, reads the offer
+      in the same grid, and books the free review.
+      FIRST VIEWPORT: Two columns of one grid. Left, the eye rendered as an
+      80×38 live glyph field that breathes and tracks the pointer. Right, the
+      headline in CRT caps, the offer, and a bracketed action key row.
+      FORM: Live ASCII scene render; dealt challenger
+      medium-native-ascii-live-scene-render, adopted at the user's request
+      after being declined on audience fit; seed key 685831a9.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with
+      the finish review, the verdict, DESIGN.md, and every shipping raster
+      carrying its provenance.
+    -->
+    <a class="skip" href="#scene">Skip to content</a>
+    <slot />
+    <script>
+      import { initBilling } from '../scripts/billing.js';
+      initBilling();
+
+      /* --- The live scene ----------------------------------------------------
+         The mark is drawn to a small offscreen canvas, each cell's luminance is
+         read, and the ramp turns it back into text. The output is a real <pre>,
+         so the whole scene is selectable — which is the point of this world. */
+      const RAMP = ' .:-=+*#%@';
+      const pre = document.querySelector<HTMLPreElement>('[data-ascii]');
+      const pathData = document.body.dataset.markPath || '';
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (pre && pathData && typeof Path2D !== 'undefined') {
+        const COLS = 80;
+        const ROWS = 38;
+        const canvas = document.createElement('canvas');
+        canvas.width = COLS;
+        canvas.height = ROWS;
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        const path = new Path2D(pathData);
+
+        // The artwork is 243.3 × 191.6; fit it into the cell field, remembering
+        // that a character cell is about 0.55 as wide as it is tall.
+        const fit = Math.min((COLS * 0.55) / 243.3, ROWS / 191.6) * 0.92;
+
+        let raf = 0;
+        let tilt = 0;
+        let targetTilt = 0;
+
+        const render = (t: number) => {
+          if (!ctx) return;
+          ctx.fillStyle = '#000';
+          ctx.fillRect(0, 0, COLS, ROWS);
+          ctx.save();
+          ctx.translate(COLS / 2, ROWS / 2);
+          ctx.scale(1 / 0.55, 1);
+          tilt += (targetTilt - tilt) * 0.08;
+          ctx.rotate(tilt * 0.16);
+          ctx.scale(fit, fit);
+          ctx.translate(-121.5, -95.8);
+          ctx.fillStyle = '#fff';
+          ctx.fill(path, 'evenodd');
+          ctx.restore();
+
+          const data = ctx.getImageData(0, 0, COLS, ROWS).data;
+          let out = '';
+          for (let y = 0; y < ROWS; y++) {
+            for (let x = 0; x < COLS; x++) {
+              const i = (y * COLS + x) * 4;
+              let v = data[i] / 255;
+              // A slow band of light travels the field, so density reads as
+              // illumination rather than as a static stencil.
+              if (!reduced) {
+                const wave = Math.sin((x + y * 0.6) * 0.14 - t * 0.0016);
+                v = Math.max(0, Math.min(1, v * (0.62 + 0.38 * wave) + (v > 0.5 ? 0.18 : 0.04) * wave));
+              }
+              out += RAMP[Math.min(RAMP.length - 1, Math.round(v * (RAMP.length - 1)))];
+            }
+            out += '\n';
+          }
+          pre.textContent = out;
+        };
+
+        render(0);
+
+        if (!reduced) {
+          const loop = (t: number) => {
+            render(t);
+            raf = requestAnimationFrame(loop);
+          };
+          // Only run while the scene is actually on screen.
+          const io = new IntersectionObserver((entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting && !raf) raf = requestAnimationFrame(loop);
+              else if (!e.isIntersecting && raf) {
+                cancelAnimationFrame(raf);
+                raf = 0;
+              }
+            });
+          });
+          io.observe(pre);
+
+          addEventListener(
+            'pointermove',
+            (e) => {
+              targetTilt = (e.clientX / innerWidth - 0.5) * 2;
+            },
+            { passive: true }
+          );
+        }
+      }
+    </script>
+  </body>
+</html>

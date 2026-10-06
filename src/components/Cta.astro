@@ -1,36 +1,62 @@
 ---
+/**
+ * The closing sheet: an issue block. A drawing is issued for a purpose and
+ * signed off, so the page ends the same way.
+ */
+import { site, hero } from '../data/site.js';
 import { withBase } from '../utils/url.js';
 
 interface Props {
   heading: string;
-  /** Second line of the heading, painted with the refraction spectrum. */
   headingAccent?: string;
-  body?: string;
+  body: string;
   label?: string;
-  href?: string;
+  sheet?: string;
+  id?: string;
 }
 
 const {
   heading,
-  headingAccent,
+  headingAccent = '',
   body,
-  label = 'Start a project',
-  href = '/contact/',
+  label = hero.primaryCta.label,
+  sheet = '06',
+  id = 'issue',
 } = Astro.props;
 ---
 
-<section class="section" style="padding-bottom:clamp(4rem,8vw,7rem)">
-  <hr class="rule rule--spectrum" />
-  <div class="container" data-reveal style="padding-top:clamp(3.5rem,7vw,6rem)">
-    <h2 class="display-l">
-      {heading}{headingAccent && <> <br /><span class="spectrum">{headingAccent}</span></>}
-    </h2>
-    {body && <p class="lede" style="margin-top:1.6rem">{body}</p>}
-    <div class="btn-row">
-      <a class="btn btn--primary" href={withBase(href)}>{label}</a>
-      <button class="btn btn--secondary" data-cmdk-open type="button">
-        Search the site <kbd>⌘</kbd><kbd>K</kbd>
-      </button>
-    </div>
+<section class="sh issue" id={id} data-sheet={sheet} data-mark>
+  <p class="issue__seal">Issued<br />for<br />review</p>
+
+  <h2 class="issue__title">{heading} {headingAccent}</h2>
+  <p class="issue__body">{body}</p>
+
+  <div class="stamp-row">
+    <a class="stamp" href={withBase('/contact/')}>
+      {label}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+        <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="square"></path>
+      </svg>
+    </a>
+    <a class="stamp stamp--ghost" href={withBase('/services/')}>See the scope of work</a>
   </div>
+
+  <dl class="signoff">
+    <div>
+      <dt>Prepared by</dt>
+      <dd>{site.legalName}</dd>
+    </div>
+    <div>
+      <dt>Reply within</dt>
+      <dd>One business day</dd>
+    </div>
+    <div>
+      <dt>Warranty</dt>
+      <dd>90 days after handover</dd>
+    </div>
+    <div>
+      <dt>Ownership</dt>
+      <dd>Yours on delivery</dd>
+    </div>
+  </dl>
 </section>

@@ -1,0 +1,518 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-19T00:00:00.000Z",
+  "title": "Design System: CodeView Solutions",
+  "extensions": {
+    "colorMeta": {
+      "stock": {
+        "role": "neutral",
+        "displayName": "Drafting Stock",
+        "canonical": "#EFEEE7",
+        "tonalRamp": [
+          "#26251F",
+          "#3D3B33",
+          "#565349",
+          "#726E62",
+          "#93907F",
+          "#B5B2A2",
+          "#D4D2C6",
+          "#EFEEE7"
+        ]
+      },
+      "stock-2": {
+        "role": "neutral",
+        "displayName": "Tinted Cell",
+        "canonical": "#E6E5DC",
+        "tonalRamp": [
+          "#232219",
+          "#39372C",
+          "#514E40",
+          "#6C6857",
+          "#8C8873",
+          "#ADA995",
+          "#CBC8B9",
+          "#E6E5DC"
+        ]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Manuscript Navy",
+        "canonical": "#000036",
+        "tonalRamp": [
+          "#000036",
+          "#0A0A55",
+          "#16167A",
+          "#2626A0",
+          "#4A4ABE",
+          "#7C7CD4",
+          "#B0B0E6",
+          "#DEDEF5"
+        ]
+      },
+      "red": {
+        "role": "secondary",
+        "displayName": "Revision Red",
+        "canonical": "#D8261B",
+        "tonalRamp": [
+          "#3A0906",
+          "#59100B",
+          "#7C1710",
+          "#A11E16",
+          "#D8261B",
+          "#E85B51",
+          "#F19289",
+          "#F9CCC7"
+        ]
+      },
+      "red-ink": {
+        "role": "secondary",
+        "displayName": "Revision Red, Text Weight",
+        "canonical": "#C21B12",
+        "tonalRamp": [
+          "#330705",
+          "#4F0B08",
+          "#70110C",
+          "#961610",
+          "#C21B12",
+          "#DE4F45",
+          "#EC8B83",
+          "#F7C8C4"
+        ]
+      },
+      "graphite": {
+        "role": "neutral",
+        "displayName": "Graphite",
+        "canonical": "#4E4E47",
+        "tonalRamp": [
+          "#1B1B18",
+          "#2C2C27",
+          "#3E3E38",
+          "#4E4E47",
+          "#6E6E64",
+          "#918F83",
+          "#B6B4A8",
+          "#DAD8CE"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "#C6C5BA",
+        "tonalRamp": [
+          "#22221D",
+          "#38372F",
+          "#4F4E43",
+          "#696758",
+          "#8A8877",
+          "#A9A796",
+          "#C6C5BA",
+          "#E4E3DA"
+        ]
+      },
+      "rule-2": {
+        "role": "neutral",
+        "displayName": "Faint Rule",
+        "canonical": "#D8D7CD",
+        "tonalRamp": [
+          "#25241F",
+          "#3B3A32",
+          "#535146",
+          "#6E6C5C",
+          "#908E7B",
+          "#B0AE9C",
+          "#D8D7CD",
+          "#EDECE5"
+        ]
+      },
+      "red-lit": {
+        "role": "secondary",
+        "displayName": "Revision Red, Lifted",
+        "canonical": "#FF6A5E",
+        "tonalRamp": [
+          "#4A120D",
+          "#6E1B14",
+          "#94261C",
+          "#BC3427",
+          "#E04A3B",
+          "#FF6A5E",
+          "#FFA096",
+          "#FFD3CE"
+        ]
+      },
+      "on-ink": {
+        "role": "neutral",
+        "displayName": "Stock on Ink",
+        "canonical": "#B9B9C9",
+        "tonalRamp": [
+          "#1B1B26",
+          "#2C2C3D",
+          "#414156",
+          "#5A5A72",
+          "#77778E",
+          "#9797AC",
+          "#B9B9C9",
+          "#DCDCE5"
+        ]
+      },
+      "on-ink-dim": {
+        "role": "neutral",
+        "displayName": "Stock on Ink, Dim",
+        "canonical": "#9A9AB4",
+        "tonalRamp": [
+          "#17171F",
+          "#262633",
+          "#38384A",
+          "#4E4E66",
+          "#6A6A85",
+          "#8181A0",
+          "#9A9AB4",
+          "#C7C7D6"
+        ]
+      },
+      "rule-on-ink": {
+        "role": "neutral",
+        "displayName": "Rule on Ink",
+        "canonical": "rgba(239, 238, 231, 0.3)",
+        "tonalRamp": [
+          "rgba(239,238,231,0.06)",
+          "rgba(239,238,231,0.12)",
+          "rgba(239,238,231,0.2)",
+          "rgba(239,238,231,0.3)",
+          "rgba(239,238,231,0.42)",
+          "rgba(239,238,231,0.56)",
+          "rgba(239,238,231,0.72)",
+          "rgba(239,238,231,0.9)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The title-sheet headline. Capped at 15ch so it always breaks into a block."
+      },
+      "display-inner": {
+        "displayName": "Display, Inner",
+        "purpose": "The H1 of every inner sheet: one step down from the title sheet, floor 2.4rem, capped at 16ch."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "The closing issue block's call, reversed out on navy, capped at 17ch."
+      },
+      "title": {
+        "displayName": "Sheet Title",
+        "purpose": "Sheet titles in the ruled header band; service-detail titles run the same step."
+      },
+      "subtitle": {
+        "displayName": "Clause Name",
+        "purpose": "Clause names and rate-schedule plan names: the rows of a spec list."
+      },
+      "sub-heading": {
+        "displayName": "Sub-heading",
+        "purpose": "The heading inside a cell: sequence step titles and the question of a drawing note. The smallest step still set in the heavy weight."
+      },
+      "hero-sub": {
+        "displayName": "Hero Sub",
+        "purpose": "The paragraph directly under the title-sheet headline. One step above the lede, because it is the only body copy in the first viewport. Max 46ch."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "The one graphite paragraph under a sheet title, max 62ch. The issue block body runs the same step reversed out at 52ch."
+      },
+      "prose": {
+        "displayName": "Prose",
+        "purpose": "Running paragraphs on the about and service sheets: body with a higher ceiling, because a column of continuous text carries a longer measure. Max 66ch."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "The document default, set on body and inherited wherever a more specific step is not named."
+      },
+      "small-body": {
+        "displayName": "Small Body",
+        "purpose": "The most-used size on the site: clause descriptions, step bodies, note answers, schedule lines, plan taglines, group items, table cells, fact and plate values. Anything set inside a ruled cell."
+      },
+      "micro-body": {
+        "displayName": "Micro Body",
+        "purpose": "The rate schedule's inclusion rows and its footnote: one step below small body, where a list must stay dense inside a narrow column."
+      },
+      "field": {
+        "displayName": "Field Key",
+        "purpose": "Title-block keys, form labels, table headers, group names, band items. Mono, uppercase."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "Clause numbers, sequence step numbers, schedule line numbers, the live sheet stamp. A figure is the bare zero-padded number, not a labelled one."
+      },
+      "stamp-label": {
+        "displayName": "Stamp Label",
+        "purpose": "The letterspaced mono uppercase label inside a stamped action."
+      },
+      "dimension": {
+        "displayName": "Dimension",
+        "purpose": "The price in the rate schedule, set as a measurement. Tabular figures."
+      }
+    },
+    "shadows": [],
+    "lineWeights": [
+      {
+        "name": "hair",
+        "value": "1px",
+        "token": "--w-hair",
+        "purpose": "Within a cell: list rows, column rules, cell gaps in a ruled region. ISO 0.13."
+      },
+      {
+        "name": "key",
+        "value": "1px",
+        "token": "--w-key",
+        "purpose": "Around a cell or component: form boxes, notes, tables, the rate grid. ISO 0.25."
+      },
+      {
+        "name": "div",
+        "value": "2px",
+        "token": "--w-div",
+        "purpose": "Between sheets, the rail edge, stamp-row frames, the focus ring. ISO 0.5."
+      },
+      {
+        "name": "edge",
+        "value": "3px",
+        "token": "--w-edge",
+        "purpose": "The document's sheet edge and the command palette's border. ISO 0.7."
+      }
+    ],
+    "motion": [
+      {
+        "name": "draw",
+        "value": "cubic-bezier(0.22, 0.61, 0.36, 1)",
+        "purpose": "Stroke reveal: stroke-dashoffset runs from getTotalLength() to 0 over 620-1200ms, staggered 260/480/640ms."
+      },
+      {
+        "name": "snap",
+        "value": "cubic-bezier(0.9, 0, 0.1, 1)",
+        "purpose": "Rule: state changes on hover, focus, and toggles land in 80-160ms."
+      },
+      {
+        "name": "stamp",
+        "value": "220ms cubic-bezier(0.9, 0, 0.1, 1)",
+        "purpose": "The rail's sheet number flashes inverted as it advances down the page."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "transition/animation-duration 0.01ms; is-drawn applied immediately; dashoffset starts at 0",
+        "purpose": "Every stroke renders already drawn. The finding is never withheld."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "detail",
+        "value": "66rem"
+      },
+      {
+        "name": "clause",
+        "value": "60rem"
+      },
+      {
+        "name": "table",
+        "value": "52rem"
+      },
+      {
+        "name": "sheet",
+        "value": "44rem"
+      },
+      {
+        "name": "coarse-pointer",
+        "value": "(pointer: coarse)"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Stamp (Primary Action)",
+      "kind": "button",
+      "refersTo": "stamp",
+      "description": "The primary action, stamped rather than clicked: solid navy, mono uppercase label, square, with an inline square-capped arrow.",
+      "html": "<div class=\"ds-stamp-row\"><a class=\"ds-stamp\" href=\"#\">Book the free review<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" aria-hidden=\"true\"><path d=\"M4 12h15M13 6l6 6-6 6\" stroke-linecap=\"square\"></path></svg></a><a class=\"ds-stamp ds-stamp--ghost\" href=\"#\">See the scope of work</a></div>",
+      "css": ".ds-stamp-row { display: flex; flex-wrap: wrap; gap: 0; border: 2px solid var(--ink, #000036); width: fit-content; max-width: 100%; } .ds-stamp { display: inline-flex; align-items: center; gap: 0.7rem; padding: 0.95rem 1.5rem; font: 700 0.8125rem/1 'Martian Mono Variable', ui-monospace, monospace; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; border: 0; border-radius: 0; background: var(--ink, #000036); color: var(--stock, #EFEEE7); transition: background 80ms cubic-bezier(0.9,0,0.1,1), color 80ms cubic-bezier(0.9,0,0.1,1); } .ds-stamp svg { width: 13px; height: 13px; flex: none; } .ds-stamp:hover, .ds-stamp:focus-visible { background: var(--red-ink, #C21B12); color: var(--stock, #EFEEE7); } .ds-stamp--ghost { background: transparent; color: var(--ink, #000036); border-left: 2px solid var(--ink, #000036); } .ds-stamp--ghost:hover, .ds-stamp--ghost:focus-visible { background: var(--ink, #000036); color: var(--stock, #EFEEE7); } .ds-stamp:focus-visible { outline: 2px solid var(--red, #D8261B); outline-offset: 3px; }"
+    },
+    {
+      "name": "Revision Note",
+      "kind": "custom",
+      "refersTo": "note",
+      "description": "A boxed margin note in the revision red, with its REV tag hung above the top-left corner as a solid flag. Carries the finding the redline points at.",
+      "html": "<p class=\"ds-note\" data-tag=\"REV A · FIRST FINDING\">The first review is free, and you keep the written findings whether or not you hire us.</p>",
+      "css": ".ds-note { position: relative; display: block; max-width: 34ch; margin: 1.75rem 0 0; border: 1px solid var(--red, #D8261B); border-radius: 0; padding: 0.7rem 0.9rem; color: var(--red-ink, #C21B12); font: 500 0.8125rem/1.45 'Martian Mono Variable', ui-monospace, monospace; background: var(--stock, #EFEEE7); } .ds-note::before { content: attr(data-tag); position: absolute; top: -1px; left: -1px; transform: translateY(-100%); background: var(--red-ink, #C21B12); color: var(--stock, #EFEEE7); font: 700 0.6875rem/1 'Martian Mono Variable', ui-monospace, monospace; letter-spacing: 0.1em; padding: 0.3rem 0.45rem; }"
+    },
+    {
+      "name": "Clause Row",
+      "kind": "card",
+      "refersTo": "cell",
+      "description": "The service list as numbered clauses instead of a card grid. Hover tints the row and wipes a red bar in from the left.",
+      "html": "<a class=\"ds-clause\" href=\"#\"><span class=\"ds-clause__no\">2.1</span><span><span class=\"ds-clause__name\">Website redesign</span><span class=\"ds-clause__desc\">A full rebuild of the site you have, on a stack you own, priced before we start.</span></span><dl class=\"ds-clause__params\"><div class=\"ds-clause__param\"><dt>Lead time</dt><dd>3-5 weeks</dd></div><div class=\"ds-clause__param\"><dt>Handover</dt><dd>Source + hosting</dd></div></dl><svg class=\"ds-clause__go\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M4 12h15M13 6l6 6-6 6\" stroke-linecap=\"square\"/></svg></a>",
+      "css": ".ds-clause { display: grid; grid-template-columns: 6.5rem minmax(0,1fr) minmax(0,17rem) 2.5rem; gap: 2rem; align-items: start; padding: 2rem 0; border-top: 1px solid var(--ink, #000036); border-bottom: 1px solid var(--ink, #000036); text-decoration: none; color: inherit; position: relative; transition: background 90ms cubic-bezier(0.9,0,0.1,1); } .ds-clause::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--red, #D8261B); transform: scaleX(0); transform-origin: left center; transition: transform 160ms cubic-bezier(0.9,0,0.1,1); } .ds-clause:hover, .ds-clause:focus-visible { background: var(--stock-2, #E6E5DC); } .ds-clause:hover::after, .ds-clause:focus-visible::after { transform: scaleX(1); } .ds-clause__no { font: 500 0.8125rem/1.4 'Martian Mono Variable', ui-monospace, monospace; color: var(--red-ink, #C21B12); padding-top: 0.45rem; } .ds-clause__name { display: block; font: 700 2.35rem/1.04 'Archivo Variable', system-ui, sans-serif; letter-spacing: -0.035em; margin-bottom: 0.6rem; } .ds-clause__desc { display: block; color: var(--graphite, #4E4E47); max-width: 58ch; font: 400 1.0625rem/1.55 'Archivo Variable', system-ui, sans-serif; } .ds-clause__params { display: grid; gap: 0; margin: 0.5rem 0 0; border-top: 1px solid var(--rule, #C6C5BA); } .ds-clause__param { display: flex; justify-content: space-between; gap: 1rem; padding: 0.42rem 0; border-bottom: 1px solid var(--rule, #C6C5BA); font: 500 0.6875rem/1.35 'Martian Mono Variable', ui-monospace, monospace; } .ds-clause__param dt { color: var(--graphite, #4E4E47); text-transform: uppercase; letter-spacing: 0.08em; flex: none; margin: 0; } .ds-clause__param dd { color: var(--ink, #000036); text-align: right; margin: 0; } .ds-clause__go { align-self: center; justify-self: end; width: 22px; height: 22px; color: var(--ink, #000036); transition: transform 160ms cubic-bezier(0.9,0,0.1,1), color 160ms cubic-bezier(0.9,0,0.1,1); } .ds-clause:hover .ds-clause__go { transform: translateX(5px); color: var(--red, #D8261B); }"
+    },
+    {
+      "name": "Ruled Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "A form field as a cell of a ruled block: mono uppercase label above the control, the cell itself carrying the focus state.",
+      "html": "<div class=\"ds-form\"><div class=\"ds-field\"><label for=\"ds-name\">Name <span class=\"ds-req\">*</span></label><input id=\"ds-name\" type=\"text\" placeholder=\"Your name\" /></div><div class=\"ds-field\"><label for=\"ds-svc\">What you need</label><select id=\"ds-svc\"><option>Website redesign</option><option>Ongoing care</option></select></div></div>",
+      "css": ".ds-form { display: grid; gap: 0; border: 1px solid var(--ink, #000036); border-radius: 0; background: var(--stock, #EFEEE7); } .ds-field { display: grid; border-bottom: 1px solid var(--ink, #000036); } .ds-field:last-child { border-bottom: 0; } .ds-field label { font: 500 0.6875rem/1 'Martian Mono Variable', ui-monospace, monospace; letter-spacing: 0.11em; text-transform: uppercase; color: var(--graphite, #4E4E47); padding: 0.7rem 0.9rem 0; } .ds-req { color: var(--red-ink, #C21B12); } .ds-field input, .ds-field select { font-family: 'Archivo Variable', system-ui, sans-serif; font-size: 1rem; color: var(--ink, #000036); background: transparent; border: 0; border-radius: 0; padding: 0.35rem 0.9rem 0.75rem; width: 100%; } .ds-field input::placeholder { color: var(--graphite, #4E4E47); opacity: 0.8; } .ds-field select { appearance: none; padding-right: 2.4rem; background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 10'%3E%3Cpath d='M1 1 L7 8 L13 1' fill='none' stroke='%23000036' stroke-width='1.6'/%3E%3C/svg%3E\"); background-repeat: no-repeat; background-position: right 0.9rem center; background-size: 12px 9px; } .ds-field input:focus-visible, .ds-field select:focus-visible { outline: none; } .ds-field:focus-within { background: var(--stock-2, #E6E5DC); } .ds-field:focus-within label { color: var(--red-ink, #C21B12); }"
+    },
+    {
+      "name": "Top Band Navigation",
+      "kind": "nav",
+      "refersTo": "rail-zone",
+      "description": "The sheet's top band: mono uppercase, hairline-divided links that invert to stock-on-navy, current page held at the tinted cell.",
+      "html": "<div class=\"ds-band\"><span>CodeView Solutions LLC · Old Bridge, NJ</span><nav aria-label=\"Main\"><a href=\"#\">Services</a><a href=\"#\" aria-current=\"page\">About</a><a href=\"#\">Contact</a><button class=\"ds-find\" type=\"button\">Find <kbd>⌘</kbd><kbd>K</kbd></button></nav></div>",
+      "css": ".ds-band { display: flex; align-items: stretch; justify-content: space-between; border-bottom: 1px solid var(--ink, #000036); background: var(--stock, #EFEEE7); font: 500 0.6875rem/1 'Martian Mono Variable', ui-monospace, monospace; letter-spacing: 0.06em; text-transform: uppercase; color: var(--graphite, #4E4E47); } .ds-band > span { padding: 0.6rem 1.5rem; display: grid; place-items: center; } .ds-band nav { display: flex; gap: 0; } .ds-band nav a { padding: 0.6rem 0.95rem; color: var(--graphite, #4E4E47); text-decoration: none; border-left: 1px solid var(--rule, #C6C5BA); display: grid; place-items: center; transition: background 90ms cubic-bezier(0.9,0,0.1,1), color 90ms cubic-bezier(0.9,0,0.1,1); } .ds-band nav a:hover, .ds-band nav a:focus-visible { background: var(--ink, #000036); color: var(--stock, #EFEEE7); } .ds-band nav a[aria-current='page'] { background: var(--stock-2, #E6E5DC); color: var(--ink, #000036); } .ds-find { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.6rem 0.95rem; border: 0; border-left: 1px solid var(--rule, #C6C5BA); background: transparent; color: var(--graphite, #4E4E47); font: 500 0.6875rem/1 'Martian Mono Variable', ui-monospace, monospace; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: background 90ms cubic-bezier(0.9,0,0.1,1), color 90ms cubic-bezier(0.9,0,0.1,1); } .ds-find:hover, .ds-find:focus-visible { background: var(--ink, #000036); color: var(--stock, #EFEEE7); } .ds-find kbd { font: 500 0.625rem/1 'Martian Mono Variable', ui-monospace, monospace; border: 1px solid currentColor; padding: 0.15rem 0.3rem; }"
+    },
+    {
+      "name": "Title Block",
+      "kind": "card",
+      "refersTo": "cell",
+      "description": "The ruled table a drawing signs off in. Grid gap over a navy ground is the rule between cells; each cell paints its own stock face.",
+      "html": "<dl class=\"ds-tblock\"><div class=\"ds-tblock__cell\"><dt>First step</dt><dd>A free written review</dd></div><div class=\"ds-tblock__cell\"><dt>Ongoing care</dt><dd>From $95 / month</dd></div><div class=\"ds-tblock__cell\"><dt>Based</dt><dd>Old Bridge, NJ</dd></div><div class=\"ds-tblock__cell\"><dt>Built for</dt><dd>Owners, not agencies</dd></div></dl>",
+      "css": ".ds-tblock { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); border-top: 1px solid var(--ink, #000036); background: var(--ink, #000036); gap: 1px; margin: 0; } .ds-tblock__cell { background: var(--stock, #EFEEE7); padding: 0.85rem 1.5rem; display: grid; gap: 0.3rem; align-content: start; } .ds-tblock__cell dt { font: 500 0.6875rem/1 'Martian Mono Variable', ui-monospace, monospace; letter-spacing: 0.11em; text-transform: uppercase; color: var(--graphite, #4E4E47); margin: 0; } .ds-tblock__cell dd { font: 600 0.9375rem/1.4 'Archivo Variable', system-ui, sans-serif; letter-spacing: -0.01em; color: var(--ink, #000036); margin: 0; }"
+    },
+    {
+      "name": "Rate Column",
+      "kind": "card",
+      "refersTo": "cell",
+      "description": "A column of the rate schedule: mono figure, heavy name, the price fenced by keylines and set as a dimension, inclusions on hairlines with a red tick dash.",
+      "html": "<div class=\"ds-rate\"><span class=\"ds-rate__no\">5.2</span><h3 class=\"ds-rate__name\">Care</h3><p class=\"ds-rate__tag\">Someone accountable for the site every month.</p><p class=\"ds-rate__price\"><b>$195</b><i>per month</i></p><ul class=\"ds-rate__list\"><li>Updates, backups, and uptime checks</li><li>Content edits within one business day</li></ul><a class=\"ds-rate__cta\" href=\"#\">Start with a review</a></div>",
+      "css": ".ds-rate { background: var(--stock, #EFEEE7); border: 1px solid var(--ink, #000036); padding: 1.85rem; display: flex; flex-direction: column; gap: 0.9rem; max-width: 22rem; } .ds-rate__no { font: 500 0.75rem/1 'Martian Mono Variable', ui-monospace, monospace; color: var(--red-ink, #C21B12); } .ds-rate__name { font: 800 2.1rem/1.02 'Archivo Variable', system-ui, sans-serif; letter-spacing: -0.035em; margin: 0.5rem 0 0.35rem; color: var(--ink, #000036); } .ds-rate__tag { color: var(--graphite, #4E4E47); font: 400 0.9375rem/1.45 'Archivo Variable', system-ui, sans-serif; margin: 0; } .ds-rate__price { border-top: 1px solid var(--ink, #000036); border-bottom: 1px solid var(--ink, #000036); padding: 0.85rem 0; margin: 0; display: flex; align-items: baseline; gap: 0.55rem; flex-wrap: wrap; } .ds-rate__price b { font: 800 3rem/1 'Archivo Variable', system-ui, sans-serif; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; color: var(--ink, #000036); } .ds-rate__price i { font: 500 0.75rem/1 'Martian Mono Variable', ui-monospace, monospace; font-style: normal; letter-spacing: 0.06em; text-transform: uppercase; color: var(--graphite, #4E4E47); } .ds-rate__list { list-style: none; padding: 0; margin: 0; display: grid; border-top: 1px solid var(--rule, #C6C5BA); } .ds-rate__list li { font: 400 0.875rem/1.45 'Archivo Variable', system-ui, sans-serif; color: var(--graphite, #4E4E47); padding: 0.55rem 0 0.55rem 1.35rem; border-bottom: 1px solid var(--rule, #C6C5BA); position: relative; } .ds-rate__list li::before { content: ''; position: absolute; left: 0; top: 1.05em; width: 8px; height: 1px; background: var(--red, #D8261B); } .ds-rate__cta { margin-top: auto; display: inline-flex; align-items: center; justify-content: center; border: 2px solid var(--ink, #000036); background: var(--ink, #000036); color: var(--stock, #EFEEE7); padding: 0.95rem 1.5rem; font: 700 0.8125rem/1 'Martian Mono Variable', ui-monospace, monospace; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; transition: background 80ms cubic-bezier(0.9,0,0.1,1); } .ds-rate__cta:hover, .ds-rate__cta:focus-visible { background: var(--red-ink, #C21B12); }"
+    },
+    {
+      "name": "Cycle Switch",
+      "kind": "chip",
+      "refersTo": "cycle-btn",
+      "description": "The monthly/yearly switch: two mono buttons sharing one border, the pressed one inverted. CSS decides which price shows from a data attribute, so the default is correct with no script.",
+      "html": "<div class=\"ds-cycle\"><button class=\"ds-cycle__btn\" type=\"button\" aria-pressed=\"true\">Monthly</button><button class=\"ds-cycle__btn\" type=\"button\" aria-pressed=\"false\">Yearly</button><span class=\"ds-cycle__hint\">Two months free on yearly</span></div>",
+      "css": ".ds-cycle { display: flex; align-items: center; flex-wrap: wrap; gap: 0 1rem; } .ds-cycle__btn { font: 700 0.75rem/1 'Martian Mono Variable', ui-monospace, monospace; letter-spacing: 0.09em; text-transform: uppercase; padding: 0.8rem 1.2rem; border: 1px solid var(--ink, #000036); border-radius: 0; background: transparent; color: var(--ink, #000036); cursor: pointer; transition: background 80ms cubic-bezier(0.9,0,0.1,1), color 80ms cubic-bezier(0.9,0,0.1,1); } .ds-cycle__btn + .ds-cycle__btn { border-left: 0; } .ds-cycle__btn:hover { background: var(--stock-2, #E6E5DC); } .ds-cycle__btn[aria-pressed='true'] { background: var(--ink, #000036); color: var(--stock, #EFEEE7); } .ds-cycle__btn:focus-visible { outline: 2px solid var(--red, #D8261B); outline-offset: 3px; } .ds-cycle__hint { font: 500 0.75rem/1.4 'Martian Mono Variable', ui-monospace, monospace; color: var(--red-ink, #C21B12); }"
+    },
+    {
+      "name": "Zone Rail",
+      "kind": "nav",
+      "refersTo": "rail-zone",
+      "description": "The drawing's left margin: the mark, the zone letters for the current page, and the live sheet stamp that advances as the visitor scrolls.",
+      "html": "<div class=\"ds-rail\"><span class=\"ds-rail__mark\" aria-hidden=\"true\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M9 6 3 12l6 6M15 6l6 6-6 6\" stroke-linecap=\"square\"/></svg></span><nav class=\"ds-rail__zones\" aria-label=\"Sheets on this page\"><a class=\"ds-rail__zone\" href=\"#\">A</a><a class=\"ds-rail__zone\" href=\"#\">B</a><a class=\"ds-rail__zone\" href=\"#\">C</a></nav><span class=\"ds-rail__rev\">02</span></div>",
+      "css": ".ds-rail { width: 3.25rem; min-height: 20rem; background: var(--stock, #EFEEE7); border-right: 2px solid var(--ink, #000036); display: grid; grid-template-rows: auto 1fr auto; align-items: center; justify-items: center; padding: 1rem 0; } .ds-rail__mark svg { width: 26px; height: 26px; color: var(--ink, #000036); } .ds-rail__zones { display: grid; width: 100%; align-content: center; border-top: 1px solid var(--rule, #C6C5BA); border-bottom: 1px solid var(--rule, #C6C5BA); } .ds-rail__zone { display: grid; place-items: center; padding: 0.85rem 0; font: 500 0.6875rem/1 'Martian Mono Variable', ui-monospace, monospace; letter-spacing: 0.04em; color: var(--graphite, #4E4E47); text-decoration: none; border-bottom: 1px solid var(--rule, #C6C5BA); transition: background 90ms cubic-bezier(0.9,0,0.1,1), color 90ms cubic-bezier(0.9,0,0.1,1); } .ds-rail__zone:last-child { border-bottom: 0; } .ds-rail__zone:hover, .ds-rail__zone:focus-visible { background: var(--ink, #000036); color: var(--stock, #EFEEE7); } .ds-rail__rev { font: 700 0.8125rem/1 'Martian Mono Variable', ui-monospace, monospace; color: var(--red-ink, #C21B12); border: 1px solid var(--red, #D8261B); padding: 0.35rem 0.3rem; width: 2.05rem; text-align: center; }"
+    },
+    {
+      "name": "Command Palette Row",
+      "kind": "custom",
+      "refersTo": "cell",
+      "description": "The drawing set's index. Native dialog framing, mono group headers, hairline-divided rows, selected row inverted with its icon in red.",
+      "html": "<div class=\"ds-cmdk\"><div class=\"ds-cmdk__search\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"M20 20l-4-4\" stroke-linecap=\"square\"/></svg><input class=\"ds-cmdk__input\" placeholder=\"Find on sheet\" /></div><p class=\"ds-cmdk__group\">Sheets</p><ul class=\"ds-cmdk__list\"><li class=\"ds-cmdk__item\" aria-selected=\"true\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M4 4h16v16H4z\"/></svg>Scope of work<span class=\"ds-cmdk__hint\">02</span></li><li class=\"ds-cmdk__item\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M4 4h16v16H4z\"/></svg>Schedule of rates<span class=\"ds-cmdk__hint\">05</span></li></ul></div>",
+      "css": ".ds-cmdk { width: min(32rem, 100%); border: 3px solid var(--ink, #000036); border-radius: 0; background: var(--stock, #EFEEE7); color: var(--ink, #000036); } .ds-cmdk__search { display: flex; align-items: center; gap: 0.7rem; padding: 0.9rem 1rem; border-bottom: 2px solid var(--ink, #000036); color: var(--red, #D8261B); } .ds-cmdk__search svg { width: 16px; height: 16px; flex: none; } .ds-cmdk__input { flex: 1; border: 0; background: transparent; color: var(--ink, #000036); font-family: 'Archivo Variable', system-ui, sans-serif; font-size: 1.0625rem; padding: 0; } .ds-cmdk__input:focus-visible { outline: none; } .ds-cmdk__input::placeholder { color: var(--graphite, #4E4E47); } .ds-cmdk__group { font: 600 0.625rem/1 'Martian Mono Variable', ui-monospace, monospace; letter-spacing: 0.13em; text-transform: uppercase; color: var(--graphite, #4E4E47); padding: 0.85rem 1rem 0.45rem; margin: 0; } .ds-cmdk__list { list-style: none; margin: 0; padding: 0; } .ds-cmdk__item { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 1rem; border-top: 1px solid var(--rule, #C6C5BA); cursor: pointer; font: 400 0.9375rem/1.4 'Archivo Variable', system-ui, sans-serif; } .ds-cmdk__item svg { width: 15px; height: 15px; color: var(--graphite, #4E4E47); flex: none; } .ds-cmdk__item:hover { background: var(--stock-2, #E6E5DC); } .ds-cmdk__item[aria-selected='true'] { background: var(--ink, #000036); color: var(--stock, #EFEEE7); } .ds-cmdk__item[aria-selected='true'] svg { color: var(--red, #D8261B); } .ds-cmdk__hint { margin-left: auto; font: 500 0.6875rem/1 'Martian Mono Variable', ui-monospace, monospace; color: var(--graphite, #4E4E47); } .ds-cmdk__item[aria-selected='true'] .ds-cmdk__hint { color: var(--stock, #EFEEE7); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Redline",
+    "overview": "The site is a technical specification sheet for the visitor's own website. Every surface behaves like a sheet in a drawing set: bordered by a sheet edge, indexed by a zone rail down the left margin, ruled into whole cells, numbered, and signed off in a title block. The category default — a gradient hero floating above three equal service cards — is refused outright, because the whole promise is that somebody looked at the thing, wrote it down, ruled it, and put their name on it. The redline is not a metaphor applied to the surface; it is the layout mechanic. Findings are drawn in red over the sheet and tied back by a leader line to the exact words they question.\n\nDensity is high and deliberate. Rules do the work that shadows and cards do elsewhere: a division between two ideas is a line of a stated weight, not a floating panel. Nothing is soft. No corner radii exist anywhere in the build, no box shadows exist anywhere, and no decorative gradients; the only repeating fills are the stock's own 44px field grid and the 45° hatch on the single cut face, both drafting devices rather than decoration.\n\nThe palette is enumerated and closed. Four inks are declared — drafting stock, the logo's own navy, one spot revision red, one graphite. The red exists at three levels because it does three jobs, and the stock exists as two cooled tints for the one reversed-out field; those are the same inks at different levels, not additional colours. Every one of them is a named custom property in the `:root` block, no colour literal appears anywhere else in either stylesheet, and `npm run check:contrast` tests each value against the ground it actually sits on at the threshold that pairing actually has to meet. Six other complete visual worlds were built and judged before this one; they live under `archive/worlds/` with restore notes and are not part of this system.",
+    "keyCharacteristics": [
+      "Four declared inks, never exceeded; one red at three levels, one stock at three levels.",
+      "Every colour in the build is a `:root` token; no literal appears outside the token block.",
+      "Every border is one of four ISO line weights: hairline, keyline, division, sheet edge.",
+      "Zero radii, zero shadows, zero decorative gradients.",
+      "Archivo for sheet lettering; Martian Mono confined to fields, figures, and dimensions.",
+      "Sheets are numbered, zoned, and indexed by a fixed left rail.",
+      "Motion is draw, rule, and stamp. Nothing fades in and nothing drifts."
+    ],
+    "rules": [
+      {
+        "name": "The Four Inks Rule",
+        "body": "Stock, ink, red, graphite. A new colour is never introduced; it is derived as another *level* of a declared ink — lifted, darkened, or cooled for the ground it has to sit on — named in the :root block of src/styles/global.css, and added to scripts/check-contrast.mjs. If it cannot be named as a level of one of the four, it does not ship.",
+        "section": "colors"
+      },
+      {
+        "name": "The Split Red Rule",
+        "body": "One red, three levels, chosen by the job and the ground. {colors.red} strokes rules, marks, and large type on stock; {colors.red-ink} sets any red text under 24px, any red on the tinted cell, and any red fill carrying stock-coloured text; {colors.red-lit} is the only red permitted on the navy field. Never pick by taste — pick by ground and size. npm run check:contrast asserts all three separately and is the gate.",
+        "section": "colors"
+      },
+      {
+        "name": "The Token-Only Rule",
+        "body": "Every colour in the build is a named custom property in :root. No hex, rgb(), or rgba() literal appears anywhere else in either stylesheet, and the build currently satisfies this with zero exceptions. A value worth using is worth naming; a value not worth naming does not ship.",
+        "section": "colors"
+      },
+      {
+        "name": "The Rarity Rule",
+        "body": "Red marks findings, figures, and the one live control the eye should track. It never fills a large area and never becomes a section background. The single dark field on the entire site is the closing issue block.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mono Confinement Rule",
+        "body": "Martian Mono is only ever a field key, a figure, a stamp label, or a keyboard hint. It never sets a sentence, a lede, or a heading. If the string is prose, it is Archivo.",
+        "section": "typography"
+      },
+      {
+        "name": "The No-Eyebrow Rule",
+        "body": "A sheet's label and number are never stacked above the heading as a kicker. They sit at the opposite end of the ruled header band, on the same baseline as the title (space-between, align-items: baseline), because a header band is a real drawing device and an eyebrow is not.",
+        "section": "typography"
+      },
+      {
+        "name": "The Cell-Step Rule",
+        "body": "Text set across a sheet uses the lede, prose, or body steps; text set inside a ruled cell drops to small body (0.9375rem), and only a dense list inside a narrow column goes to micro body (0.875rem). The step tells you whether you are reading the sheet or reading a cell of it.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "font-variant-numeric: tabular-nums is set globally on body. Figures on a spec sheet line up in columns and do not reflow between states.",
+        "section": "typography"
+      },
+      {
+        "name": "The Whole-Cell Rule",
+        "body": "Elements occupy whole cells of the grid. Regions are laid out as grid-plus-gap-as-rule, never as free-floating boxes separated by margins.",
+        "section": "layout"
+      },
+      {
+        "name": "The Density-Preservation Rule",
+        "body": "Touch accommodation lives entirely in @media (pointer: coarse), where targets grow to a 44px minimum and the pointer-position readout cell (which a coarse pointer cannot drive) is removed. Fine-pointer density is never lowered to accommodate touch.",
+        "section": "layout"
+      },
+      {
+        "name": "The Line-Weight Rule",
+        "body": "Every border picks one of four weights and nothing else: {spacing.rule-hair} hairline (within a cell — list rows, column rules, cell gaps), {spacing.rule-key} keyline (around a cell or component — form boxes, notes, tables, the rate grid), {spacing.rule-div} division (between sheets, the rail edge, stamp-row frames, focus rings), {spacing.rule-edge} sheet edge (the document border and the command palette). A border with a bespoke width is a bug.",
+        "section": "elevation"
+      },
+      {
+        "name": "The No-Shadow Rule",
+        "body": "No box-shadow, no drop-shadow, no backdrop-filter, no blurred panels. Hierarchy is line weight and reversal. The only translucency in the build is the command palette's flat navy scrim and {colors.rule-on-ink}, which is the hairline expressed against the ink field.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Drawn-Not-Faded Rule",
+        "body": "The motion vocabulary is three verbs: **draw** — strokes reveal by animating stroke-dashoffset from their own getTotalLength() down to 0, staggered 260/480/640ms on cubic-bezier(0.22, 0.61, 0.36, 1); **rule** — state changes snap in 80–160ms on cubic-bezier(0.9, 0, 0.1, 1); **stamp** — the sheet number flashes inverted for 220ms as it advances. Nothing fades in, nothing drifts up, nothing scales on hover. Under prefers-reduced-motion: reduce, every stroke renders already drawn: is-drawn is applied immediately and dash offset starts at 0, so the finding is never withheld from a reduced-motion visitor.",
+        "section": "components"
+      },
+      {
+        "name": "The No-JS-Correct Rule",
+        "body": "Progressive enhancement is structural. The rate schedule renders both billing cycles into the DOM and CSS shows one based on the group's data-cycle attribute, so the monthly column is correct with the script disabled; the switch only rewrites an attribute and aria-pressed.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do derive any new colour as a level of one of the four declared inks, name it in the :root block of src/styles/global.css, and add its pairing to scripts/check-contrast.mjs.",
+      "Do reach for the reversed-out ramp ({colors.on-ink}, {colors.on-ink-dim}, {colors.rule-on-ink}, {colors.red-lit}) rather than pure stock whenever you set type or a rule on the navy field.",
+      "Do pick every border width from the four ISO weights (--w-hair, --w-key, --w-div, --w-edge).",
+      "Do use {colors.red-ink} for red under 24px, red on the tinted cell, and any red fill carrying stock-coloured text; keep bright {colors.red} for strokes, rules, registration marks, and the focus ring.",
+      "Do build multi-cell regions as a grid with a navy background and a 1px/2px gap, so the gap is the rule.",
+      "Do give a new sheet a data-sheet number, a zone entry, and — if it makes a claim worth questioning — its own data-mark / data-cloud / data-note trio.",
+      "Do keep Martian Mono on field keys, figures, stamp labels, and keyboard hints only.",
+      "Do put touch accommodations inside @media (pointer: coarse) rather than lowering density for everyone.",
+      "Do render both states of any toggled content and let CSS choose from a data attribute, so the default state survives without JavaScript.",
+      "Do inline icons as SVG stroked in currentColor with square caps."
+    ],
+    "donts": [
+      "Don't add a box-shadow, drop-shadow, or backdrop-filter anywhere. Hierarchy is line weight and figure/ground reversal.",
+      "Don't put {colors.red} or {colors.red-ink} on the navy field, or {colors.red-lit} on stock. Each level of the red has exactly one ground it is legible against.",
+      "Don't add a border-radius. The system's only radius value is 0.",
+      "Don't add a tonal or blurred gradient. repeating-linear-gradient is permitted only where it draws hard 1px rules (the stock's field grid, the cut-face hatch).",
+      "Don't stack a label or number above a heading as a kicker or eyebrow; it belongs at the opposite end of the ruled header band, on the title's baseline.",
+      "Don't set prose, ledes, or headings in Martian Mono.",
+      "Don't introduce a fifth ink — not even one accent for a chart, a badge, or a status. The four are enumerated and guard-enforced.",
+      "Don't fade, slide, or scale anything on entrance. If it should appear, draw it.",
+      "Don't use icon fonts, emoji, or glyph characters as icons.",
+      "Don't widen the red beyond findings, figures, and the live control; a red section background destroys the rarity that makes a finding read as a finding.",
+      "Don't write a colour literal anywhere outside the :root token block. The build satisfies this with zero exceptions today; every colour is a named property and a line in the contrast guard."
+    ]
+  }
+}

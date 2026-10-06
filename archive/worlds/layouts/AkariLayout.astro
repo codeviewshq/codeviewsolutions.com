@@ -1,0 +1,83 @@
+---
+/**
+ * AKARI LIGHT SCULPTURE — room shell. Self-contained; no global.css.
+ */
+import '@fontsource/alegreya-sans/400.css';
+import '@fontsource/alegreya-sans/500.css';
+import '@fontsource/alegreya-sans/700.css';
+import '../styles/world-akari.css';
+
+import { withBase } from '../utils/url.js';
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#F6EBD8" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+  </head>
+  <body>
+    <!--
+      THESIS: The offer as a room of lit paper volumes. It refuses the category
+      default — a gradient hero above three service cards — by making every
+      block a physical object with ribs, weight, and a bulb inside, so light
+      comes through the surface instead of sitting on it.
+      OWN-WORLD: Candlelit washi #F6EBD8 ground, bamboo rib tan for structure
+      lines, charcoal body ink, one vermilion stamp as the active mark. The
+      world is brief-pinned, so the ivory ground is the correct rendition and
+      not a default. Alegreya Sans, a genuinely humanist face. Sculpted
+      radii, inset warm light, no flat cards anywhere.
+      STORY: A visitor moves between glowing forms, reads a plainly worded
+      offer, and books the free review.
+      FIRST VIEWPORT: A dim room lit from above. The title left at large
+      humanist weight with the vermilion stamp beside the free-review line; a
+      lit moon form on the right carrying the first fact.
+      FORM: Deployable akari light sculpture; dealt challenger
+      paper-folds-pleats-deployable-akari-light-sculpture, adopted at the
+      user's request after being declined on audience fit; seed key 685831a9.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with
+      the finish review, the verdict, DESIGN.md, and every shipping raster
+      carrying its provenance.
+    -->
+    <a class="skip" href="#room">Skip to content</a>
+    <slot />
+    <script>
+      import { initBilling } from '../scripts/billing.js';
+      initBilling();
+
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* The one authored motion: a folded form inflates when its bulb comes on.
+         Armed by script, so with no JS every form is simply already lit. */
+      if (!reduced) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (!e.isIntersecting) return;
+              const el = e.target as HTMLElement;
+              setTimeout(() => el.classList.add('is-lit'), Number(el.dataset.lamp || 0) * 130);
+              io.unobserve(el);
+            });
+          },
+          { threshold: 0.3 }
+        );
+        document.querySelectorAll<HTMLElement>('[data-lamp]').forEach((el) => {
+          el.classList.add('is-flat');
+          io.observe(el);
+        });
+      }
+    </script>
+  </body>
+</html>

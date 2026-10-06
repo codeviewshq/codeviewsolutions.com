@@ -1,0 +1,780 @@
+/* ==========================================================================
+   THE REFRACTION TEST
+   The free website review, staged as an eye examination.
+
+   The scene decides the light: an examination happens in a dimmed room with a
+   backlit chart on the far wall, so the chart panel is a committed navy field
+   and the room around it is bright and clinical. Type descends the Snellen
+   ramp; the acuity notation in the margin is the type scale, not decoration.
+   ========================================================================== */
+
+:root {
+  /* --- The declared palette. --- */
+  --room: #fbfbf8;
+  --room-2: #f0f0ea;
+  --chart: #000036; /* the logo's navy — the lit chart panel */
+  --optotype: #ffffff;
+  --teal: #0e6e68; /* signal, on the light room */
+  --teal-lit: #4fd6c8; /* the same signal, on the chart */
+  --rule: #dcdcd2;
+  --muted: #4a4a44;
+
+  --pad: clamp(1.15rem, 4vw, 4rem);
+
+  --f: 'Chivo Variable', system-ui, sans-serif;
+  --f-mono: 'Chivo Mono Variable', ui-monospace, monospace;
+
+  /* Refraction motion: things resolve from blur to sharp. */
+  --settle: cubic-bezier(0.16, 1, 0.3, 1);
+
+  color-scheme: light;
+  accent-color: var(--teal);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--room);
+  color: var(--chart);
+  font-family: var(--f);
+  font-size: clamp(1rem, 0.96rem + 0.22vw, 1.0625rem);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--teal);
+  color: var(--room);
+}
+:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 3px;
+}
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--room-2);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--chart);
+}
+
+.skip {
+  position: fixed;
+  top: 0.6rem;
+  left: 0.6rem;
+  z-index: 90;
+  transform: translateY(-160%);
+  background: var(--chart);
+  color: var(--room);
+  padding: 0.7rem 1.1rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.skip:focus-visible {
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   THE ROOM
+   -------------------------------------------------------------------------- */
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--room);
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem var(--pad);
+}
+.top__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: inherit;
+  text-decoration: none;
+}
+.top__mark {
+  width: 30px;
+  height: auto;
+  color: var(--chart);
+}
+.top__name {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.top nav {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+.top nav a {
+  padding: 0.55rem 0.75rem;
+  font: 500 0.8125rem/1 var(--f-mono);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+.top nav a:hover,
+.top nav a:focus-visible {
+  color: var(--chart);
+  border-color: var(--chart);
+}
+
+.section {
+  padding: clamp(3rem, 7vw, 6.5rem) var(--pad);
+  border-bottom: 1px solid var(--rule);
+}
+.section--tint {
+  background: var(--room-2);
+}
+.section__title {
+  font-size: clamp(1.9rem, 4.2vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+.section__lede {
+  margin-top: 1rem;
+  max-width: 56ch;
+  color: var(--muted);
+  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+}
+
+/* --------------------------------------------------------------------------
+   THE CHART — a backlit Snellen wall, made of the offer
+   -------------------------------------------------------------------------- */
+.chart {
+  background: var(--chart);
+  color: var(--optotype);
+  padding: clamp(2.5rem, 6vw, 5.5rem) var(--pad);
+  position: relative;
+  overflow: hidden;
+}
+
+/* The panel is lit from behind: a wide, soft falloff, not a glow ring. */
+.chart::before {
+  content: '';
+  position: absolute;
+  inset: -30%;
+  background: radial-gradient(ellipse 62% 52% at 50% 42%, rgba(120, 150, 255, 0.19), transparent 70%);
+  pointer-events: none;
+}
+
+.chart__h1 {
+  display: contents;
+}
+
+.chart__rows {
+  position: relative;
+  display: grid;
+  gap: clamp(0.5rem, 1.1vw, 1rem);
+  max-width: 62rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 5.25rem minmax(0, 1fr);
+  gap: clamp(0.9rem, 2vw, 2rem);
+  align-items: baseline;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: clamp(0.5rem, 1.1vw, 0.95rem);
+
+  /* Acuity falls off down the ramp, then the correction is dialled in. The
+     top of the chart is never blurred: the offer has to be legible in the
+     first frame, and a real chart is sharp at the top anyway. */
+  filter: blur(var(--b, 0px));
+  transition: filter 620ms var(--settle);
+}
+.chart:not(.is-focused) .row--3 {
+  --b: 3px;
+}
+.chart:not(.is-focused) .row--4 {
+  --b: 5px;
+}
+.chart:not(.is-focused) .row--5 {
+  --b: 7px;
+}
+.chart:not(.is-focused) .row--6 {
+  --b: 9px;
+}
+.row__acuity {
+  font: 500 0.75rem/1 var(--f-mono);
+  letter-spacing: 0.04em;
+  color: var(--teal-lit);
+  white-space: nowrap;
+}
+.row__line {
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  text-wrap: balance;
+}
+.row--1 .row__line {
+  font-size: clamp(2.5rem, 8.4vw, 7rem);
+}
+.row--2 .row__line {
+  font-size: clamp(2rem, 6.6vw, 5.5rem);
+}
+.row--3 .row__line {
+  font-size: clamp(1.5rem, 4.4vw, 3.6rem);
+}
+.row--4 .row__line {
+  font-size: clamp(1.0625rem, 2.1vw, 1.75rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  color: #d3d6e8;
+  max-width: 46ch;
+}
+.row--5 .row__line {
+  font-size: clamp(0.9375rem, 1.4vw, 1.125rem);
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.45;
+  color: var(--teal-lit);
+  max-width: 52ch;
+}
+.row--6 .row__line {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+  color: #a8acc4;
+  max-width: 60ch;
+}
+
+.chart__actions {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  max-width: 62rem;
+  margin: clamp(2rem, 4vw, 3.25rem) 0 0;
+  padding-left: calc(5.25rem + clamp(0.9rem, 2vw, 2rem));
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.95rem 1.5rem;
+  background: var(--teal);
+  color: #ffffff;
+  border: 2px solid var(--teal);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  transition: background 140ms var(--settle), color 140ms var(--settle);
+}
+.btn:hover,
+.btn:focus-visible {
+  background: var(--optotype);
+  color: var(--chart);
+  border-color: var(--optotype);
+}
+.btn--quiet {
+  background: transparent;
+  border-color: currentColor;
+  color: inherit;
+}
+.btn--quiet:hover,
+.btn--quiet:focus-visible {
+  background: var(--optotype);
+  color: var(--chart);
+  border-color: var(--optotype);
+}
+.btn svg {
+  width: 15px;
+  height: 15px;
+}
+.section .btn {
+  color: #ffffff;
+}
+.section .btn--quiet {
+  color: var(--chart);
+}
+.close .btn--quiet {
+  color: var(--optotype);
+  border-color: var(--optotype);
+}
+
+/* --------------------------------------------------------------------------
+   THE COMPARISON — "which is clearer, one or two?"
+   -------------------------------------------------------------------------- */
+.refract {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 15rem;
+  gap: clamp(1.5rem, 3.5vw, 3.5rem);
+  align-items: start;
+  margin-top: clamp(1.75rem, 3.5vw, 3rem);
+}
+
+.lens {
+  border: 2px solid var(--chart);
+  background: var(--room);
+  padding: clamp(1.5rem, 3.5vw, 3rem);
+  min-height: 17rem;
+  display: grid;
+  align-content: center;
+  gap: 1rem;
+  overflow: hidden;
+}
+.lens__label {
+  font: 500 0.6875rem/1 var(--f-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+.lens__copy {
+  font-size: clamp(1.0625rem, 1.5vw, 1.375rem);
+  line-height: 1.5;
+  max-width: 46ch;
+  transition:
+    filter 420ms var(--settle),
+    letter-spacing 420ms var(--settle),
+    color 420ms var(--settle),
+    line-height 420ms var(--settle);
+}
+
+/* Option one: the site they have. Legibly worse, and honestly so — this is a
+   demonstration of readability, not a claim about anyone's business. */
+.refract[data-option='1'] .lens__copy {
+  filter: blur(2.6px);
+  color: #8d8d86;
+  letter-spacing: 0.045em;
+  line-height: 1.2;
+}
+.refract[data-option='1'] .lens {
+  background: var(--room-2);
+}
+
+.dial {
+  border: 2px solid var(--chart);
+  padding: 1.15rem;
+  display: grid;
+  gap: 0.75rem;
+}
+.dial__q {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.dial__opts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+.dial__btn {
+  font-family: var(--f);
+  font-size: 1.5rem;
+  font-weight: 800;
+  padding: 0.85rem 0;
+  border: 2px solid var(--chart);
+  background: var(--room);
+  color: var(--chart);
+  cursor: pointer;
+  transition: background 140ms var(--settle), color 140ms var(--settle);
+}
+.dial__btn:hover {
+  background: var(--room-2);
+}
+.dial__btn[aria-pressed='true'] {
+  background: var(--chart);
+  color: var(--optotype);
+}
+.dial__note {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--muted);
+  border-top: 1px solid var(--rule);
+  padding-top: 0.75rem;
+}
+
+/* --------------------------------------------------------------------------
+   PRESCRIPTIONS (the services)
+   -------------------------------------------------------------------------- */
+.rx {
+  display: grid;
+  max-width: 84rem;
+  gap: 0;
+  margin-top: clamp(1.75rem, 3.5vw, 3rem);
+  border-top: 1px solid var(--chart);
+}
+.rx__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 3rem);
+  padding: clamp(1.5rem, 2.8vw, 2.4rem) 0;
+  border-bottom: 1px solid var(--chart);
+  align-items: start;
+}
+.rx__name {
+  font-size: clamp(1.4rem, 2.6vw, 2.15rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-bottom: 0.55rem;
+}
+.rx__name a {
+  color: inherit;
+  text-decoration: none;
+}
+.rx__name a:hover,
+.rx__name a:focus-visible {
+  color: var(--teal);
+}
+.rx__summary {
+  color: var(--muted);
+  max-width: 46ch;
+}
+.rx__table {
+  display: grid;
+  border-top: 1px solid var(--rule);
+}
+.rx__table > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--rule);
+  font: 500 0.8125rem/1.4 var(--f-mono);
+}
+.rx__table dt {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.6875rem;
+  flex: none;
+  align-self: center;
+}
+.rx__table dd {
+  text-align: right;
+}
+
+/* --------------------------------------------------------------------------
+   THE EXAMINATION (the process)
+   -------------------------------------------------------------------------- */
+.exam {
+  display: grid;
+  max-width: 84rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 0;
+  margin-top: clamp(1.75rem, 3.5vw, 3rem);
+  border-top: 1px solid var(--chart);
+  border-left: 1px solid var(--chart);
+}
+.exam__step {
+  border-right: 1px solid var(--chart);
+  border-bottom: 1px solid var(--chart);
+  padding: clamp(1.15rem, 2.2vw, 1.75rem);
+  display: grid;
+  gap: 0.6rem;
+  align-content: start;
+}
+.exam__no {
+  font: 500 0.75rem/1 var(--f-mono);
+  letter-spacing: 0.1em;
+  color: var(--teal);
+}
+.exam__title {
+  font-size: 1.1875rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.exam__body {
+  font-size: 0.9375rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   THE READING TEST (the questions)
+   -------------------------------------------------------------------------- */
+.reading {
+  display: grid;
+  max-width: 84rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+  gap: clamp(1.25rem, 2.6vw, 2.5rem);
+  margin-top: clamp(1.75rem, 3.5vw, 3rem);
+}
+.reading__item {
+  border-top: 2px solid var(--chart);
+  padding-top: 0.9rem;
+}
+.reading__q {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  margin-bottom: 0.4rem;
+}
+.reading__a {
+  font-size: 0.9375rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* --------------------------------------------------------------------------
+   CLOSE
+   -------------------------------------------------------------------------- */
+.close {
+  background: var(--chart);
+  color: var(--optotype);
+  border-bottom: 0;
+}
+.close__title {
+  font-size: clamp(2.1rem, 5.6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.97;
+  max-width: 16ch;
+  text-wrap: balance;
+}
+.close__body {
+  margin-top: 1.1rem;
+  max-width: 52ch;
+  color: #c3c7dc;
+  font-size: clamp(1rem, 0.95rem + 0.35vw, 1.1875rem);
+}
+.close__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.foot {
+  padding: 1.15rem var(--pad);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.4rem;
+  font: 500 0.75rem/1.5 var(--f-mono);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+.foot a {
+  color: var(--chart);
+  text-underline-offset: 3px;
+}
+.foot a:hover {
+  color: var(--teal);
+}
+
+/* --------------------------------------------------------------------------
+   ADAPT
+   -------------------------------------------------------------------------- */
+@media (max-width: 62rem) {
+  .refract,
+  .rx__item {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 44rem) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.3rem;
+  }
+  .chart__actions {
+    padding-left: 0;
+  }
+  .top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .chart .row {
+    --b: 0px !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (pointer: coarse) {
+  .top nav a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .foot a,
+  .rx__name a {
+    display: inline-block;
+    padding-block: 0.5rem;
+  }
+  .dial__btn {
+    padding-block: 1.1rem;
+  }
+}
+
+/* The home link is a tap target like any other. */
+@media (pointer: coarse) {
+  .top__brand {
+    min-height: 44px;
+    align-items: center;
+  }
+}
+
+/* The switch decides which figure shows; CSS does the showing, so the monthly
+   column is still correct with no script at all. */
+[data-billing][data-cycle='monthly'] [data-when='annual'],
+[data-billing][data-cycle='annual'] [data-when='monthly'] {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   PLANS — written up the way a prescription is
+   -------------------------------------------------------------------------- */
+.cycle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  margin: clamp(1.5rem, 3vw, 2.25rem) 0;
+}
+.cycle__group {
+  display: flex;
+  border: 2px solid var(--chart);
+}
+.cycle__btn {
+  font-family: var(--f);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  padding: 0.75rem 1.35rem;
+  border: 0;
+  background: transparent;
+  color: var(--chart);
+  cursor: pointer;
+}
+.cycle__btn + .cycle__btn {
+  border-left: 2px solid var(--chart);
+}
+.cycle__btn[aria-pressed='true'] {
+  background: var(--chart);
+  color: var(--optotype);
+}
+.cycle__hint {
+  font: 500 0.8125rem/1 var(--f-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  max-width: 84rem;
+  border-top: 1px solid var(--chart);
+  border-left: 1px solid var(--chart);
+}
+.plan {
+  border-right: 1px solid var(--chart);
+  border-bottom: 1px solid var(--chart);
+  padding: clamp(1.25rem, 2.4vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.plan__name {
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+.plan__tag {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+.plan__price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.plan__price b {
+  font-size: clamp(2.1rem, 3.6vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+.plan__price i {
+  font: 500 0.75rem/1 var(--f-mono);
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.plan__save {
+  font: 600 0.75rem/1 var(--f-mono);
+  letter-spacing: 0.04em;
+  color: var(--teal);
+  border: 1px solid var(--teal);
+  padding: 0.4rem 0.55rem;
+  width: fit-content;
+}
+.plan__list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+}
+.plan__list li {
+  font: 500 0.8125rem/1.5 var(--f-mono);
+  color: var(--muted);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.plan .btn {
+  margin-top: auto;
+  justify-content: center;
+}
+.plan__foot {
+  max-width: 84rem;
+  margin-top: 1.25rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+@media (max-width: 68rem) {
+  .plans {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

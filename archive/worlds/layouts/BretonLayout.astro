@@ -1,0 +1,83 @@
+---
+/**
+ * BRETON ORNAMENT PROGRAM — plate book shell. Self-contained; no global.css.
+ */
+import '@fontsource/krona-one';
+import '@fontsource-variable/archivo/wght.css';
+import '../styles/world-breton.css';
+
+import { withBase } from '../utils/url.js';
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#E3DCC9" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+  </head>
+  <body>
+    <!--
+      THESIS: The offer published as a plate book — a numbered catalogue of
+      repeatable units anyone can build from. It refuses the category default
+      — a gradient hero above three service cards — by treating every element
+      as a catalogued part with a keyline and a plate number instead.
+      OWN-WORLD: Slate grey and oatmeal with one madder red, printed flat on
+      plate stock. A fine keyline defines every unit; borders repeat in whole
+      modules and never in fractions; captions rule at the foot of their plate.
+      Krona One as the constructed alphabet, Archivo for the text. No shadow,
+      no gradient, no radius.
+      STORY: A visitor reads a catalogue of exactly what is on offer, sees the
+      sequence assemble, and books the free review.
+      FIRST VIEWPORT: Plate I. The masthead ruled heavy with the navigation as
+      a keylined strip of units; the title set in the constructed alphabet at
+      large; the free-review note ruled in madder; a specimen block of four
+      ornament units ranged at the right.
+      FORM: Regional ornament plate book; dealt challenger
+      design-canon-breton-ornament-program, adopted at the user's request
+      after being declined on audience fit; seed key 685831a9.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with
+      the finish review, the verdict, DESIGN.md, and every shipping raster
+      carrying its provenance.
+    -->
+    <a class="skip" href="#plate-1">Skip to content</a>
+    <slot />
+    <script>
+      import { initBilling } from '../scripts/billing.js';
+      initBilling();
+
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* The one authored motion: a unit slides into the assembled border and
+         locks. Armed by script, so with no JS every unit is already seated. */
+      if (!reduced) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (!e.isIntersecting) return;
+              const el = e.target as HTMLElement;
+              setTimeout(() => el.classList.add('is-locked'), Number(el.dataset.slot || 0) * 120);
+              io.unobserve(el);
+            });
+          },
+          { threshold: 0.4 }
+        );
+        document.querySelectorAll<HTMLElement>('[data-slot]').forEach((el) => {
+          el.classList.add('is-loose');
+          io.observe(el);
+        });
+      }
+    </script>
+  </body>
+</html>
