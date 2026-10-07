@@ -210,8 +210,7 @@ reversed-out field; those are the same inks at different levels, not additional
 colours. Every one of them is a named custom property in the `:root` block, no colour
 literal appears anywhere else in either stylesheet, and `npm run check:contrast` tests
 each value against the ground it actually sits on at the threshold that pairing
-actually has to meet. Six other complete visual worlds were built and judged before this one; they
-live under `archive/worlds/` with restore notes and are not part of this system.
+actually has to meet. Redline is the selected and sole website design.
 
 **Key Characteristics:**
 - Four declared inks, never exceeded; one red at three levels, one stock at three levels.

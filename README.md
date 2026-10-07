@@ -11,17 +11,6 @@ monthly care, and reliable growth infrastructure for businesses across the US.
 Built with [Astro](https://astro.build). It compiles to plain static HTML and CSS
 with roughly 2 KB of JavaScript, so it will run on any static host.
 
-## Standalone redesign options
-
-Two complete websites are available in their own independent folders:
-
-- [Signal](signal/README.md): navy and citron, angular CV logo; `cd signal` then `npm install` and `npm run dev` (http://localhost:4322).
-- [Evergreen](evergreen/README.md): ivory and forest, clay accents, curved CV logo; `cd evergreen` then `npm install` and `npm run dev` (http://localhost:4323).
-
-Both promote software development, consulting, and AI integration alongside website care. Each includes its own source, assets, lockfile, design system, and deployment configuration. They require Node.js 22.12 or newer. Choose the relevant folder as the deployment project root; the existing root website remains a separate application.
-
-The standalone versions use phone contact and a local project-brief composer by default. Configure and verify a real HTTPS contact endpoint before enabling enquiry delivery. See the folder READMEs for setup.
-
 ---
 
 ## Quick start
@@ -313,10 +302,6 @@ shows one based on a `data-cycle` attribute — so the monthly column is still
 correct with JavaScript disabled. `src/scripts/billing.js` only flips the
 attribute.
 
-**Other directions were considered.** Six other complete visual worlds were
-built and judged before this one was chosen; they are kept in
-[`archive/worlds/`](archive/worlds/) with restore notes.
-
 ---
 
 ## Project structure
@@ -341,13 +326,12 @@ built and judged before this one was chosen; they are kept in
 ├── src/
 │   ├── components/
 │   │   ├── CommandPalette.astro   The ⌘K palette (builds its index from site.js)
-│   │   ├── LightField.astro       The hero's animated flow field
 │   │   ├── Logo.astro             The mark (traced — do not hand-edit the path)
-│   │   └── Header, Footer, ServiceDetail, Cta
+│   │   └── Footer, ServiceDetail, Cta
 │   ├── data/site.js               ← ALL YOUR CONTENT LIVES HERE
 │   ├── layouts/BaseLayout.astro   <head>, meta tags, page shell
 │   ├── pages/                     index, services, about, contact, 404
-│   ├── styles/global.css          Design tokens and every style
+│   ├── styles/                    Redline tokens, global and inner-page styles
 │   └── utils/placeholder.js       Detects un-filled [PLACEHOLDERS]
 ├── astro.config.mjs               Set `site` here; `base` only for GH Pages
 ├── netlify.toml

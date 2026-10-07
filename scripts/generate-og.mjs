@@ -15,7 +15,7 @@
  * Re-run it after changing the headline below, then commit the new PNG.
  *
  * Note on type: this renders through librsvg, which can only use fonts
- * installed on your operating system — not the Inter webfont the site loads.
+ * installed on your operating system — not the Archivo webfont the site loads.
  * The stack below falls back to whichever neutral grotesque is available. The
  * real logo mark carries the brand here, so the substitution is not doing
  * heavy lifting.

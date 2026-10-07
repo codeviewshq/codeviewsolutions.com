@@ -1,6 +1,0 @@
----
-import { faqs } from '../data/site.js';
-import Icon from './Icon.astro';
-const { items = faqs } = Astro.props;
----
-<div class="faq-list">{items.map(item => <details><summary>{item.q}<Icon name="plus" size={20} /></summary><p>{item.a}</p></details>)}</div>
