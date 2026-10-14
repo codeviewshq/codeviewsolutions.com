@@ -1,3 +1,13 @@
+<!-- Current implementation refinements, October 2026:
+Redline remains the sole design. The field grid is quieter behind prose.
+Home retains the routed revision leader; inner-page headings use a simple
+revision underline. Cursor-following guides and position readouts are
+removed. Facts, cards, controls, and footer have complete frames and padding.
+All five pages use native SVG illustrations. About includes a clearly labeled
+illustrative review in place of the repeated process table. Current markup and
+PRODUCT.md supersede historical layout descriptions below.
+-->
+
 ---
 name: CodeView Solutions
 description: A technical specification sheet for the visitor's own website — drafting stock, one navy ink, one revision red.

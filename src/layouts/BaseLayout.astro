@@ -116,8 +116,7 @@ const jsonLd = {
       rule, headline set enormous beneath it, the free review note in
       red on a leader line pointing back at it, the stamped primary action
       beneath, and a ruled title block. That block carries five visitor-facing
-      fields (first step, ongoing care, based nearby, built for, live sheet
-      position) rather than a drafting CLIENT/SHEET/REV strip: real facts beat
+      fields (first step, ongoing care, after launch, built for, plans from) rather than a drafting CLIENT/SHEET/REV strip: real facts beat
       cosplay, and it keeps the mono on measurement instead of costume.
       FORM: Technical specification sheet + drafting-office redline markup;
       candidate 7 of the grounded list; seed key 685831a9.
@@ -255,11 +254,14 @@ const jsonLd = {
         const cw = t.width + pad * 2;
         const ch = t.height + pad * 1.2;
         const narrow = matchMedia('(max-width: 44rem)').matches;
+        const innerPage = !svg.querySelector('.mk-leader');
         svg
           .querySelector('.mk-cloud')
           ?.setAttribute(
             'd',
-            narrow
+            innerPage
+              ? (phraseLines.length ? phraseLines : [t]).map(r => wavyUnderline(r.left - base.left, r.bottom - base.top - 6, r.width)).join(' ')
+              : narrow
               ? wavyUnderline(t.left - base.left, t.bottom - base.top + 2, t.width)
               : cloudPath(cx, cy, cw, ch)
           );
@@ -273,9 +275,10 @@ const jsonLd = {
         // wide sheet and under the copy on a narrow one — several routes are
         // proposed and the first one that touches no lettering is drawn. If
         // none is clear, no leader is drawn at all.
-        const n = note.getBoundingClientRect();
         const leader = svg.querySelector('.mk-leader');
         const dot = svg.querySelector('.mk-dot');
+        if (!leader || !dot) return;
+        const n = note.getBoundingClientRect();
 
         // Every line of type on this sheet, as glyph boxes. An element box is
         // no use here: a heading is a block that spans its container, so it
@@ -476,42 +479,12 @@ const jsonLd = {
         });
       });
 
-      /* --- Pointer guides ---------------------------------------------------
-         The sheet is live under the pointer: two hairlines track it across the
-         title sheet, the way a drafting table's rule does. Fine pointers only. */
-      const stage = document.querySelector<HTMLElement>('[data-stage]');
-
-      if (stage && matchMedia('(pointer: fine)').matches && !reduced) {
-        let frame = 0;
-        let px = 0;
-        let py = 0;
-
-        const paint = () => {
-          frame = 0;
-          const r = stage.getBoundingClientRect();
-          stage.style.setProperty('--gx', `${px - r.left}px`);
-          stage.style.setProperty('--gy', `${py - r.top}px`);
-        };
-
-        stage.addEventListener(
-          'pointermove',
-          (e) => {
-            px = e.clientX;
-            py = e.clientY;
-            stage.dataset.live = 'true';
-            if (!frame) frame = requestAnimationFrame(paint);
-          },
-          { passive: true }
-        );
-        stage.addEventListener('pointerleave', () => {
-          stage.dataset.live = 'false';
-        });
-      }
-
       /* Deep links land short when the browser jumps before the webfont has
          settled, so re-assert the target once layout is final. */
       if (location.hash) {
-        const target = document.querySelector(location.hash);
+        let target: HTMLElement | null = null;
+        try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); }
+        catch { /* An invalid URL fragment should not interrupt the page. */ }
         if (target) {
           const jump = () => target.scrollIntoView({ block: 'start', behavior: 'instant' });
           jump();

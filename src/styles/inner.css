@@ -208,14 +208,37 @@ kbd {
   display: grid;
   gap: 0;
   border: var(--w-key) solid var(--ink);
+  min-width: 0;
+  background: var(--stock);
+}
+.form__intro {
+  padding: 1.4rem;
+  border-bottom: var(--w-key) solid var(--ink);
+}
+.form__eyebrow {
+  font: 500 0.6875rem/1.5 var(--f-tech);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--red-ink);
+  margin-bottom: 0.65rem;
+}
+.form__intro h2 { font-size: 1.65rem; line-height: 1.1; }
+.form__intro h2 + p { margin-top: 0.75rem; color: var(--graphite); }
+.form__privacy { font-size: 0.8125rem; color: var(--graphite); margin-bottom: 0.85rem; }
+.form--compact .form__submit .stamp { line-height: 1.4; letter-spacing: 0.04em; padding-inline: 0.8rem; }
+.form--compact .field input { min-height: 44px; }
+.form__submit .stamp:disabled {
+  background: var(--stock-2);
+  color: var(--graphite);
+  cursor: not-allowed;
 }
 .field {
   display: grid;
   border-bottom: var(--w-key) solid var(--ink);
 }
 .field label {
-  font: 500 0.6875rem/1 var(--f-tech);
-  letter-spacing: 0.11em;
+  font: 500 0.75rem/1.3 var(--f-tech);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--graphite);
   padding: 0.7rem 0.9rem 0;
@@ -254,92 +277,6 @@ kbd {
   background-size: 12px 9px;
 }
 
-/* --------------------------------------------------------------------------
-   REVISION TABLE — the drawing device this world was missing
-   REV / STAGE / WHAT CHANGES / BY. It describes how an engagement is revised,
-   which is real; it is not a fabricated history of this website.
-   -------------------------------------------------------------------------- */
-.revtable {
-  width: 100%;
-  border-collapse: collapse;
-  border: var(--w-key) solid var(--ink);
-  margin-top: clamp(1.5rem, 3vw, 2.25rem);
-  text-align: left;
-}
-.revtable caption {
-  text-align: left;
-  font: 600 0.6875rem/1 var(--f-tech);
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--graphite);
-  padding-bottom: 0.6rem;
-}
-.revtable th {
-  font: 600 0.6875rem/1 var(--f-tech);
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--stock);
-  background: var(--ink);
-  padding: 0.65rem 0.9rem;
-  white-space: nowrap;
-}
-.revtable td {
-  padding: 0.75rem 0.9rem;
-  border-bottom: var(--w-hair) solid var(--rule);
-  border-right: var(--w-hair) solid var(--rule);
-  font-size: 0.9375rem;
-  line-height: 1.45;
-  vertical-align: top;
-  color: var(--graphite);
-}
-.revtable td:last-child {
-  border-right: 0;
-}
-.revtable tr:last-child td {
-  border-bottom: 0;
-}
-.revtable .rev {
-  font: 600 0.8125rem/1.45 var(--f-tech);
-  color: var(--red-ink);
-  width: 4.5rem;
-}
-.revtable .stage {
-  color: var(--ink);
-  font-weight: 700;
-  width: 15rem;
-}
-.revtable .by {
-  font: 500 0.8125rem/1.45 var(--f-tech);
-  white-space: nowrap;
-  width: 1%;
-}
-
-@media (max-width: 52rem) {
-  .revtable,
-  .revtable tbody,
-  .revtable tr,
-  .revtable td {
-    display: block;
-    width: auto;
-  }
-  .revtable thead {
-    display: none;
-  }
-  .revtable tr {
-    border-bottom: var(--w-key) solid var(--ink);
-    padding: 0.5rem 0;
-  }
-  .revtable tr:last-child {
-    border-bottom: 0;
-  }
-  .revtable td {
-    border: 0;
-    padding: 0.2rem 0.9rem;
-  }
-  .revtable .stage {
-    padding-top: 0.5rem;
-  }
-}
 .field input::placeholder,
 .field textarea::placeholder {
   color: var(--graphite);
@@ -365,31 +302,6 @@ kbd {
   width: 100%;
   justify-content: center;
   border: 0;
-}
-
-/* A form that is not wired up says so, in the sheet's own voice. */
-.notice {
-  display: grid;
-  gap: 0.45rem;
-  border: var(--w-key) solid var(--red);
-  padding: 0.85rem 0.9rem;
-  margin: 0.9rem;
-  font: 500 0.8125rem/1.5 var(--f-tech);
-  color: var(--red-ink);
-}
-.notice__tag {
-  justify-self: start;
-  background: var(--red-ink);
-  color: var(--stock);
-  font: 700 0.6875rem/1 var(--f-tech);
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  padding: 0.3rem 0.45rem;
-}
-.notice code {
-  font-family: var(--f-tech);
-  background: var(--stock-2);
-  padding: 0 0.25rem;
 }
 
 .gotcha input,
@@ -627,9 +539,6 @@ kbd {
   position: relative;
   z-index: 1;
 }
-.sh[data-stage] {
-  cursor: crosshair;
-}
 
 
 /* --------------------------------------------------------------------------
@@ -676,6 +585,8 @@ kbd {
   color: var(--graphite);
 }
 .direct__val {
+  min-width: 0;
+  overflow-wrap: anywhere;
   font: 600 1.0625rem/1.3 var(--f-tech);
   letter-spacing: -0.01em;
   color: var(--ink);

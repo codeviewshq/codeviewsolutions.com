@@ -1,31 +1,43 @@
-# Builds the site and publishes it to GitHub Pages on every push to main.
-#
-# Before this works, go to your repository's
-#   Settings -> Pages -> Build and deployment -> Source
-# and choose "GitHub Actions".
-#
-# If you are NOT using a custom domain, also read the "GitHub Pages" section
-# of README.md — you need to set `base` in astro.config.mjs.
-
-name: Deploy to GitHub Pages
+name: Check and deploy website
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 # Let a running deploy finish rather than cancelling it mid-publish.
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Install browser system libraries
+        run: sudo apt-get install -y libnspr4 libnss3 libasound2t64
+      - run: npm run build
+      - run: npm run check:contrast
+      - run: npm run check:layout
+
   build:
+    needs: verify
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,7 +46,7 @@ jobs:
       - name: Install, build, and upload
         uses: withastro/action@v3
         with:
-          node-version: 20
+          node-version: 22
         env:
           # GitHub Pages serves this repo from a subdirectory, so the build
           # needs to know both the origin and the base path. Everywhere else
@@ -48,6 +60,9 @@ jobs:
 
   deploy:
     needs: build
+    permissions:
+      pages: write
+      id-token: write
     runs-on: ubuntu-latest
     environment:
       name: github-pages

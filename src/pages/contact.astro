@@ -1,38 +1,22 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ReviewDrawing from '../components/ReviewDrawing.astro';
+import ReviewForm from '../components/ReviewForm.astro';
 import { meta, contact, site, plans } from '../data/site.js';
 import { isPlaceholder } from '../utils/placeholder.js';
-
-// The form only points at a real endpoint once a form ID has been set in
-// src/data/site.js. Until then the form is not rendered at all: a form that
-// cannot send is worse than no form, because the visitor spends the effort of
-// writing before finding out. The live channels are offered instead, and the
-// form returns on its own the moment an ID is set — nothing here needs editing.
-const formConnected = !isPlaceholder(site.formspreeId);
-const formAction = formConnected ? `https://formspree.io/f/${site.formspreeId}` : undefined;
 
 const emailReady = Boolean(site.email) && !isPlaceholder(site.email);
 const phoneReady = Boolean(site.phone) && !isPlaceholder(site.phone);
 const telHref = phoneReady ? `tel:${site.phone.replace(/[^+\d]/g, '')}` : undefined;
 
-// What the fallback can honestly point at, named explicitly rather than
-// gestured at — "the details beside it" is false on a phone, where the panel
-// is stacked a long way below rather than beside anything.
-const channels = [
-  phoneReady ? { key: 'Phone', value: site.phone, href: telHref } : null,
-  emailReady ? { key: 'Email', value: site.email, href: `mailto:${site.email}` } : null,
-].filter(Boolean);
 
 ---
 
 <BaseLayout title={meta.contact.title} description={meta.contact.description}>
-  <section class="sh" id="enquiry" data-sheet="01" data-mark data-stage>
-        <!-- The review, performed on this sheet too: the claim is clouded and
-             the finding is tied back to it, measured off the live elements. -->
+  <section class="sh" id="enquiry" data-sheet="01" data-mark>
+    <!-- A revision mark follows the highlighted heading. -->
         <svg class="markup" data-markup aria-hidden="true">
           <path class="mk-cloud" data-draw></path>
-          <path class="mk-leader" data-draw></path>
-          <circle class="mk-dot" r="3.5"></circle>
         </svg>
 
     <header class="sh__head">
@@ -43,108 +27,15 @@ const channels = [
       We reply within one business day. The review itself carries no obligation.
     </p>
 
-    <p class="sh__lede">{contact.intro}</p>
+    <div class="drawing-overview">
+      <p class="sh__lede">{contact.intro}</p>
+      <ReviewDrawing variant="contact" />
+    </div>
+
+    <p class="plan-context" data-plan-context hidden></p>
 
     <div class="form-grid" style="margin-top:clamp(1.75rem,3vw,2.75rem)">
-      {
-        formConnected ? (
-          <form class="form" method="POST" action={formAction} data-form-live="true">
-            <div class="field">
-              <label for="name">Name <span class="req">*</span></label>
-              <input id="name" name="name" type="text" autocomplete="name" required />
-            </div>
-
-            <div class="field">
-              <label for="email">Email <span class="req">*</span></label>
-              <input id="email" name="email" type="email" autocomplete="email" required />
-            </div>
-
-            <div class="field">
-              <label for="website">Website address</label>
-              <input id="website" name="website" type="url" inputmode="url" placeholder="example.com" />
-            </div>
-
-            <div class="field">
-              <label for="company">Company</label>
-              <input id="company" name="company" type="text" autocomplete="organization" />
-            </div>
-
-            <div class="field">
-              <label for="project">What do you need?</label>
-              <select id="project" name="project">
-                {contact.projectTypes.map((type) => <option value={type}>{type}</option>)}
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="message">Message <span class="req">*</span></label>
-              <textarea
-                id="message"
-                name="message"
-                rows="7"
-                required
-                placeholder="Tell us what feels outdated, frustrating, or unreliable."></textarea>
-            </div>
-
-            <div class="gotcha" aria-hidden="true">
-              <label for="_gotcha">Leave this field empty</label>
-              <input id="_gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
-            </div>
-
-            <input type="hidden" name="_subject" value="New enquiry from codeviewsolutions.com" />
-
-            <div class="form__submit">
-              <button class="stamp" type="submit">
-                Get a free website review
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
-                  <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="square"></path>
-                </svg>
-              </button>
-            </div>
-          </form>
-        ) : (
-          <div class="direct">
-            <h2 class="direct__head">
-              {channels.length ? 'Call and ask for a free review' : 'How to reach us'}
-            </h2>
-
-            {channels.length ? (
-              <p class="direct__lede">
-                The enquiry form is being rebuilt, so the quickest route right now is to
-                get in touch directly. Tell us the website address and what feels wrong
-                with it — that is enough to start a free review.
-              </p>
-            ) : (
-              <p class="direct__lede">
-                The enquiry form is being rebuilt and no direct channel is published yet.
-                Please check back shortly.
-              </p>
-            )}
-
-            {channels.length > 0 && (
-              <ul class="direct__list">
-                {channels.map((c) => (
-                  <li class="direct__row">
-                    <span class="direct__key">{c.key}</span>
-                    <a class="direct__val" href={c.href}>
-                      {c.value}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            {phoneReady && (
-              <a class="stamp" href={telHref}>
-                Call {site.phone}
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
-                  <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="square"></path>
-                </svg>
-              </a>
-            )}
-          </div>
-        )
-      }
+      <ReviewForm />
 
       <div class="plate">
         <p class="plate__head">{contact.directLabel}</p>
@@ -172,13 +63,21 @@ const channels = [
         }
 
         <div class="plate__row">
+          <span class="plate__key">First conversation</span>
+          <span class="plate__val">We discuss your site, priorities, and what the free review should cover.</span>
+        </div>
+        <div class="plate__row">
+          <span class="plate__key">Before work starts</span>
+          <span class="plate__val">You approve the design scope, revisions, plan allowance, extra costs, and cancellation terms.</span>
+        </div>
+        <div class="plate__row">
           <span class="plate__key">Service area</span>
           <span class="plate__val">{site.serviceArea}</span>
         </div>
 
         <div class="plate__row">
           <span class="plate__key">Response time</span>
-          <span class="plate__val">Within one business day</span>
+          <span class="plate__val">Initial reply within one business day; completion times depend on the agreed work.</span>
         </div>
 
         <div class="plate__row">
@@ -190,4 +89,21 @@ const channels = [
       </div>
     </div>
   </section>
+  <script>
+    import { plans } from '../data/site.js';
+    const query = new URLSearchParams(location.search);
+    const tier = plans.tiers.find(t => t.id === query.get('plan'));
+    const cycle = query.get('cycle') === 'annual' ? 'annual' : 'monthly';
+    if (tier) {
+      const context = document.querySelector<HTMLElement>('[data-plan-context]');
+      if (context) {
+        context.textContent = `Interested in ${tier.name}: ${tier[cycle].amount} ${tier[cycle].period}. Mention this plan when you contact us; scope and terms are agreed before work starts.`;
+        context.hidden = false;
+      }
+      const planInput = document.querySelector<HTMLInputElement>('[data-enquiry-plan]');
+      const cycleInput = document.querySelector<HTMLInputElement>('[data-enquiry-cycle]');
+      if (planInput) planInput.value = tier.name;
+      if (cycleInput) cycleInput.value = cycle;
+    }
+  </script>
 </BaseLayout>

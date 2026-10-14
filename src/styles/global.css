@@ -22,6 +22,7 @@
   --stock-2: #e6e5dc;
   --rule: #c6c5ba;
   --rule-2: #d8d7cd;
+  --grid: rgba(78, 78, 71, 0.08);
 
   /* One red at three levels, by the job it is doing:
      --red      strokes, rules, and large type on stock
@@ -92,8 +93,8 @@ body {
 
   /* The stock itself: 8mm field grid, the way drafting paper is ruled. */
   background-image:
-    repeating-linear-gradient(to right, var(--rule-2) 0 1px, transparent 1px 44px),
-    repeating-linear-gradient(to bottom, var(--rule-2) 0 1px, transparent 1px 44px);
+    repeating-linear-gradient(to right, var(--grid) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(to bottom, var(--grid) 0 1px, transparent 1px 44px);
 }
 
 img,
@@ -248,36 +249,7 @@ svg {
      handed the slack to the strip instead, leaving each cell half empty. */
   grid-template-rows: 1fr auto;
   padding: 0;
-  cursor: crosshair;
   overflow: hidden;
-}
-
-/* Live pointer guides — the drafting table's rule, tracking the hand. */
-.title-sheet::before,
-.title-sheet::after {
-  content: '';
-  position: absolute;
-  background: var(--red);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 3;
-  transition: opacity 140ms linear;
-}
-.title-sheet::before {
-  top: 0;
-  bottom: 0;
-  width: var(--w-hair);
-  transform: translateX(var(--gx, -10px));
-}
-.title-sheet::after {
-  left: 0;
-  right: 0;
-  height: var(--w-hair);
-  transform: translateY(var(--gy, -10px));
-}
-.title-sheet[data-live='true']::before,
-.title-sheet[data-live='true']::after {
-  opacity: 0.42;
 }
 
 /* --------------------------------------------------------------------------
@@ -509,9 +481,9 @@ svg {
    -------------------------------------------------------------------------- */
 .tblock {
   margin-inline: var(--gutter);
-  border-top: var(--w-key) solid var(--ink);
+  border: var(--w-key) solid var(--ink);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
   background: var(--ink);
   gap: var(--w-hair);
   z-index: 2;
@@ -540,7 +512,7 @@ svg {
    SHEET 02 — SCOPE OF WORK (numbered clauses)
    -------------------------------------------------------------------------- */
 .clauses {
-  border-top: var(--w-key) solid var(--ink);
+  border: var(--w-key) solid var(--ink);
 }
 .clause {
   /* The heading's own first-line box. The clause number and the arrow are
@@ -550,21 +522,19 @@ svg {
   --clause-lead: calc(clamp(1.5rem, 2.6vw, 2.35rem) * 1.04);
 
   display: grid;
-  /* The figure column holds a four-character number, so it is sized for one
-     rather than left at a width that parked it 113px from the heading it
-     labels. The text column is capped at its own measure so the copy reaches
-     its column edge instead of stopping short and opening a channel, and the
-     parameters take whatever is left, which pulls them back toward the text.
-     The cue column is the width of the arrow. */
-  grid-template-columns: 2.75rem minmax(0, 44rem) minmax(0, 1fr) 1.5rem;
-  gap: clamp(0.85rem, 1.8vw, 1.75rem);
+  /* Leave room inside the frame for the figure and the navigation cue. */
+  grid-template-columns: 2.75rem minmax(0, 1.35fr) minmax(0, 1fr) 1.5rem;
+  gap: clamp(0.85rem, 1.8vw, 1.5rem);
   align-items: start;
-  padding: clamp(1.6rem, 2.8vw, 2.4rem) 0;
+  padding: clamp(1.6rem, 2.8vw, 2.4rem) clamp(1rem, 2vw, 1.75rem);
   border-bottom: var(--w-key) solid var(--ink);
   text-decoration: none;
   color: inherit;
   position: relative;
   transition: background 90ms var(--snap);
+}
+.clause:last-child {
+  border-bottom: 0;
 }
 .clause::after {
   content: '';
@@ -644,12 +614,11 @@ svg {
   height: 20px;
   overflow: visible;
 }
-.dimstring [data-draw] {
+.dimstring path {
   stroke: var(--red);
   fill: none;
   stroke-width: 1.25;
   vector-effect: non-scaling-stroke;
-  transition: stroke-dashoffset 900ms var(--draw) 120ms;
 }
 .dimstring span {
   font: 600 0.6875rem/1 var(--f-tech);
@@ -658,10 +627,7 @@ svg {
   color: var(--red-ink);
 }
 
-/* The drawing signs itself off, beside the actions on the closing row. The
-   issue block runs the foot's own four-column grid, so the sign-off's left
-   edge and its internal rule fall exactly on the rules of the revision table
-   beneath it — the columns read as one continuous grid, not a near miss. */
+/* Sign-off fields share the closing section’s four-column grid. */
 .issue {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -684,9 +650,7 @@ svg {
   margin-top: clamp(1.75rem, 3vw, 2.5rem);
   background: var(--rule-on-ink);
   border: var(--w-key) solid var(--rule-on-ink);
-  /* The frame hangs its keyline outside the column so the cells inside start
-     exactly where the foot's cells start, not one keyline over. */
-  margin-inline: calc(-1 * var(--w-key));
+
 }
 .signoff > div {
   background: var(--ink);
@@ -734,6 +698,18 @@ svg {
   gap: var(--w-key);
   border: var(--w-key) solid var(--ink);
 }
+.drawing-overview {
+  margin-top: 1.1rem;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+}
+.drawing-overview .sh__lede {
+  margin-top: 0;
+}
 .step {
   background: var(--stock);
   padding: clamp(1.25rem, 2.2vw, 1.9rem);
@@ -774,16 +750,17 @@ svg {
    SHEET 04 — NOTES (how drawing notes are actually set)
    -------------------------------------------------------------------------- */
 .notes {
-  columns: 2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column;
   column-gap: clamp(1.75rem, 4vw, 4rem);
-  column-rule: var(--w-hair) solid var(--rule);
 }
 .note-item {
-  break-inside: avoid;
   padding: 1.1rem 0;
   border-bottom: var(--w-hair) solid var(--rule);
   display: grid;
-  grid-template-columns: 2.75rem 1fr;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
   gap: 0.9rem;
 }
 .note-item__no {
@@ -885,19 +862,19 @@ svg {
    -------------------------------------------------------------------------- */
 .foot {
   border-top: var(--w-div) solid var(--ink);
-  padding-inline: var(--gutter);
   font: 500 0.6875rem/1.6 var(--f-tech);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--graphite);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   background: var(--ink);
   gap: var(--w-hair);
 }
 .foot > * {
   background: var(--stock);
-  padding: 0.9rem clamp(0.9rem, 1.6vw, 1.4rem);
+  padding: 1rem var(--pad);
+  overflow-wrap: anywhere;
 }
 .foot a {
   color: var(--ink);
@@ -912,8 +889,16 @@ svg {
    ADAPT
    -------------------------------------------------------------------------- */
 @media (max-width: 60rem) {
+  .drawing-overview {
+    grid-template-columns: minmax(0, 1fr);
+  }
   .notes {
-    columns: 1;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-auto-flow: row;
+  }
+  .foot {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .clause {
     grid-template-columns: 2.75rem minmax(0, 1fr);
@@ -933,6 +918,9 @@ svg {
 
 
 @media (max-width: 30rem) {
+  .foot {
+    grid-template-columns: minmax(0, 1fr);
+  }
   .clause {
     grid-template-columns: 3rem minmax(0, 1fr);
   }
@@ -1043,15 +1031,13 @@ svg {
   font: 700 0.75rem/1 var(--f-tech);
   letter-spacing: 0.09em;
   text-transform: uppercase;
+  min-height: 44px;
   padding: 0.8rem 1.2rem;
   border: var(--w-key) solid var(--ink);
   background: transparent;
   color: var(--ink);
   cursor: pointer;
   transition: background 80ms var(--snap), color 80ms var(--snap);
-}
-.cycle__btn + .cycle__btn {
-  border-left: 0;
 }
 .cycle__btn:hover {
   background: var(--stock-2);
@@ -1286,4 +1272,38 @@ svg {
     justify-self: end;
     max-width: 38ch;
   }
+}
+
+/* A sample review uses the existing card grid with readable field labels. */
+@media (min-width: 64rem) {
+  .ts__field--review { grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr); }
+  .ts__field--review .ts__title {
+    grid-column: 1;
+    font-size: clamp(2.9rem, 5.4vw, 5.5rem);
+  }
+  .ts__field--review .note { grid-column: 1; justify-self: start; }
+  .ts__field--review .stamp-row { grid-column: 1; }
+  .ts__field--review .form { grid-column: 2; grid-row: 1 / 5; align-self: center; }
+}
+
+.sample-finding dt {
+  margin-top: 1.25rem;
+  font: 600 0.8125rem/1.4 var(--f-tech);
+  color: var(--ink);
+}
+.sample-finding dd { margin: 0.35rem 0 0; color: var(--graphite); }
+.plan-context { padding: 1rem; border: var(--w-key) solid var(--ink); margin-top: 1.5rem; }
+
+.sample-review {
+  margin-top: clamp(1.75rem, 3vw, 2.75rem);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.sample-finding .group__name {
+  font: 700 1.125rem/1.3 var(--f-sheet);
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--ink);
+}
+@media (max-width: 60rem) {
+  .sample-review { grid-template-columns: minmax(0, 1fr); }
 }

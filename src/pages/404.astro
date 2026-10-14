@@ -1,44 +1,44 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ReviewDrawing from '../components/ReviewDrawing.astro';
 import { withBase } from '../utils/url.js';
 ---
 
 <BaseLayout
-  title="Sheet not found — CodeView Solutions LLC"
+  title="Page not found — CodeView Solutions LLC"
   description="That page doesn't exist. Head back to the homepage or search the site."
 >
-  <section class="void" data-mark data-stage>
-    <!-- The review, performed on this sheet too: the claim is clouded and
-         the finding is tied back to it, measured off the live elements. -->
+  <section class="void" data-mark>
+    <!-- A revision mark follows the highlighted heading. -->
     <svg class="markup" data-markup aria-hidden="true">
       <path class="mk-cloud" data-draw></path>
-      <path class="mk-leader" data-draw></path>
-      <circle class="mk-dot" r="3.5"></circle>
     </svg>
 
 
-    <p class="void__stamp">Rev 404 · sheet not in set</p>
+    <p class="void__stamp">404 · Page not found</p>
 
-    <h1 class="sh__h1">This sheet is <em data-cloud>not in the set</em>.</h1>
+    <h1 class="sh__h1">This page is <em data-cloud>missing</em>.</h1>
 
-    <p class="note" data-note data-tag="REV 404 · SUPERSEDED">
-      Nothing is lost — every sheet is indexed. Open the finder and search it.
+    <p class="note" data-note data-tag="NEXT STEP">
+      Try the homepage or search for the service you need.
     </p>
 
-    <p class="sh__lede" style="margin-top:0">
-      The page you asked for does not exist, or it has been superseded. Everything else on the
-      drawing set is one keystroke away.
-    </p>
+    <div class="drawing-overview">
+      <p class="sh__lede" style="margin-top:0">
+        The address may have changed, or the link may be incorrect. Use the links below to continue.
+      </p>
+      <ReviewDrawing variant="missing" />
+    </div>
 
     <div class="stamp-row">
       <a class="stamp" href={withBase('/')}>
-        Back to sheet 01
+        Back to home
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
           <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="square"></path>
         </svg>
       </a>
       <button class="stamp stamp--ghost" data-cmdk-open type="button">
-        Find on sheet <kbd data-mod>Ctrl</kbd><kbd>K</kbd>
+        Search the site <kbd data-mod>Ctrl</kbd><kbd>K</kbd>
       </button>
     </div>
   </section>

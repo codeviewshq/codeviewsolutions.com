@@ -1,10 +1,9 @@
 /* ==========================================================================
    EDIT THIS FILE TO CHANGE THE SITE'S CONTENT.
 
-   Every word a visitor reads lives here — including page headings. You should
-   not need to open the .astro files to change copy.
+   Shared content, offers, contact settings, and page headings live here.
 
-   Anything wrapped in [SQUARE BRACKETS] is a placeholder that still needs
+   Anything written as <VARIABLE> or wrapped in [SQUARE BRACKETS] is a placeholder that still needs
    your real information. Search this file for "[" to find them all.
 
    A note on voice: the copy is written in the first person plural ("we") and
@@ -33,20 +32,13 @@ export const site = {
 
      Keep any address here size-neutral (hello@, support@) rather than a
      personal one — the site never says how many people are behind it.       */
-  email: '',
+  email: 'hello@codeviewsolutions.com',
   phone: '(732) 654-9519',
   serviceArea: 'Working with clients across the United States',
 
-  /* --- CONTACT FORM ------------------------------------------------------
-     The form is built and styled but has no endpoint yet — a custom one is
-     being built to replace Formspree. Until an ID is set here, the contact
-     sheet hides the form entirely and offers the phone instead, rather than
-     showing a form that cannot send.
-
-     To use Formspree in the meantime: create a form at https://formspree.io
-     and paste the ID from the endpoint they give you
-     (https://formspree.io/f/XXXXXXXX  ->  the ID is XXXXXXXX).              */
-  formspreeId: '[YOUR_FORM_ID]',
+  // Set a working HTTPS endpoint that accepts a native form POST. Until then,
+  // submission is disabled; the forms provide a direct email link instead.
+  reviewEndpoint: '<VARIABLE>',
 
   /* --- SOCIAL / PROFILE LINKS -------------------------------------------
      Delete any you do not want shown. They render in the footer.            */
@@ -66,10 +58,10 @@ export const nav = [
 
 /* --- HOME PAGE HERO ------------------------------------------------------ */
 export const hero = {
-  // The headline is split in two. The second part is the phrase the revision
-  // cloud is drawn around, so put the words worth marking there — keep it to
-  // a few words, since the cloud is measured from the text itself.
-  headlineLead: 'Make your website an asset.',
+  // Keep the marked phrase short; the revision cloud follows its text bounds.
+  headlineBefore: 'Make your website ',
+  headlineMarked: 'an asset',
+  headlineAfter: '.',
   headlineAccent: 'Keep it that way.',
 
   body: 'We modernize outdated websites, manage them with predictable monthly support, and keep them dependable as your traffic and business grow.',
@@ -132,14 +124,14 @@ export const services = [
     body:
       "A website is not finished the day it launches. Software changes, content gets stale, and small issues become expensive when nobody owns them. Monthly care gives your business a consistent place to take updates, questions, and problems.\n\nWe learn the site and the business behind it, so you do not have to brief a new freelancer every time something needs attention.",
     includes: [
-      'Routine content and page updates',
+      'Content and page updates within an agreed allowance',
       'Security, dependency, and uptime monitoring',
       'Backups, recovery checks, and issue response',
       'Performance and accessibility maintenance',
       'A monthly improvement plan with clear priorities',
     ],
     meta: [
-      { key: 'Cadence', value: 'Ongoing, month to month' },
+      { key: 'Cadence', value: 'Ongoing, agreed allowance' },
       { key: 'Engagement', value: 'Predictable monthly care' },
       { key: 'Good fit for', value: 'Businesses without web staff' },
     ],
@@ -211,7 +203,7 @@ export const credibility = {
     },
     {
       q: 'How is the work priced?',
-      a: 'Ongoing care is a published monthly plan — Care, Improve, or Grow — so you know the number before you start. The consultation and your first website design are free, and larger projects outside a plan are scoped and agreed before any work begins.',
+      a: 'Choose Care, Improve, or Grow at the published price. Before work starts, we agree the free design scope, revision limits, monthly update allowance, hosting and third-party costs, and cancellation terms. Larger projects are quoted separately.',
     },
     {
       q: 'Who owns the website and accounts?',
@@ -223,7 +215,7 @@ export const credibility = {
     },
     {
       q: 'What happens as traffic grows?',
-      a: 'We watch the signals that matter, remove bottlenecks before they become outages, and recommend infrastructure changes only when the business case is real.',
+      a: 'We review traffic, performance, and capacity, then recommend changes when there is a clear business need. A reply within one business day means an initial response; completion times depend on the agreed work.',
     },
   ],
 };
@@ -238,7 +230,7 @@ export const about = {
   story: [
     'CodeView Solutions is a website and technology partner. We help small and midsize businesses replace outdated web experiences with sites that are clearer, faster, and easier to trust.',
     'Our work connects design, content, development, hosting, and ongoing support. That means fewer handoffs, fewer mystery problems, and one partner who understands how the whole website fits together.',
-    'We prefer long-term relationships because good websites improve through steady attention. The goal is not to launch something flashy and disappear; it is to keep a valuable business asset healthy as your needs change.',
+    'We explain what needs attention, what can wait, and what each change involves. You approve the scope before work starts and keep control of your website and accounts.',
   ],
 
   // Short facts in the sidebar card. Delete any that don't apply.
@@ -273,10 +265,10 @@ export const contact = {
   headingLead: 'Let’s look at',
   headingAccent: 'the site you have.',
   intro:
-    'Send the website address and tell us what feels outdated, frustrating, or unreliable. We will reply within one business day to arrange a no-obligation review.',
+    'Tell us which website you want reviewed and what is getting in the way. The first step is a no-obligation conversation about the site and your priorities.',
 
   // Heading on the card beside the form.
-  directLabel: 'Prefer to talk first?',
+  directLabel: 'What happens next',
 
   // Options in the "What do you need?" dropdown on the form.
   projectTypes: [
@@ -362,12 +354,12 @@ export const meta = {
    with JavaScript disabled.
 
    NOTE: this is the first pricing ever published on the site. If you change a
-   number here, change it here only — every world reads from this list.       */
+   number here, change it here only — every page reads from this list.       */
 export const plans = {
   label: 'Plans',
   heading: 'A plan, not an invoice you cannot predict.',
   intro:
-    'Every plan starts the same way: a free consultation and your first website design at no cost. The monthly fee is for looking after it afterwards.',
+    'Start with a free consultation and first website design within an agreed scope. Choose the support you need afterwards; the prices below cover the agreed plan allowance.',
 
   // Labels on the billing switch.
   cycles: { monthly: 'Monthly', annual: 'Pay yearly' },
@@ -382,7 +374,7 @@ export const plans = {
       annual: { amount: '$90', period: 'per year', note: 'Saves $30 a year' },
       includes: [
         'Free consultation and first website design',
-        'Routine content and page updates',
+        'Content and page updates within an agreed allowance',
         'Security, dependency, and uptime monitoring',
         'Backups and recovery checks',
         '90-day warranty on the agreed work',
@@ -401,7 +393,7 @@ export const plans = {
         'Message, navigation, and conversion review',
         'Performance and accessibility maintenance',
         'Search fundamentals and analytics',
-        'Forms and page improvements as you need them',
+        'Agreed forms and page improvements',
       ],
     },
     {
@@ -423,5 +415,16 @@ export const plans = {
 
   cta: 'Get a free website review',
   footnote:
-    'The consultation and your first website design are free on every plan. Larger projects outside a plan are scoped and agreed before any work begins, and you own the website, domain, hosting accounts, and content throughout.',
+    'Before work starts, we agree the free design scope and revisions, monthly update allowance, hosting and third-party costs, and cancellation terms. Extra work is quoted separately. You keep ownership of your website and accounts. The one-business-day reply standard is an initial response, not a promise to complete every request that day.',
+};
+
+// Illustrative findings only: no client work or measured results are claimed.
+export const sampleReview = {
+  heading: 'What a useful website review looks like.',
+  intro: 'Illustrative example — not client work or measured results. A review connects each finding to a customer problem and a practical next step.',
+  items: [
+    { title: 'The enquiry route is hard to find', finding: 'The main call to action is buried below a long introduction.', impact: 'A visitor who is ready to ask a question has to search for the next step.', action: 'Place a clear enquiry link near the main offer and verify that its destination works.' },
+    { title: 'The mobile layout needs room', finding: 'Card text and controls sit against the edges on a narrow screen.', impact: 'The content is harder to scan and adjacent controls are easier to tap by mistake.', action: 'Restore consistent padding and check text wrapping, focus, and touch targets at small widths.' },
+    { title: 'The offer leaves costs unclear', finding: 'A support plan lists services without defining the included allowance.', impact: 'A buyer cannot tell what the price covers or when extra charges apply.', action: 'Agree the scope, allowances, third-party costs, and cancellation terms before work starts.' },
+  ],
 };

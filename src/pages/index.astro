@@ -1,18 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Cta from '../components/Cta.astro';
+import ReviewForm from '../components/ReviewForm.astro';
+import ReviewDrawing from '../components/ReviewDrawing.astro';
 import { hero, services, process, credibility, sections, ctas, plans, meta } from '../data/site.js';
 import { withBase } from '../utils/url.js';
 
 
-// The headline is one sentence pair; "an asset" is the phrase the review
-// clouds, so it is split out of the lead rather than re-typed.
-const [leadBefore, leadAfter] = hero.headlineLead.split('an asset');
 ---
 
 <BaseLayout title={meta.home.title} description={meta.home.description}>
       <!-- ============================ SHEET 01 ============================ -->
-      <section class="sh title-sheet" id="sheet-01" data-sheet="01" data-mark data-stage>
+      <section class="sh title-sheet" id="sheet-01" data-sheet="01" data-mark>
         <!-- The review, performed on the sheet: a revision cloud round the
              claim and a leader line tying the first finding back to it. Both
              are measured off the live elements, so they survive any reflow. -->
@@ -22,9 +21,9 @@ const [leadBefore, leadAfter] = hero.headlineLead.split('an asset');
           <circle class="mk-dot" r="3.5"></circle>
         </svg>
 
-        <div class="ts__field">
+        <div class="ts__field ts__field--review">
           <h1 class="ts__title">
-            {leadBefore}<em data-cloud>an asset</em>{leadAfter}<br />{hero.headlineAccent}
+            {hero.headlineBefore}<em data-cloud>{hero.headlineMarked}</em>{hero.headlineAfter}<br />{hero.headlineAccent}
           </h1>
 
           <p class="ts__sub">{hero.body}</p>
@@ -32,7 +31,7 @@ const [leadBefore, leadAfter] = hero.headlineLead.split('an asset');
           <p class="note" data-note data-tag="REV A · FIRST FINDING">{hero.assurance}</p>
 
           <div class="stamp-row">
-            <a class="stamp" href={withBase(hero.primaryCta.href)}>
+            <a class="stamp" href="#hero-review-name">
               {hero.primaryCta.label}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
                 <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="square"></path>
@@ -42,6 +41,7 @@ const [leadBefore, leadAfter] = hero.headlineLead.split('an asset');
               {hero.secondaryCta.label}
             </a>
           </div>
+          <ReviewForm compact />
         </div>
 
         <!-- TITLE BLOCK -->
@@ -110,15 +110,20 @@ const [leadBefore, leadAfter] = hero.headlineLead.split('an asset');
           <h2 class="sh__title">{process.heading}</h2>
           <p class="sh__no">Sheet 03 · {process.label}</p>
         </header>
-        <p class="sh__lede">{process.intro}</p>
+        <div class="drawing-overview">
+          <p class="sh__lede">{process.intro}</p>
+          <ReviewDrawing />
+        </div>
+
+        <p><a href={withBase('/about/#sample-review')}>See a sample website review</a></p>
 
         <!-- The run is dimensioned once, ticked at every step boundary — a
              dimension string, not four decorative arrows. -->
         <div class="dimstring">
           <span>Four steps · free review through ongoing care</span>
           <svg viewBox="0 0 1000 20" preserveAspectRatio="none" aria-hidden="true">
-            <path data-draw d="M1 2v16M250 4v12M500 4v12M750 4v12M999 2v16"></path>
-            <path data-draw d="M1 11h998M9 7l-8 4 8 4M991 7l8 4-8 4"></path>
+            <path d="M1 2v16M250 4v12M500 4v12M750 4v12M999 2v16"></path>
+            <path d="M1 11h998M9 7l-8 4 8 4M991 7l8 4-8 4"></path>
           </svg>
         </div>
 
@@ -193,7 +198,7 @@ const [leadBefore, leadAfter] = hero.headlineLead.split('an asset');
                 <ul class="rate__list">
                   {tier.includes.map((item) => <li>{item}</li>)}
                 </ul>
-                <a class="stamp rate__cta" href={withBase('/contact/')}>
+                <a class="stamp rate__cta" data-plan={tier.id} href={withBase(`/contact/?plan=${tier.id}&cycle=monthly`)}>
                   {plans.cta}
                 </a>
               </article>

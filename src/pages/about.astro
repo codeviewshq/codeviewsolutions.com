@@ -1,19 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ReviewDrawing from '../components/ReviewDrawing.astro';
 import Cta from '../components/Cta.astro';
-import { meta, about, ctas, process, site } from '../data/site.js';
+import { meta, about, ctas, sampleReview } from '../data/site.js';
 
 ---
 
 <BaseLayout title={meta.about.title} description={meta.about.description}>
   <!-- SHEET 01 — THE RECORD -->
-  <section class="sh" id="record" data-sheet="01" data-mark data-stage>
-        <!-- The review, performed on this sheet too: the claim is clouded and
-             the finding is tied back to it, measured off the live elements. -->
+  <section class="sh" id="record" data-sheet="01" data-mark>
+    <!-- A revision mark follows the highlighted heading. -->
         <svg class="markup" data-markup aria-hidden="true">
           <path class="mk-cloud" data-draw></path>
-          <path class="mk-leader" data-draw></path>
-          <circle class="mk-dot" r="3.5"></circle>
         </svg>
 
     <header class="sh__head">
@@ -51,7 +49,10 @@ import { meta, about, ctas, process, site } from '../data/site.js';
       <h2 class="sh__title">{about.toolsHeading}</h2>
       <p class="sh__no">Sheet 02 · {about.toolsLabel}</p>
     </header>
-    <p class="sh__lede">{about.toolsLede}</p>
+    <div class="drawing-overview">
+      <p class="sh__lede">{about.toolsLede}</p>
+      <ReviewDrawing variant="care" />
+    </div>
 
     <div class="groups" style="margin-top:clamp(1.75rem,3vw,2.75rem)">
       {
@@ -69,40 +70,24 @@ import { meta, about, ctas, process, site } from '../data/site.js';
     </div>
   </section>
 
-  <!-- SHEET 03 · HOW AN ENGAGEMENT IS REVISED -->
-  <section class="sh" id="revisions" data-sheet="03" data-mark>
+  <section class="sh" id="sample-review" data-sheet="03" data-mark>
     <header class="sh__head">
-      <h2 class="sh__title">Every change is a revision, and every revision is recorded.</h2>
-      <p class="sh__no">Sheet 03 · Revision schedule</p>
+      <h2 class="sh__title">{sampleReview.heading}</h2>
+      <p class="sh__no">Sample review</p>
     </header>
-    <p class="sh__lede">
-      A drawing is never finished, it is revised — and each revision says what
-      changed and who is answerable for it. An engagement runs the same way.
-    </p>
-
-    <table class="revtable">
-      <caption>Revision schedule · one engagement</caption>
-      <thead>
-        <tr>
-          <th scope="col">Rev</th>
-          <th scope="col">Stage</th>
-          <th scope="col">What changes</th>
-          <th scope="col">By</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          process.steps.map((step, i) => (
-            <tr>
-              <td class="rev">{String.fromCharCode(65 + i)}</td>
-              <td class="stage">{step.title}</td>
-              <td>{step.body}</td>
-              <td class="by">{site.name}</td>
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
+    <p class="sh__lede">{sampleReview.intro}</p>
+    <div class="groups sample-review">
+      {sampleReview.items.map((item) => (
+        <article class="group sample-finding">
+          <h3 class="group__name">{item.title}</h3>
+          <dl>
+            <dt>Finding</dt><dd>{item.finding}</dd>
+            <dt>Why it matters</dt><dd>{item.impact}</dd>
+            <dt>Next step</dt><dd>{item.action}</dd>
+          </dl>
+        </article>
+      ))}
+    </div>
   </section>
 
   <Cta

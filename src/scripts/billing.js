@@ -1,11 +1,4 @@
-/**
- * The monthly / yearly switch, shared by every candidate world.
- *
- * Behaviour only — each world styles its own control in its own grammar. The
- * price that shows is decided by a data attribute in CSS rather than by this
- * script, so the monthly column still renders correctly with no JavaScript at
- * all; the switch is an enhancement, not a dependency.
- */
+// Keep prices and enquiry links in sync; monthly links also work without JavaScript.
 export function initBilling() {
   document.querySelectorAll('[data-billing]').forEach((group) => {
     const buttons = [...group.querySelectorAll('[data-cycle-btn]')];
@@ -13,6 +6,11 @@ export function initBilling() {
 
     const set = (cycle) => {
       group.dataset.cycle = cycle;
+      group.querySelectorAll('a[data-plan]').forEach((link) => {
+        const url = new URL(link.href);
+        url.searchParams.set('cycle', cycle);
+        link.href = url.href;
+      });
       buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cycleBtn === cycle)));
     };
 

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ReviewDrawing from '../components/ReviewDrawing.astro';
 import ServiceDetail from '../components/ServiceDetail.astro';
 import Cta from '../components/Cta.astro';
 import { meta, services, sections, ctas, plans } from '../data/site.js';
@@ -11,13 +12,10 @@ const intro = sections.servicesIntro;
 
 <BaseLayout title={meta.services.title} description={meta.services.description}>
   <!-- TITLE SHEET -->
-  <section class="sh" id="scope" data-sheet="00" data-mark data-stage>
-        <!-- The review, performed on this sheet too: the claim is clouded and
-             the finding is tied back to it, measured off the live elements. -->
+  <section class="sh" id="scope" data-sheet="00" data-mark>
+    <!-- A revision mark follows the highlighted heading. -->
         <svg class="markup" data-markup aria-hidden="true">
           <path class="mk-cloud" data-draw></path>
-          <path class="mk-leader" data-draw></path>
-          <circle class="mk-dot" r="3.5"></circle>
         </svg>
 
     <header class="sh__head">
@@ -29,7 +27,10 @@ const intro = sections.servicesIntro;
       the documentation.
     </p>
 
-    <p class="sh__lede">{intro.lede}</p>
+    <div class="drawing-overview">
+      <p class="sh__lede">{intro.lede}</p>
+      <ReviewDrawing variant="services" />
+    </div>
 
     <!-- The contents of the set, so the reader knows what is on this sheet. -->
     <dl class="facts">
