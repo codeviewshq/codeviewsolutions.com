@@ -1,430 +1,164 @@
-/* ==========================================================================
-   EDIT THIS FILE TO CHANGE THE SITE'S CONTENT.
-
-   Shared content, offers, contact settings, and page headings live here.
-
-   Anything written as <VARIABLE> or wrapped in [SQUARE BRACKETS] is a placeholder that still needs
-   your real information. Search this file for "[" to find them all.
-
-   A note on voice: the copy is written in the first person plural ("we") and
-   is deliberately size-neutral — it describes what the company delivers, not
-   how many people deliver it. Keep it that way when you edit, and avoid
-   adding claims about team size in either direction.
-   ========================================================================== */
-
+// Shared company facts and marketing content. Keep unconfigured contact routes hidden.
 export const site = {
-  name: 'CodeView Solutions',
-  legalName: 'CodeView Solutions LLC',
-  domain: 'codeviewsolutions.com',
-  url: 'https://codeviewsolutions.com',
-
-  tagline: 'A better website, looked after.',
-
-  // One sentence, shown in the footer under the logo.
-  blurb:
-    'A website partner helping small and midsize businesses modernize, stay reliable, and grow with confidence.',
-
-  /* --- CONTACT -----------------------------------------------------------
-     Whatever is filled in here becomes a live, clickable channel; anything
-     left as an empty string ('') is hidden entirely rather than rendered as
-     a dead row. The contact sheet reads these to decide what to offer, so
-     adding an address here is all it takes to turn the email route on.
-
-     Keep any address here size-neutral (hello@, support@) rather than a
-     personal one — the site never says how many people are behind it.       */
-  email: 'hello@codeviewsolutions.com',
-  phone: '(732) 654-9519',
-  serviceArea: 'Working with clients across the United States',
-
-  // Set a working HTTPS endpoint that accepts a native form POST. Until then,
-  // submission is disabled; the forms provide a direct email link instead.
-  reviewEndpoint: '<VARIABLE>',
-
-  /* --- SOCIAL / PROFILE LINKS -------------------------------------------
-     Delete any you do not want shown. They render in the footer.            */
+  name: "CodeView Solutions",
+  legalName: "CodeView Solutions LLC",
+  domain: "codeviewsolutions.com",
+  url: "https://codeviewsolutions.com",
+  tagline: "Websites, software, and integrations that fit how you work.",
+  blurb: "Websites, custom software, and integrations for small and midsize businesses across the US.",
+  email: "hello@codeviewsolutions.com",
+  phone: "732.588.3179",
+  serviceArea: "Working with businesses across the United States",
+  // HTTPS receiver for the Contact form; leave unset to keep the form disabled.
+  contactEndpoint: "<VARIABLE>",
   links: [
-    { label: 'GitHub', href: '[YOUR GITHUB URL]' },
-    { label: 'LinkedIn', href: '[YOUR LINKEDIN URL]' },
+    { label: "GitHub", href: "[YOUR GITHUB URL]" },
+    { label: "LinkedIn", href: "[YOUR LINKEDIN URL]" },
   ],
 };
 
-/* --- MAIN NAVIGATION ----------------------------------------------------- */
 export const nav = [
-  { label: 'Home', href: '/' },
-  { label: 'Services', href: '/services/' },
-  { label: 'About', href: '/about/' },
-  { label: 'Contact', href: '/contact/' },
+  { label: "Services", href: "/services/" },
+  { label: "Work", href: "/work/" },
+  { label: "About", href: "/about/" },
+  { label: "Contact", href: "/contact/" },
 ];
 
-/* --- HOME PAGE HERO ------------------------------------------------------ */
+export const consultationHref = `mailto:${site.email}?subject=${encodeURIComponent("Let’s talk about a project")}`;
+
 export const hero = {
-  // Keep the marked phrase short; the revision cloud follows its text bounds.
-  headlineBefore: 'Make your website ',
-  headlineMarked: 'an asset',
-  headlineAfter: '.',
-  headlineAccent: 'Keep it that way.',
-
-  body: 'We modernize outdated websites, manage them with predictable monthly support, and keep them dependable as your traffic and business grow.',
-
-  assurance: 'Free, plain-English review. No obligation and no technical runaround.',
-  primaryCta: { label: 'Get a free website review', href: '/contact/' },
-  secondaryCta: { label: 'See how it works', href: '/#process' },
-
-  // The quiet row under the buttons. Keep values short.
-  //
-  // Deliberately no years-of-experience or founded-in fact here. Nothing on
-  // this site dates the company in either direction — that is a decision, not
-  // an omission waiting to be filled.
-  facts: [
-    { key: 'First step', value: 'A free website review' },
-    { key: 'Ongoing care', value: 'Predictable monthly support' },
-    { key: 'After launch', value: '90-day warranty' },
-    { key: 'Built for', value: 'Reliable, steady growth' },
-  ],
+  headline: "Tell us what’s",
+  accent: "in your way.",
+  body: "Websites, custom software, and integrations for small and midsize businesses. Bring us the thing that’s slowing you down, and we’ll help you fix it.",
+  primaryCta: { label: "Let’s talk", href: "/contact/" },
+  secondaryCta: { label: "See how we work", href: "/#approach" },
 };
 
-/* --- SERVICES ------------------------------------------------------------
-   Used on the home page (short rows) and the services page (full detail).
-   Add or remove entries freely — the layout adapts to any number.
-
-   The order here is the order they appear on both pages.
-
-   id       -> URL anchor, must be unique and lowercase
-   name     -> the heading
-   summary  -> one or two lines, shown on the home page
-   body     -> one or two paragraphs, shown on the services page
-   includes -> bullet list of concrete deliverables
-   meta     -> the small key/value strip; keep values short              */
 export const services = [
   {
-    id: 'website-refresh',
-    name: 'Modern Website Refresh',
+    id: "digital-experiences",
+    name: "Your website should be working for you.",
+    discipline: "Websites & digital experiences",
     summary:
-      'Turn an outdated, slow, or hard-to-manage site into a clear, modern home for your business.',
-    body:
-      'If your website no longer reflects the quality of your business, we will help you fix the parts that are costing you trust and enquiries. That may mean a focused improvement or a full redesign—always guided by what customers need to understand and do.\n\nThe result is a faster, clearer, mobile-friendly site your team can feel confident sending people to.',
+      "A clear, fast website that explains what you do and makes it easy for people to get in touch.",
+    body: "If your site is hard to update, looks off on a phone, or just isn’t bringing in enquiries, it’s worth fixing. We work out what your customers need to see, then write, design, and build around that, so you end up with a site you can actually keep up to date.\n\nThat might be a full rebuild or a focused redesign. Either way, we start with your customers and your goals, not a template.",
     includes: [
-      'Message, navigation, and conversion review',
-      'Modern responsive design for phones and desktops',
-      'Performance, accessibility, and search fundamentals',
-      'Content and page improvements around real customer questions',
-      'A clean launch plan with no avoidable disruption',
-    ],
-    meta: [
-      { key: 'Starts with', value: 'Free website review' },
-      { key: 'Engagement', value: 'Focused improvement project' },
-      { key: 'Good fit for', value: 'Sites that feel a step behind' },
+      "Working out what your site needs to say",
+      "Design and development that works on every screen",
+      "Accessible, fast-loading pages",
+      "Help with launch, and a handover you can follow",
     ],
   },
   {
-    id: 'website-care',
-    name: 'Ongoing Website Care',
+    id: "products-and-portals",
+    name: "When spreadsheets and email stop keeping up.",
+    discipline: "Digital products & portals",
     summary:
-      'One dependable partner for updates, monitoring, fixes, and steady improvements each month.',
-    body:
-      "A website is not finished the day it launches. Software changes, content gets stale, and small issues become expensive when nobody owns them. Monthly care gives your business a consistent place to take updates, questions, and problems.\n\nWe learn the site and the business behind it, so you do not have to brief a new freelancer every time something needs attention.",
+      "Custom portals and tools that give your customers or your team a simpler way to get things done.",
+    body: "A lot of important work runs on spreadsheets, shared inboxes, and follow-up emails. That works until it doesn’t. A customer portal or an internal tool can turn a messy process into something people finish in a few clicks.\n\nWe help you decide what the first useful version should do, design it around the people who’ll use it, and build it so it can grow with you.",
     includes: [
-      'Content and page updates within an agreed allowance',
-      'Security, dependency, and uptime monitoring',
-      'Backups, recovery checks, and issue response',
-      'Performance and accessibility maintenance',
-      'A monthly improvement plan with clear priorities',
-    ],
-    meta: [
-      { key: 'Cadence', value: 'Ongoing, agreed allowance' },
-      { key: 'Engagement', value: 'Predictable monthly care' },
-      { key: 'Good fit for', value: 'Businesses without web staff' },
+      "Deciding what the first version needs to do",
+      "Designing how each screen will work",
+      "Custom development",
+      "Testing with real use, then handover",
     ],
   },
   {
-    id: 'growth-infrastructure',
-    name: 'Reliable Growth Infrastructure',
+    id: "connected-systems",
+    name: "Stop typing the same thing twice.",
+    discipline: "APIs, integrations & automation",
     summary:
-      'Hosting, integrations, and technical foundations that stay dependable when attention and traffic increase.',
-    body:
-      "Growth should create opportunity, not a scramble to keep the website online. We strengthen the systems behind your site so campaigns, seasonal traffic, new locations, and new customer needs do not expose avoidable weak points.\n\nThat includes choosing sensible hosting, simplifying fragile integrations, and planning capacity before it becomes urgent—not selling complexity your business does not need.",
+      "We connect the tools you already use, so information moves between them without someone copying it by hand.",
+    body: "If someone on your team copies orders, contacts, or invoices from one system into another, that’s time you could get back, and a place where mistakes creep in.\n\nOften you don’t need new software, just better connections between what you already have. We use APIs and third-party integrations to move information between your tools, cut out manual steps, and write down how it all fits together.",
     includes: [
-      'Hosting and deployment reliability review',
-      'Traffic, speed, and capacity planning',
-      'Analytics, forms, CRM, and business-system integrations',
-      'Monitoring and practical recovery planning',
-      'Technical improvements staged around business priorities',
+      "Mapping how information moves today",
+      "Connecting your tools through their APIs",
+      "Automating the repetitive steps",
+      "Clear notes on what connects to what",
     ],
-    meta: [
-      { key: 'Goal', value: 'Fewer surprises as demand grows' },
-      { key: 'Engagement', value: 'Project or monthly care' },
-      { key: 'Good fit for', value: 'Sites becoming business-critical' },
+  },
+  {
+    id: "consulting",
+    name: "Not sure what to do next?",
+    discipline: "Technology & product consulting",
+    summary:
+      "An honest second opinion before you spend money on new software or a rebuild.",
+    body: "Maybe you have quotes that don’t agree with each other, or you’re weighing an off-the-shelf product against something custom. It helps to talk it through with someone who isn’t trying to sell you a particular answer.\n\nBring the problem as you see it. We’ll help you understand the options, the tradeoffs, and a sensible scope, so you can decide with confidence.",
+    includes: [
+      "A look at what you have today",
+      "Off-the-shelf or custom: a straight comparison",
+      "A practical plan for what to do first",
+      "Clear next steps you can act on",
     ],
   },
 ];
 
-/* --- PROCESS -------------------------------------------------------------
-   A real sequence from first review through ongoing care.                   */
-export const process = {
-  label: 'How it works',
-  heading: 'A clear path from outdated to looked after.',
-  intro:
-    'You do not need a technical brief. We start with the website you have, explain what matters, and move at a pace that fits the business.',
-  steps: [
-    {
-      title: 'Free website review',
-      body: 'We look at your current site through a customer’s eyes—clarity, trust, mobile experience, speed, and obvious technical risks.',
-    },
-    {
-      title: 'Practical recommendations',
-      body: 'You get a plain-English view of what to fix now, what can wait, and whether a focused refresh or broader redesign makes sense.',
-    },
-    {
-      title: 'Redesign or improvement',
-      body: 'We make the agreed changes, keep disruption low, and show progress as the improved site takes shape.',
-    },
-    {
-      title: 'Ongoing monthly care',
-      body: 'After launch, we stay responsible for updates, monitoring, fixes, and the next improvements as your business grows.',
-    },
-  ],
-};
-
-/* --- "HOW WE WORK" -------------------------------------------------------
-   The questions clients ask before committing to a build. Answer them
-   plainly — vague answers here are the ones that lose the work.            */
-export const credibility = {
-  label: 'A long-term partner',
-  heading: 'Someone stays responsible.',
-  intro: 'Clear ownership, steady communication, and support that continues after the redesigned site goes live.',
-  items: [
-    {
-      q: 'Do we need to know what is wrong first?',
-      a: 'No. The free review is designed to find that out. We separate business-impacting issues from nice-to-have changes and explain the tradeoffs in plain language.',
-    },
-    {
-      q: 'Can you work with our existing website?',
-      a: 'Usually, yes. We first determine what is worth keeping, what can be improved safely, and whether rebuilding would be the more responsible long-term choice.',
-    },
-    {
-      q: 'How is the work priced?',
-      a: 'Choose Care, Improve, or Grow at the published price. Before work starts, we agree the free design scope, revision limits, monthly update allowance, hosting and third-party costs, and cancellation terms. Larger projects are quoted separately.',
-    },
-    {
-      q: 'Who owns the website and accounts?',
-      a: 'You do. Your website, domain, hosting accounts, content, and access stay under your control. Monthly care pays for ongoing help, not access to your own property.',
-    },
-    {
-      q: 'What happens after launch?',
-      a: 'Every refresh includes a 90-day warranty for the agreed work. If you choose monthly care, we also handle routine updates, monitoring, fixes, and planned improvements from there.',
-    },
-    {
-      q: 'What happens as traffic grows?',
-      a: 'We review traffic, performance, and capacity, then recommend changes when there is a clear business need. A reply within one business day means an initial response; completion times depend on the agreed work.',
-    },
-  ],
-};
-
-/* --- ABOUT PAGE ---------------------------------------------------------- */
-export const about = {
-  label: 'About',
-  headingLead: 'The website partner',
-  headingAccent: 'who stays involved.',
-
-  // Each string is its own paragraph.
-  story: [
-    'CodeView Solutions is a website and technology partner. We help small and midsize businesses replace outdated web experiences with sites that are clearer, faster, and easier to trust.',
-    'Our work connects design, content, development, hosting, and ongoing support. That means fewer handoffs, fewer mystery problems, and one partner who understands how the whole website fits together.',
-    'We explain what needs attention, what can wait, and what each change involves. You approve the scope before work starts and keep control of your website and accounts.',
-  ],
-
-  // Short facts in the sidebar card. Delete any that don't apply.
-  // No "Founded" row by decision — see the note on hero.facts.
-  facts: [
-    { key: 'Entity', value: 'CodeView Solutions LLC' },
-    { key: 'Focus', value: 'Website modernization and care' },
-    { key: 'Works with', value: 'Small and midsize businesses' },
-  ],
-
-  toolsLabel: 'What we look after',
-  toolsHeading: 'The whole website, not just the launch.',
-  toolsLede:
-    'The right tools vary by site. The responsibility does not: keep the experience useful, the systems dependable, and the next decision clear.',
-
-  // Edit to match what you actually use — an honest short list reads better
-  // than an exhaustive one.
-  stack: [
-    { group: 'Customer experience', items: ['Clear messaging', 'Responsive design', 'Accessibility', 'Conversion paths'] },
-    { group: 'Website health', items: ['Updates', 'Security', 'Backups', 'Uptime monitoring'] },
-    {
-      group: 'Performance',
-      items: ['Page speed', 'Search foundations', 'Analytics', 'Traffic readiness'],
-    },
-    { group: 'Business connections', items: ['Forms', 'CRM', 'Scheduling', 'Third-party integrations'] },
-  ],
-};
-
-/* --- CONTACT PAGE -------------------------------------------------------- */
-export const contact = {
-  label: 'Free website review',
-  headingLead: 'Let’s look at',
-  headingAccent: 'the site you have.',
-  intro:
-    'Tell us which website you want reviewed and what is getting in the way. The first step is a no-obligation conversation about the site and your priorities.',
-
-  // Heading on the card beside the form.
-  directLabel: 'What happens next',
-
-  // Options in the "What do you need?" dropdown on the form.
-  projectTypes: [
-    'Free website review',
-    'Modern website refresh',
-    'Ongoing website care',
-    'Reliable growth infrastructure',
-    'Not sure yet',
-  ],
-};
-
-/* --- SECTION HEADINGS ----------------------------------------------------
-   Headings for the sections that are not covered above. `Accent` fields are
-   the phrase the revision cloud is drawn around.                            */
-export const sections = {
-  homeServices: {
-    label: 'Website partnership',
-    heading: 'Improve it. Care for it. Grow on it.',
-    lede: 'Start with the problem in front of you, then keep one dependable partner in place for what comes next.',
+export const process = [
+  {
+    title: "We listen first.",
+    body: "We start by understanding your business, the people involved, and what’s actually getting in the way. Questions come before any proposed solution.",
   },
-  servicesIntro: {
-    label: 'Services',
-    headingLead: 'A stronger website,',
-    headingAccent: 'with someone behind it.',
-    lede: 'Three practical ways to improve the site you have now and keep it dependable as the business asks more of it.',
+  {
+    title: "We agree on a plan.",
+    body: "Together we decide what to build, what to connect, and what can wait. You’ll know the scope and fees before any work starts.",
   },
-};
+  {
+    title: "We build it with you.",
+    body: "Design and development happen side by side, and you’ll see progress along the way. When there’s a decision to make, we explain it in plain language.",
+  },
+  {
+    title: "You stay in control.",
+    body: "At handover you get the code, accounts, and documentation. If you’d like ongoing support, we agree it around what you need.",
+  },
+];
 
-/* --- CALLS TO ACTION -----------------------------------------------------
-   The band at the bottom of each page. `accent` is the clouded phrase.      */
-export const ctas = {
-  home: {
-    heading: 'Start with a free',
-    accent: 'website review.',
-    body: 'We will look at what customers see, identify the highest-value improvements, and explain the next step in plain language.',
+export const questions = [
+  {
+    q: "Do I need to know exactly what I want?",
+    a: "Not at all. Most people come to us with a problem, not a plan. The free consultation is where we work out what’s going on and what a sensible next step looks like.",
   },
-  services: {
-    heading: 'Not sure what',
-    accent: 'your website needs?',
-    body: 'That is exactly what the free review is for. We will separate urgent issues from useful improvements and give you a sensible path forward.',
-    label: 'Get a free website review',
+  {
+    q: "Can you work with the tools we already use?",
+    a: "Yes. We can look at your current website, software, or workflow and find a practical way to improve or connect it. Sometimes an existing tool is the right answer; sometimes something custom makes more sense.",
   },
-  about: {
-    heading: 'Meet your next',
-    accent: 'website partner.',
-    body: 'Start with a free review, with no obligation to continue.',
+  {
+    q: "How much will it cost?",
+    a: "It depends on what we agree to do. Before any work starts, we’ll set out the scope and fees for your project, including anything that depends on third-party products, and how changes will be handled.",
   },
-};
+  {
+    q: "Who owns the finished work?",
+    a: "You do. Your website, custom code, content, accounts, and documentation stay yours. If a project relies on third-party products, we’ll name them and their terms up front.",
+  },
+  {
+    q: "What happens once it’s finished?",
+    a: "We agree the handover and any ongoing support as part of the project, so you know what happens next before the work begins. There’s no subscription to sign up for.",
+  },
+];
 
-/* --- SEO / SOCIAL SHARING -----------------------------------------------
-   Per-page titles and descriptions. Keep descriptions near 150–160
-   characters — search engines truncate past that.                          */
 export const meta = {
   home: {
-    title: 'Website Redesign & Monthly Care — CodeView Solutions LLC',
+    title: "CodeView Solutions — Websites, Software & Integrations",
     description:
-      'Modern website redesign, predictable monthly care, and reliable growth infrastructure for small and midsize businesses. Start with a free website review.',
+      "We help small and midsize businesses fix what’s slowing them down: websites, custom software, and the connections between their tools. Start with a free consultation.",
   },
   services: {
-    title: 'Website Redesign, Care & Growth Services — CodeView Solutions',
+    title: "How We Can Help — CodeView Solutions",
     description:
-      'Modern website refreshes, ongoing monthly website care, and reliable infrastructure for growing small and midsize businesses.',
+      "Websites that bring in enquiries, portals that replace spreadsheets, integrations that stop the copying and pasting, and honest advice on what to do next.",
+  },
+  work: {
+    title: "Work & Product Demos — CodeView Solutions",
+    description:
+      "Examples of our work and product demos are on their way. In the meantime, we’re happy to talk through how we’d approach your project.",
   },
   about: {
-    title: 'About — CodeView Solutions LLC',
+    title: "About Us — CodeView Solutions",
     description:
-      'CodeView Solutions is a long-term website partner, helping small and midsize businesses improve and maintain their sites.',
+      "We help businesses plan, design, and build technology that fits how they work, explained in plain language, with you in control of the result.",
   },
   contact: {
-    title: 'Free Website Review — CodeView Solutions LLC',
+    title: "Contact — CodeView Solutions",
     description:
-      'Request a free, no-obligation website review from CodeView Solutions. Get a plain-English view of what to fix now and what can wait.',
+      "Tell us what’s getting in the way. The first consultation is free, with no obligation, and we reply within one business day.",
   },
-};
-
-/* --- PLANS ---------------------------------------------------------------
-   Published pricing. Three tiers named after the three things the site says
-   it does — Improve it, Care for it, Grow on it — so the plan ladder and the
-   services use one vocabulary.
-
-   `monthly.amount` and `annual.amount` are both rendered; CSS shows one and
-   hides the other based on the switch, so the monthly column is still correct
-   with JavaScript disabled.
-
-   NOTE: this is the first pricing ever published on the site. If you change a
-   number here, change it here only — every page reads from this list.       */
-export const plans = {
-  label: 'Plans',
-  heading: 'A plan, not an invoice you cannot predict.',
-  intro:
-    'Start with a free consultation and first website design within an agreed scope. Choose the support you need afterwards; the prices below cover the agreed plan allowance.',
-
-  // Labels on the billing switch.
-  cycles: { monthly: 'Monthly', annual: 'Pay yearly' },
-  cycleHint: 'Pay yearly and save.',
-
-  tiers: [
-    {
-      id: 'care',
-      name: 'Care',
-      tagline: 'Keep a good website healthy.',
-      monthly: { amount: '$10', period: 'per month' },
-      annual: { amount: '$90', period: 'per year', note: 'Saves $30 a year' },
-      includes: [
-        'Free consultation and first website design',
-        'Content and page updates within an agreed allowance',
-        'Security, dependency, and uptime monitoring',
-        'Backups and recovery checks',
-        '90-day warranty on the agreed work',
-        'Reply within one business day',
-      ],
-    },
-    {
-      id: 'improve',
-      name: 'Improve',
-      tagline: 'Keep making it better every month.',
-      monthly: { amount: '$50', period: 'per month' },
-      annual: { amount: '$540', period: 'per year', note: 'Saves $60 a year' },
-      includes: [
-        'Everything in Care',
-        'A monthly improvement plan with clear priorities',
-        'Message, navigation, and conversion review',
-        'Performance and accessibility maintenance',
-        'Search fundamentals and analytics',
-        'Agreed forms and page improvements',
-      ],
-    },
-    {
-      id: 'grow',
-      name: 'Grow',
-      tagline: 'Stay dependable as demand increases.',
-      monthly: { amount: '$100', period: 'per month' },
-      annual: { amount: '$1,080', period: 'per year', note: 'Saves $120 a year' },
-      includes: [
-        'Everything in Improve',
-        'Hosting and deployment reliability review',
-        'Traffic, speed, and capacity planning',
-        'CRM and business-system integrations',
-        'Monitoring and practical recovery planning',
-        'Technical work staged around business priorities',
-      ],
-    },
-  ],
-
-  cta: 'Get a free website review',
-  footnote:
-    'Before work starts, we agree the free design scope and revisions, monthly update allowance, hosting and third-party costs, and cancellation terms. Extra work is quoted separately. You keep ownership of your website and accounts. The one-business-day reply standard is an initial response, not a promise to complete every request that day.',
-};
-
-// Illustrative findings only: no client work or measured results are claimed.
-export const sampleReview = {
-  heading: 'What a useful website review looks like.',
-  intro: 'Illustrative example — not client work or measured results. A review connects each finding to a customer problem and a practical next step.',
-  items: [
-    { title: 'The enquiry route is hard to find', finding: 'The main call to action is buried below a long introduction.', impact: 'A visitor who is ready to ask a question has to search for the next step.', action: 'Place a clear enquiry link near the main offer and verify that its destination works.' },
-    { title: 'The mobile layout needs room', finding: 'Card text and controls sit against the edges on a narrow screen.', impact: 'The content is harder to scan and adjacent controls are easier to tap by mistake.', action: 'Restore consistent padding and check text wrapping, focus, and touch targets at small widths.' },
-    { title: 'The offer leaves costs unclear', finding: 'A support plan lists services without defining the included allowance.', impact: 'A buyer cannot tell what the price covers or when extra charges apply.', action: 'Agree the scope, allowances, third-party costs, and cancellation terms before work starts.' },
-  ],
 };

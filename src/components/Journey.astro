@@ -1,0 +1,64 @@
+---
+import Icon from "./Icon.astro";
+const nodes = [
+  {
+    title: "Your problem",
+    body: "Tell us what’s in the way.",
+    kind: "idea",
+  },
+  {
+    title: "A plan",
+    body: "Agreed together, in plain language.",
+    kind: "direction",
+  },
+  {
+    title: "A working fix",
+    body: "Built to fit how you work.",
+    kind: "build",
+  },
+];
+---
+
+<figure
+  class="journey"
+  aria-label="From your problem, through a plan agreed together, to a working fix"
+>
+  {nodes.map((node, index) => (
+    <div class={`journey__node journey__node--${node.kind}`}>
+      {index < nodes.length - 1 && (
+        <div class="journey__connector" aria-hidden="true"></div>
+      )}
+      <div class="journey__symbol" aria-hidden="true">
+        {node.kind === "idea" ? (
+          <svg viewBox="0 0 56 56" fill="none">
+            <circle cx="28" cy="28" r="17" />
+            <circle
+              cx="28"
+              cy="28"
+              r="24"
+              stroke-dasharray="3 8"
+            />
+            <circle cx="28" cy="28" r="5" />
+          </svg>
+        ) : node.kind === "direction" ? (
+          <svg viewBox="0 0 56 56" fill="none">
+            <path d="M9 36 28 17l19 19M9 25 28 6l19 19M9 47l19-19 19 19" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 56 56" fill="none">
+            <rect x="9" y="9" width="38" height="38" rx="10" />
+            <path d="m18 28 7 7 13-14" />
+          </svg>
+        )}
+      </div>
+      <div>
+        <p class="journey__title">{node.title}</p>
+        <p class="journey__body">{node.body}</p>
+      </div>
+    </div>
+  ))}
+  <figcaption>
+    From the first conversation to something that works.
+    <Icon name="arrow" />
+  </figcaption>
+</figure>

@@ -1,109 +1,98 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ReviewDrawing from '../components/ReviewDrawing.astro';
-import ReviewForm from '../components/ReviewForm.astro';
-import { meta, contact, site, plans } from '../data/site.js';
-import { isPlaceholder } from '../utils/placeholder.js';
-
-const emailReady = Boolean(site.email) && !isPlaceholder(site.email);
-const phoneReady = Boolean(site.phone) && !isPlaceholder(site.phone);
-const telHref = phoneReady ? `tel:${site.phone.replace(/[^+\d]/g, '')}` : undefined;
-
-
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FlowField from "../components/FlowField.astro";
+import Journey from "../components/Journey.astro";
+import ContactForm from "../components/ContactForm.astro";
+import { meta, site } from "../data/site.js";
+import { isPlaceholder } from "../utils/placeholder.js";
+const emailReady = !isPlaceholder(site.email);
+const phoneReady = !isPlaceholder(site.phone);
 ---
 
-<BaseLayout title={meta.contact.title} description={meta.contact.description}>
-  <section class="sh" id="enquiry" data-sheet="01" data-mark>
-    <!-- A revision mark follows the highlighted heading. -->
-        <svg class="markup" data-markup aria-hidden="true">
-          <path class="mk-cloud" data-draw></path>
-        </svg>
-
-    <header class="sh__head">
-      <h1 class="sh__h1">{contact.headingLead} <em data-cloud>{contact.headingAccent}</em></h1>
-      <p class="sh__no">Enquiry sheet · {contact.label}</p>
-    </header>
-    <p class="note" data-note data-tag="REV A · COMMITTED">
-      We reply within one business day. The review itself carries no obligation.
-    </p>
-
-    <div class="drawing-overview">
-      <p class="sh__lede">{contact.intro}</p>
-      <ReviewDrawing variant="contact" />
-    </div>
-
-    <p class="plan-context" data-plan-context hidden></p>
-
-    <div class="form-grid" style="margin-top:clamp(1.75rem,3vw,2.75rem)">
-      <ReviewForm />
-
-      <div class="plate">
-        <p class="plate__head">{contact.directLabel}</p>
-
-        {
-          phoneReady && (
-            <div class="plate__row">
-              <span class="plate__key">Phone</span>
-              <span class="plate__val">
-                <a href={telHref}>{site.phone}</a>
-              </span>
-            </div>
-          )
-        }
-
-        {
-          emailReady && (
-            <div class="plate__row">
-              <span class="plate__key">Email</span>
-              <span class="plate__val">
-                <a href={`mailto:${site.email}`}>{site.email}</a>
-              </span>
-            </div>
-          )
-        }
-
-        <div class="plate__row">
-          <span class="plate__key">First conversation</span>
-          <span class="plate__val">We discuss your site, priorities, and what the free review should cover.</span>
-        </div>
-        <div class="plate__row">
-          <span class="plate__key">Before work starts</span>
-          <span class="plate__val">You approve the design scope, revisions, plan allowance, extra costs, and cancellation terms.</span>
-        </div>
-        <div class="plate__row">
-          <span class="plate__key">Service area</span>
-          <span class="plate__val">{site.serviceArea}</span>
-        </div>
-
-        <div class="plate__row">
-          <span class="plate__key">Response time</span>
-          <span class="plate__val">Initial reply within one business day; completion times depend on the agreed work.</span>
-        </div>
-
-        <div class="plate__row">
-          <span class="plate__key">Plans start at</span>
-          <span class="plate__val">
-            {plans.tiers[0].monthly.amount} a month, after a free design
-          </span>
-        </div>
-      </div>
+<BaseLayout {...meta.contact}>
+  <section class="page-intro page-intro--short">
+    <FlowField />
+    <div class="container">
+      <h1>
+        Let’s talk it
+        <br />
+        <span>through.</span>
+      </h1>
+      <p class="lede">
+        Whether it’s a website, a process, or just an idea, we’re happy to
+        listen.
+      </p>
     </div>
   </section>
-  <script>
-    import { plans } from '../data/site.js';
-    const query = new URLSearchParams(location.search);
-    const tier = plans.tiers.find(t => t.id === query.get('plan'));
-    const cycle = query.get('cycle') === 'annual' ? 'annual' : 'monthly';
-    if (tier) {
-      const context = document.querySelector<HTMLElement>('[data-plan-context]');
-      if (context) {
-        context.textContent = `Interested in ${tier.name}: ${tier[cycle].amount} ${tier[cycle].period}. Mention this plan when you contact us; scope and terms are agreed before work starts.`;
-        context.hidden = false;
-      }
-      const planInput = document.querySelector<HTMLInputElement>('[data-enquiry-plan]');
-      const cycleInput = document.querySelector<HTMLInputElement>('[data-enquiry-cycle]');
-      if (planInput) planInput.value = tier.name;
-      if (cycleInput) cycleInput.value = cycle;
-    }
-  </script>
+  <section
+    class="container contact-layout"
+    aria-label="Contact and consultation"
+  >
+    <div class="contact-panel">
+      <h2>
+        Start with a
+        <br />
+        conversation.
+      </h2>
+      <p>
+        The first consultation is free, with no obligation. Share a little about
+        your business and what you’d like to change.
+      </p>
+      <ContactForm />
+      <dl class="contact-methods">
+        {emailReady && (
+          <div>
+            <dt>Email</dt>
+            <dd>
+              <a href={`mailto:${site.email}`}>{site.email}</a>
+            </dd>
+          </div>
+        )}
+        {phoneReady && (
+          <div>
+            <dt>Phone</dt>
+            <dd>
+              <a href={`tel:${site.phone.replace(/[^+\d]/g, "")}`}>
+                {site.phone}
+              </a>
+            </dd>
+          </div>
+        )}
+        <div>
+          <dt>Where we work</dt>
+          <dd>Remotely, across the United States</dd>
+        </div>
+        <div>
+          <dt>When you’ll hear from us</dt>
+          <dd>An initial reply within one business day.</dd>
+        </div>
+      </dl>
+    </div>
+    <div class="contact-aside">
+      <ol class="contact-steps">
+        <li>
+          <h3>Start with what’s on your mind.</h3>
+          <p>
+            What’s frustrating, what isn’t working, or what you’d like to build.
+            Rough notes are fine.
+          </p>
+        </li>
+        <li>
+          <h3>We’ll talk through the options.</h3>
+          <p>
+            We’ll ask questions and help you see what makes sense. There’s no
+            obligation to go further.
+          </p>
+        </li>
+        <li>
+          <h3>We agree a clear plan.</h3>
+          <p>
+            If it’s a good fit, we’ll set out the scope, fees, and next steps
+            together before any work begins.
+          </p>
+        </li>
+      </ol>
+      <Journey />
+    </div>
+  </section>
 </BaseLayout>

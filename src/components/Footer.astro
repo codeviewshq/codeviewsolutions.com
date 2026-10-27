@@ -1,32 +1,41 @@
 ---
-/** The sheet's bottom margin: a revision table. */
-import { site, nav } from '../data/site.js';
-import { withBase } from '../utils/url.js';
-import { isPlaceholder } from '../utils/placeholder.js';
-
-const emailReady = !isPlaceholder(site.email);
-const phoneReady = !isPlaceholder(site.phone);
-const links = site.links.filter((l) => !isPlaceholder(l.href));
+import { site, nav } from "../data/site.js";
+import { withBase } from "../utils/url.js";
+import { isPlaceholder } from "../utils/placeholder.js";
+import logoSvg from "../../public/brand/lockup.svg?raw";
+import Icon from "./Icon.astro";
+const links = site.links.filter((link) => !isPlaceholder(link.href));
 ---
 
-<footer class="foot">
-  <div>{site.legalName}</div>
-  <div>{site.serviceArea}</div>
-  <div>
-    {
-      phoneReady ? (
-        <a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a>
-      ) : emailReady ? (
-        <a href={`mailto:${site.email}`}>{site.email}</a>
-      ) : (
-        'Reply within one business day'
-      )
-    }
+<footer class="footer container">
+  <div class="footer__top">
+    <a class="brand" href={withBase("/")} aria-label={`${site.name} home`}>
+      <span set:html={logoSvg} />
+    </a>
+    <p>{site.blurb}</p>
+    <nav aria-label="Footer">
+      {nav.map((item) => (
+        <a href={withBase(item.href)}>{item.label}</a>
+      ))}
+      {links.map((link) => (
+        <a href={link.href}>{link.label}</a>
+      ))}
+    </nav>
   </div>
-  <div>
-    {nav.map((item, i) => (
-      <>{i > 0 && ' · '}<a href={withBase(item.href)}>{item.label}</a></>
-    ))}
-    {links.map((l) => <> · <a href={l.href}>{l.label}</a></>)}
+  <div class="footer__bottom">
+    <span>
+      © {new Date().getFullYear()} {site.legalName}
+    </span>
+    <span>{site.serviceArea}</span>
+    <button
+      class="motion-toggle text-button"
+      type="button"
+      data-motion-toggle
+      aria-pressed="false"
+    >
+      <Icon name="pause" class="motion-pause" />
+      <Icon name="play" class="motion-play" />
+      <span data-motion-label>Pause motion</span>
+    </button>
   </div>
 </footer>

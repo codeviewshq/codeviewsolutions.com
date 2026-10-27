@@ -1,0 +1,73 @@
+---
+import Logo from "./Logo.astro";
+---
+
+<div class="connections" data-connections data-active="experience">
+  <div class="connections__controls" aria-label="Where problems show up">
+    <button type="button" data-connection="experience" aria-pressed="true">
+      Your customers
+    </button>
+    <button type="button" data-connection="workflow" aria-pressed="false">
+      Your team
+    </button>
+    <button type="button" data-connection="systems" aria-pressed="false">
+      Your tools
+    </button>
+  </div>
+  <div class="connections__map">
+    <svg
+      class="connections__paths"
+      viewBox="0 0 800 420"
+      preserveAspectRatio="none"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path d="M170 90H270Q300 90 300 120V180Q300 210 335 210H400" />
+      <path d="M170 330H270Q300 330 300 300V240Q300 210 335 210H400" />
+      <path d="M400 210H470Q500 210 500 180V120Q500 90 530 90H630" />
+      <path d="M400 210H470Q500 210 500 240V300Q500 330 530 330H630" />
+      <path
+        pathLength="100"
+        class="connection-signal connection-signal--experience"
+        d="M170 90H270Q300 90 300 120V180Q300 210 335 210H400"
+      />
+      <path
+        pathLength="100"
+        class="connection-signal connection-signal--workflow"
+        d="M170 330H270Q300 330 300 300V240Q300 210 335 210H400"
+      />
+      <path
+        pathLength="100"
+        class="connection-signal connection-signal--systems"
+        d="M400 210H470Q500 210 500 240V300Q500 330 530 330H630"
+      />
+    </svg>
+    <div class="connections__center">
+      <Logo />
+      <span>Your business</span>
+    </div>
+    <div class="connection-point connection-point--experience">
+      <span class="connection-point__dot"></span>
+      <p>Customers</p>
+      <span>Easy to find and reach</span>
+    </div>
+    <div class="connection-point connection-point--workflow">
+      <span class="connection-point__dot"></span>
+      <p>Your team</p>
+      <span>Less manual work</span>
+    </div>
+    <div class="connection-point connection-point--product">
+      <span class="connection-point__dot"></span>
+      <p>New ideas</p>
+      <span>Worth exploring properly</span>
+    </div>
+    <div class="connection-point connection-point--systems">
+      <span class="connection-point__dot"></span>
+      <p>Your tools</p>
+      <span>Talking to each other</span>
+    </div>
+  </div>
+  <p class="connections__caption" data-connection-caption aria-live="polite">
+    Can people find what they need and get in touch easily? That’s often the first thing to fix.
+  </p>
+</div>
