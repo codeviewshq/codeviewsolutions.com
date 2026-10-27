@@ -1,99 +1,115 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ReviewDrawing from '../components/ReviewDrawing.astro';
-import Cta from '../components/Cta.astro';
-import { meta, about, ctas, sampleReview } from '../data/site.js';
-
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FlowField from "../components/FlowField.astro";
+import Journey from "../components/Journey.astro";
+import Cta from "../components/Cta.astro";
+import { meta, process, site } from "../data/site.js";
 ---
 
-<BaseLayout title={meta.about.title} description={meta.about.description}>
-  <!-- SHEET 01 — THE RECORD -->
-  <section class="sh" id="record" data-sheet="01" data-mark>
-    <!-- A revision mark follows the highlighted heading. -->
-        <svg class="markup" data-markup aria-hidden="true">
-          <path class="mk-cloud" data-draw></path>
-        </svg>
-
-    <header class="sh__head">
-      <h1 class="sh__h1">{about.headingLead} <em data-cloud>{about.headingAccent}</em></h1>
-      <p class="sh__no">Sheet 01 · {about.label}</p>
-    </header>
-
-    <p class="note" data-note data-tag="REV A · FIRST FINDING">
-      Support continues after launch. Every refresh carries a 90-day warranty
-      on the agreed work.
-    </p>
-
-    <div class="detail__grid" style="margin-top:clamp(1.5rem,3vw,2.5rem)">
-      <div class="prose">
-        {about.story.map((paragraph) => <p>{paragraph}</p>)}
+<BaseLayout {...meta.about}>
+  <section class="page-intro">
+    <FlowField />
+    <div class="container">
+      <h1>
+        Technology should
+        <br />
+        <span>make work easier.</span>
+      </h1>
+      <p class="lede">
+        We help small and midsize businesses plan, design, and build websites,
+        software, and integrations that fit the way they actually work.
+      </p>
+    </div>
+  </section>
+  <section class="section section--soft">
+    <div class="container">
+      <h2 class="about-statement" data-reveal>
+        Too much software is built around what’s easy to sell rather than what’s
+        useful. We try to do the opposite: understand how you work first, then
+        build something that fits.
+      </h2>
+      <div class="principles">
+        <div>
+          <h3>We explain things plainly.</h3>
+          <p>
+            We ask questions, lay out your options, and are honest about the
+            tradeoffs. You shouldn’t need a technical background to make a good
+            decision.
+          </p>
+        </div>
+        <div>
+          <h3>We think about the whole job.</h3>
+          <p>
+            How something looks, how it works, and how it connects to your other
+            tools all matter. We handle them together rather than in separate
+            pieces.
+          </p>
+        </div>
+        <div>
+          <h3>We fit the work to you.</h3>
+          <p>
+            Your goals, your way of working, and the tools you already use shape
+            what we recommend. We don’t push one product or approach on everyone.
+          </p>
+        </div>
       </div>
-
-      <div class="plate">
-        <p class="plate__head">Company record</p>
-        {
-          about.facts.map((fact) => (
-            <div class="plate__row">
-              <span class="plate__key">{fact.key}</span>
-              <span class="plate__val">{fact.value}</span>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container approach">
+      <div class="approach__intro">
+        <h2>
+          How a project
+          <br />
+          usually goes.
+        </h2>
+        <p>
+          No surprises. You’ll know what’s happening, why, and what it costs.
+        </p>
+        <Journey />
+      </div>
+      <ol class="process-list">
+        {process.map((step) => (
+          <li>
+            <div>
+              <h3>{step.title}</h3>
+              <p>{step.body}</p>
             </div>
-          ))
-        }
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+  <section class="section section--soft">
+    <div class="container intro-grid">
+      <h2>
+        It’s your work.
+        <br />
+        You keep control.
+      </h2>
+      <div class="prose">
+        <p>
+          Your custom code, content, and documentation belong to you, and your
+          website and accounts stay under your control. If a project relies on
+          third-party tools, we’ll tell you which ones and what their terms are
+          up front.
+        </p>
+        <p>
+          Fees, responsibilities, timing, and any ongoing support are agreed with
+          you before work begins. The first consultation is free.
+        </p>
+        <dl class="company-record">
+          <div>
+            <dt>Company</dt>
+            <dd>{site.legalName}</dd>
+          </div>
+          <div>
+            <dt>Where we work</dt>
+            <dd>Remotely, across the United States</dd>
+          </div>
+        </dl>
       </div>
     </div>
   </section>
-
-  <!-- SHEET 02 — SCOPE OF CARE -->
-  <section class="sh" id="scope-of-care" data-sheet="02" data-mark>
-    <header class="sh__head">
-      <h2 class="sh__title">{about.toolsHeading}</h2>
-      <p class="sh__no">Sheet 02 · {about.toolsLabel}</p>
-    </header>
-    <div class="drawing-overview">
-      <p class="sh__lede">{about.toolsLede}</p>
-      <ReviewDrawing variant="care" />
-    </div>
-
-    <div class="groups" style="margin-top:clamp(1.75rem,3vw,2.75rem)">
-      {
-        about.stack.map((group) => (
-          <div class="group">
-            <h3 class="group__name">{group.group}</h3>
-            <ul>
-              {group.items.map((item) => (
-                <li>{item}</li>
-              ))}
-            </ul>
-          </div>
-        ))
-      }
-    </div>
-  </section>
-
-  <section class="sh" id="sample-review" data-sheet="03" data-mark>
-    <header class="sh__head">
-      <h2 class="sh__title">{sampleReview.heading}</h2>
-      <p class="sh__no">Sample review</p>
-    </header>
-    <p class="sh__lede">{sampleReview.intro}</p>
-    <div class="groups sample-review">
-      {sampleReview.items.map((item) => (
-        <article class="group sample-finding">
-          <h3 class="group__name">{item.title}</h3>
-          <dl>
-            <dt>Finding</dt><dd>{item.finding}</dd>
-            <dt>Why it matters</dt><dd>{item.impact}</dd>
-            <dt>Next step</dt><dd>{item.action}</dd>
-          </dl>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <Cta
-    heading={ctas.about.heading}
-    headingAccent={ctas.about.accent}
-    body={ctas.about.body}
-    sheet="04"
-  />
+  <Cta />
 </BaseLayout>

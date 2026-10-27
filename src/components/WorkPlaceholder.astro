@@ -1,0 +1,51 @@
+---
+interface Props {
+  demo?: boolean;
+  compact?: boolean;
+  title?: string;
+}
+const {
+  demo = false,
+  compact = false,
+  title = demo ? "Product demos" : "Selected work",
+} = Astro.props;
+---
+
+<article
+  class:list={[
+    "work-placeholder",
+    { "work-placeholder--demo": demo, "work-placeholder--compact": compact },
+  ]}
+>
+  <div class="work-placeholder__visual" aria-hidden="true">
+    {demo ? (
+      <div class="demo-geometry">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    ) : (
+      <div class="project-geometry">
+        <div></div>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    )}
+    <span class="placeholder-label">
+      {demo ? "Demo coming soon" : "Project coming soon"}
+    </span>
+  </div>
+  <div class="work-placeholder__caption">
+    <div>
+      <h3>{title}</h3>
+      <p>
+        {demo
+          ? "Demos of the products we’re building will appear here."
+          : "Write-ups of our projects will appear here."}
+      </p>
+    </div>
+  </div>
+</article>

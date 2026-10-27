@@ -1,17 +1,17 @@
 # CodeView Solutions LLC
 
-Astro 5 static marketing website using the Redline design. Five pages share one layout, stylesheet, navigation, and search dialog. Native SVG illustrations keep the drafting style consistent without paid generation services or external image requests.
+A static Astro website for CodeView’s digital consulting and development work. The “Quiet momentum” design uses the supplied logo, self-hosted Manrope, light and dark themes, a live canvas background, and animated system diagrams.
 
 ## Run locally
 
-Use Node.js 22 LTS and npm.
+Use Node.js 22 and npm.
 
 ```bash
 npm ci
 npm run dev -- --host 0.0.0.0
 ```
 
-Open `http://localhost:4321`. From another device, use this machine's LAN address instead of localhost.
+Open `http://localhost:4321`.
 
 ```bash
 npm run build
@@ -20,37 +20,28 @@ npm run check:layout
 npm run preview
 ```
 
-The layout check serves `dist/` temporarily on port 4418 and uses Puppeteer to check five pages at eleven widths, accessibility, reduced motion, pricing, and enquiry context. Chrome must have its system libraries installed. CI installs the browser dependencies. No enquiries are submitted by these checks.
+The layout check serves the built site on port 4418. It checks all six pages at six widths in both themes, accessibility, navigation, search, consultation links, theme persistence, animated diagrams, the live background, pause/resume, reduced motion, and the no-JavaScript fallback. It sends no enquiries. Chrome’s system libraries are required; CI installs them. Add `-- --capture` to save review screenshots under `.impeccable/review/`.
 
-## Content and configuration
+## Content and design
 
-Edit `src/data/site.js` for shared copy, services, contact details, pricing, and metadata. `<VARIABLE>`, square-bracket placeholders, and empty values are unconfigured; they never become live email links or form actions.
+- `src/data/site.js`: company facts, contact channels, positioning, capabilities, process, FAQs, and metadata.
+- `src/pages/`: Home, Services, Work, About, Contact, and 404.
+- `src/layouts/BaseLayout.astro`: shared header, metadata, theme initialization, search, and footer.
+- `src/styles/global.css`: both palettes, typography, layout, components, and responsive rules.
+- `src/scripts/site.ts`: preferences, navigation, connection-diagram state, Motion orchestration, and the canvas field.
+- `src/components/`: shared diagram, background, placeholder, and layout components.
+- `PRODUCT.md`: confirmed offer and product constraints.
+- `DESIGN.md` and `.impeccable/design.json`: the implemented design system.
 
-- `site.email`: public email address. Currently `hello@codeviewsolutions.com`.
-- `site.reviewEndpoint`: working HTTPS endpoint accepting a native form POST. Currently `<VARIABLE>`. Alternatively set `PUBLIC_REVIEW_ENDPOINT` when building.
-- `site.phone`: currently the published contact route.
-- `site.links`: replace profile URLs or remove unused entries.
-- `plans`: the single source for monthly and annual prices. Plan and billing choices are passed to Contact.
-- `hero.headlineBefore`, `headlineMarked`, `headlineAfter`: editable headline with the marked phrase specified explicitly.
-- `sampleReview`: a labeled illustrative review, not a client case study.
+The primary action is a free consultation. Email and phone come from `site`. The Contact form posts natively to `site.contactEndpoint` (or the `PUBLIC_CONTACT_ENDPOINT` build variable), which must be HTTPS; until it is set, the form renders disabled and email is the working route. There are no subscriptions or published prices. Keep contact routes real and hide unconfigured profile links. Do not invent client names, results, testimonials, commercial terms, or company size. Work and product demos are explicitly labeled placeholders until publishable material is supplied.
 
-The homepage hero collects name, email, and an optional website address; the Contact page also collects company, project, message, and optional selected plan/billing period. Both use `ReviewForm.astro` and the same receiver. Until the custom form service is connected, both render as a preview with submission disabled and a direct email link. Set `site.reviewEndpoint` or `PUBLIC_REVIEW_ENDPOINT` to a working HTTPS endpoint accepting a native form POST to enable delivery. The endpoint must validate submissions, handle spam, and provide its own success/error response. Test actual delivery after configuring it. The site never claims a request was sent without a receiver.
+The theme follows the device until the visitor chooses a preference. Theme and motion choices persist locally when browser storage is available. Motion pauses when the field leaves the viewport or the document is hidden. A global pause control and reduced-motion mode preserve the complete content and a static composition. Core content and navigation work without JavaScript.
 
-The free first design, revision limits, monthly update allowance, hosting and third-party costs, and cancellation terms are agreed before work starts. Keep the published prices; do not invent quantities or contractual terms. One business day is an initial reply standard, not a resolution deadline. No fabricated client work, testimonials, metrics, or claims about company size.
+## Brand assets
 
-## Files
+The supplied logo is `first.jpg`; the site renders the traced SVG lockup and mark. `npm run logo` regenerates the derived assets. `npm run og` regenerates the 1200×630 social image from the logo, current headline, and Manrope font. These generated assets are committed separately from a site build.
 
-| Change | File |
-| --- | --- |
-| Shared content and offers | `src/data/site.js` |
-| Page structure | `src/pages/*.astro` |
-| Navigation, metadata, revision geometry | `src/layouts/BaseLayout.astro` |
-| Palette, spacing, responsive rules | `src/styles/global.css`, `src/styles/inner.css` |
-| Native illustrations | `src/components/ReviewDrawing.astro` |
-| Billing behaviour | `src/scripts/billing.js` |
-| Browser regression checks | `scripts/check-layout.mjs` |
-
-The supplied logo is `first.jpg`. `npm run logo` regenerates derived brand assets; keep the mark in `Logo.astro` and `public/favicon.svg` synchronized when replacing it. `npm run og` regenerates `public/og.png`.
+`npm run social` regenerates the 1080×1080 profile images (`public/brand/social-avatar-light.png` and `-dark.png`) from the traced mark.
 
 ## Deployment
 

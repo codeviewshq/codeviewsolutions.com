@@ -1,62 +1,37 @@
 ---
-/**
- * The closing sheet: an issue block. A drawing is issued for a purpose and
- * signed off, so the page ends the same way.
- */
-import { site, hero } from '../data/site.js';
-import { withBase } from '../utils/url.js';
-
+import { site } from "../data/site.js";
+import { withBase } from "../utils/url.js";
+import Icon from "./Icon.astro";
 interface Props {
-  heading: string;
-  headingAccent?: string;
-  body: string;
-  label?: string;
-  sheet?: string;
-  id?: string;
+  heading?: string;
+  body?: string;
 }
-
 const {
-  heading,
-  headingAccent = '',
-  body,
-  label = hero.primaryCta.label,
-  sheet = '06',
-  id = 'issue',
+  heading = "Tell us what’s getting in the way.",
+  body = "A short conversation is often enough to see a sensible next step. We’ll listen, ask a few questions, and give you an honest view.",
 } = Astro.props;
 ---
 
-<section class="sh issue" id={id} data-sheet={sheet} data-mark>
-  <p class="issue__seal">Issued<br />for<br />review</p>
-
-  <h2 class="issue__title">{heading} {headingAccent}</h2>
-  <p class="issue__body">{body}</p>
-
-  <div class="stamp-row">
-    <a class="stamp" href={withBase('/contact/')}>
-      {label}
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
-        <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="square"></path>
-      </svg>
-    </a>
-    <a class="stamp stamp--ghost" href={withBase('/services/')}>See the scope of work</a>
+<section class="closing section" data-reveal>
+  <div class="closing__arc" aria-hidden="true">
+    <span></span>
+    <span></span>
+    <span></span>
   </div>
-
-  <dl class="signoff">
-    <div>
-      <dt>Prepared by</dt>
-      <dd>{site.legalName}</dd>
+  <div class="container closing__content">
+    <h2>{heading}</h2>
+    <p>{body}</p>
+    <div class="actions">
+      <a class="button button--inverse" href={withBase("/contact/")}>
+        Let’s talk
+        <Icon />
+      </a>
+      <span class="closing__note">
+        The first consultation is free. No obligation.
+      </span>
     </div>
-    <div>
-      <dt>Reply within</dt>
-      <dd>One business day</dd>
-    </div>
-    <div>
-      <dt>Warranty</dt>
-      <dd>90 days after handover</dd>
-    </div>
-    <div>
-      <dt>Ownership</dt>
-      <dd>Yours on delivery</dd>
-    </div>
-  </dl>
+    <a class="closing__email" href={`mailto:${site.email}`}>
+      {site.email}
+    </a>
+  </div>
 </section>

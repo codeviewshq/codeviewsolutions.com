@@ -1,45 +1,32 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ReviewDrawing from '../components/ReviewDrawing.astro';
-import { withBase } from '../utils/url.js';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import { withBase } from "../utils/url.js";
 ---
 
 <BaseLayout
-  title="Page not found — CodeView Solutions LLC"
-  description="That page doesn't exist. Head back to the homepage or search the site."
+  title="Page not found — CodeView Solutions"
+  description="This page could not be found. Return to CodeView Solutions or search for what you need."
 >
-  <section class="void" data-mark>
-    <!-- A revision mark follows the highlighted heading. -->
-    <svg class="markup" data-markup aria-hidden="true">
-      <path class="mk-cloud" data-draw></path>
-    </svg>
-
-
-    <p class="void__stamp">404 · Page not found</p>
-
-    <h1 class="sh__h1">This page is <em data-cloud>missing</em>.</h1>
-
-    <p class="note" data-note data-tag="NEXT STEP">
-      Try the homepage or search for the service you need.
+  <section class="container empty-page">
+    <h1>
+      This page
+      <br />
+      isn’t here.
+    </h1>
+    <p>
+      It may have moved, or the address might be slightly off.
     </p>
-
-    <div class="drawing-overview">
-      <p class="sh__lede" style="margin-top:0">
-        The address may have changed, or the link may be incorrect. Use the links below to continue.
-      </p>
-      <ReviewDrawing variant="missing" />
-    </div>
-
-    <div class="stamp-row">
-      <a class="stamp" href={withBase('/')}>
+    <div class="actions">
+      <a class="button" href={withBase("/")}>
         Back to home
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
-          <path d="M4 12h15M13 6l6 6-6 6" stroke-linecap="square"></path>
-        </svg>
+        <Icon />
       </a>
-      <button class="stamp stamp--ghost" data-cmdk-open type="button">
-        Search the site <kbd data-mod>Ctrl</kbd><kbd>K</kbd>
+      <button class="text-button" type="button" data-cmdk-open>
+        <Icon name="search" />
+        Search the site
       </button>
     </div>
+    <p>404 · Page not found</p>
   </section>
 </BaseLayout>

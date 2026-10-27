@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FlowField from "../components/FlowField.astro";
+import WorkPlaceholder from "../components/WorkPlaceholder.astro";
+import Cta from "../components/Cta.astro";
+import { meta } from "../data/site.js";
+---
+
+<BaseLayout {...meta.work}>
+  <section class="page-intro">
+    <FlowField />
+    <div class="container">
+      <h1>
+        Our work is
+        <br />
+        <span>on its way.</span>
+      </h1>
+      <p class="lede">
+        Much of our past work is covered by confidentiality agreements, so we’re
+        preparing examples we can share openly.
+      </p>
+    </div>
+  </section>
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <header class="section-head">
+        <h2>Selected work</h2>
+        <p>
+          Project write-ups will appear here. For now these are placeholders,
+          not finished case studies.
+        </p>
+      </header>
+      <div class="work-page-grid">
+        <WorkPlaceholder title="Digital experiences" />
+        <WorkPlaceholder title="Custom solutions" />
+      </div>
+    </div>
+  </section>
+  <section class="section section--soft demo-section" id="product-demos">
+    <div class="container">
+      <header class="section-head">
+        <h2>Product demos</h2>
+        <p>
+          We’ll add working demos here as they’re ready. Until then, this space
+          is a placeholder.
+        </p>
+      </header>
+      <WorkPlaceholder demo title="Product demos" />
+    </div>
+  </section>
+  <Cta
+    heading="Have a project in mind?"
+    body="Tell us about it. We’re glad to talk through how we’d approach it, even if it’s still just an idea."
+  />
+</BaseLayout>

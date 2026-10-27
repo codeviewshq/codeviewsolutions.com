@@ -1,0 +1,15 @@
+<div class="flow-field" aria-hidden="true">
+  <svg
+    class="flow-field__fallback"
+    viewBox="0 0 1440 900"
+    preserveAspectRatio="xMidYMid slice"
+    fill="none"
+  >
+    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
+      <path
+        d={`M${750 + i * 18} -120 C${1390 + i * 5} 150 ${650 + i * 23} 380 ${1050 + i * 10} 620 S${1350 + i * 20} 950 1750 780`}
+      />
+    ))}
+  </svg>
+  <canvas data-flow-field></canvas>
+</div>

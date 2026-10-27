@@ -1,975 +1,1897 @@
-/* ==========================================================================
-   THE REDLINE
-   A technical specification sheet for the visitor's own website.
-
-   The ink list is declared here and never exceeded: drafting stock, the
-   logo's navy, one spot revision red, one graphite. Everything a spec sheet
-   does not have — shadows, corner radii, gradients, glass — is absent by
-   rule, not by omission. Every division on the page draws its thickness from
-   the ISO line-weight hierarchy below.
-   ========================================================================== */
-
-@import './inner.css';
-
+/* Hallmark · checked: 2026-10-27 · genre: modern-minimal (inferred)
+ * theme: custom, locked Quiet momentum · scope: six existing pages
+ * floor: 0 FAIL · reflex: 0 open, 1 waived · structural: 19 notes
+ * finish-review: subagent, ship · built: the project · redesign: polish · v2.0.0 */
+/* Hallmark · waive 38iii · one h1 span treatment per page introduction · The periwinkle second line belongs to the existing CodeView headline treatment; section headings retain one ink. */
+/* Hallmark · dismissed 25 · Short introductions and the nine-word footer blurb use 29–42ch caption measures, checked in the 1440px and375px captures. */
+/* Hallmark · answered F1 · The straight quote is Astro JavaScript in service.body.split, not rendered prose. */
+/* Hallmark · answered F15 · The locked page layouts use different column proportions and gaps for service rows, prose, diagrams, and contact methods. */
 :root {
-  /* --- The four inks. Declared, enumerated, never exceeded. --- */
-  --stock: #efeee7;
-  --ink: #000036;
-  --red: #d8261b;
-  --graphite: #4e4e47;
-
-  /* Working tints of the declared inks — not new colours. */
-  --stock-2: #e6e5dc;
-  --rule: #c6c5ba;
-  --rule-2: #d8d7cd;
-  --grid: rgba(78, 78, 71, 0.08);
-
-  /* One red at three levels, by the job it is doing:
-     --red      strokes, rules, and large type on stock
-     --red-ink  small red text on stock (clears AA)
-     --red-lit  the same red lifted to read on the ink field */
-  --red-ink: #c21b12;
-  --red-lit: #ff6a5e;
-
-  /* Reversed out on the one dark field: the stock, cooled. Tints of the
-     declared inks, named so nothing on the site hard-codes a literal. */
-  --on-ink: #b9b9c9;
-  --on-ink-dim: #9a9ab4;
-  --rule-on-ink: rgba(239, 238, 231, 0.3);
-
-  /* --- ISO line weights, translated to screen ---
-     0.13 hairline · 0.25 keyline · 0.5 division · 0.7 sheet edge */
-  --w-hair: 1px;
-  --w-key: 1px;
-  --w-div: 2px;
-  --w-edge: 3px;
-
-  /* --- The modular grid. Every element occupies whole cells. --- */
-  --pad: clamp(1rem, 2.6vw, 2.25rem);
-
-  /* The measure of the drawing. Rules, grounds, and the sheet edge still run
-     the full width of the window; the content sits in a column of its own so
-     the eye never has to travel the whole monitor to read a line. --gutter is
-     that column expressed as padding: the page gutter on a narrow screen, and
-     whatever it takes to centre the column on a wide one. */
-  --container: 78rem;
-  --gutter: max(var(--pad), (100% - var(--container)) / 2);
-  --cell: clamp(4.5rem, 7.2vw, 7.5rem);
-
-  --f-sheet: 'Archivo Variable', system-ui, sans-serif;
-  --f-tech: 'Martian Mono Variable', ui-monospace, monospace;
-
-  /* Drafting motion: things draw, rule, and stamp. Nothing eases softly. */
-  --draw: cubic-bezier(0.22, 0.61, 0.36, 1);
-  --snap: cubic-bezier(0.9, 0, 0.1, 1);
-
   color-scheme: light;
-  accent-color: var(--red);
+  --bg: #f7f8fc;
+  --surface: #ffffff;
+  --surface-soft: #eef0f8;
+  --surface-blue: #e4e8f8;
+  --ink: #000036;
+  --muted: #505b78;
+  --accent: #4655ad;
+  --accent-hover: #34418e;
+  --line: #d8ddec;
+  --line-strong: #8691b1;
+  --field-rgb: 70, 85, 173;
+  --field-bright-rgb: 119, 134, 213;
+  --button-bg: #000036;
+  --button-ink: #f7f8fc;
+  --closing: #0c1237;
+  --closing-ink: #f0f2ff;
+  --closing-muted: #bac3e0;
+  --focus: #4655ad;
+  --closing-line: #b7c5ff30;
+  --dialog-backdrop: #04081880;
+  --shadow: 0 20px 70px #15215a12;
+  --radius: 16px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --font: "Manrope Variable", sans-serif;
+  --display: clamp(3.25rem, 7.1vw, 6rem);
+  --headline: clamp(2.15rem, 4.1vw, 3.8rem);
+  --title: clamp(1.65rem, 2.5vw, 2.35rem);
+  --body: 1rem;
+  --small: 0.875rem;
+  --gutter: clamp(1.25rem, 4.5vw, 5rem);
+  --section: clamp(5rem, 9vw, 8.5rem);
 }
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #090d24;
+  --surface: #111831;
+  --surface-soft: #141d3a;
+  --surface-blue: #1a2549;
+  --ink: #eff2ff;
+  --muted: #b1bcd8;
+  --accent: #a7b5ff;
+  --accent-hover: #d1d9ff;
+  --line: #2b3657;
+  --line-strong: #7382ac;
+  --field-rgb: 120, 142, 237;
+  --field-bright-rgb: 172, 188, 255;
+  --button-bg: #dbe2ff;
+  --button-ink: #101632;
+  --closing: #131d40;
+  --closing-ink: #f0f2ff;
+  --closing-muted: #bac3e0;
+  --focus: #a7b5ff;
+  --shadow: 0 24px 80px #00000030;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --bg: #090d24;
+    --surface: #111831;
+    --surface-soft: #141d3a;
+    --surface-blue: #1a2549;
+    --ink: #eff2ff;
+    --muted: #b1bcd8;
+    --accent: #a7b5ff;
+    --accent-hover: #d1d9ff;
+    --line: #2b3657;
+    --line-strong: #7382ac;
+    --button-bg: #dbe2ff;
+    --button-ink: #101632;
+    --focus: #a7b5ff;
+  }
 }
 * {
-  margin: 0;
+  box-sizing: border-box;
 }
-
 html {
+  overflow-x: clip;
   scroll-behavior: smooth;
-  scrollbar-color: var(--ink) var(--stock-2);
+  scroll-padding-top: 110px;
+  scrollbar-color: var(--line-strong) var(--bg);
 }
-
 body {
-  background: var(--stock);
+  overflow-x: clip;
+  margin: 0;
+  background: var(--bg);
   color: var(--ink);
-  font-family: var(--f-sheet);
-  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
-  line-height: 1.55;
-  font-variant-numeric: tabular-nums;
+  font-family: var(--font);
+  font-size: var(--body);
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-
-  /* The stock itself: 8mm field grid, the way drafting paper is ruled. */
-  background-image:
-    repeating-linear-gradient(to right, var(--grid) 0 1px, transparent 1px 44px),
-    repeating-linear-gradient(to bottom, var(--grid) 0 1px, transparent 1px 44px);
 }
-
-img,
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 5px;
+}
+input,
+textarea {
+  caret-color: var(--accent);
+}
 svg {
   display: block;
-  max-width: 100%;
 }
-
-/* Layout modes below set `display`, which would otherwise beat the attribute. */
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+h1,
+h2,
+h3,
+h4,
+p,
+figure {
+  margin: 0;
+}
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.14;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+h1 {
+  font-size: var(--display);
+}
+h2 {
+  font-size: var(--headline);
+}
+h3 {
+  font-size: var(--title);
+}
+p {
+  text-wrap: pretty;
+}
+button {
+  border: 0;
+}
 [hidden] {
   display: none !important;
 }
-
-/* --- Browser surfaces belong to the design system too. --- */
-::selection {
-  background: var(--red-ink);
-  color: var(--stock);
+.container {
+  width: min(100% - var(--gutter) * 2, 1320px);
+  margin-inline: auto;
 }
-:focus-visible {
-  outline: var(--w-div) solid var(--red);
-  outline-offset: 3px;
+.section {
+  padding-block: var(--section);
 }
-::-webkit-scrollbar {
-  width: 12px;
+.section--soft {
+  color: var(--ink);
+  background: var(--surface-soft);
 }
-::-webkit-scrollbar-track {
-  background: var(--stock-2);
-  border-left: var(--w-hair) solid var(--rule);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--ink);
-}
-
-.skip {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 90;
-  transform: translateY(-120%);
-  background: var(--ink);
-  color: var(--stock);
-  padding: 0.7rem 1.1rem;
-  font: 600 0.75rem/1 var(--f-tech);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-.skip:focus-visible {
-  transform: none;
-}
-
-/* --------------------------------------------------------------------------
-   THE SHEET — edge and registration marks
-   -------------------------------------------------------------------------- */
-.sheet {
-  position: relative;
-  min-height: 100vh;
-  border: var(--w-edge) solid var(--ink);
-  margin: 0;
-  /* A short page (the 404) must still put the foot at the sheet's bottom
-     margin, the way a drawing pins its title block to the sheet edge, rather
-     than leaving it afloat mid-sheet. */
+.section-head {
   display: flex;
-  flex-direction: column;
-}
-
-/* Corner registration marks, drawn into the sheet's own margin. */
-.sheet::before,
-.sheet::after {
-  content: '';
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  pointer-events: none;
-}
-.sheet::before {
-  top: 10px;
-  right: 10px;
-  border-top: var(--w-key) solid var(--red);
-  border-right: var(--w-key) solid var(--red);
-}
-.sheet::after {
-  bottom: 10px;
-  left: 10px;
-  border-bottom: var(--w-key) solid var(--red);
-  border-left: var(--w-key) solid var(--red);
-}
-
-.body {
-  min-width: 0;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.body > main {
-  flex: 1 0 auto;
-}
-
-/* --------------------------------------------------------------------------
-   SHEETS
-   -------------------------------------------------------------------------- */
-.sh {
-  position: relative;
-  border-bottom: var(--w-div) solid var(--ink);
-  padding: clamp(2.75rem, 5.5vw, 5rem) var(--gutter);
-}
-.sh--tight {
-  padding-block: clamp(2rem, 3.6vw, 3.25rem);
-}
-
-/* The section head is a ruled sheet header, not an eyebrow above a heading:
-   the label is the sheet's own name in the header band, set as a field. */
-.sh__head {
-  display: flex;
-  align-items: baseline;
+  align-items: end;
   justify-content: space-between;
-  gap: 1rem;
-  border-bottom: var(--w-key) solid var(--ink);
-  padding-bottom: 0.5rem;
-  margin-bottom: clamp(1.75rem, 3vw, 2.75rem);
-  flex-wrap: wrap;
+  gap: 3rem;
+  margin-bottom: 3.5rem;
 }
-.sh__no {
-  font: 600 0.75rem/1.3 var(--f-tech);
-  letter-spacing: 0.02em;
-  color: var(--graphite);
+.section-head h2 {
+  max-width: 18ch;
 }
-.sh__title {
-  font-size: clamp(1.75rem, 3.4vw, 3rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.02;
-  text-wrap: balance;
-  flex: 1 1 22ch;
+.section-head p {
+  color: var(--muted);
+  max-width: 42ch;
 }
-.sh__lede {
+.lede {
+  font-size: clamp(1.08rem, 1.1vw + 0.5rem, 1.3rem);
+  color: var(--muted);
+  line-height: 1.75;
   max-width: 62ch;
-  color: var(--graphite);
-  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
-  margin-top: 1.1rem;
 }
-
-/* --------------------------------------------------------------------------
-   SHEET 01 — THE TITLE SHEET
-   -------------------------------------------------------------------------- */
-.title-sheet {
-  position: relative;
-  min-height: min(92vh, 54rem);
+.text-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid var(--line-strong);
+  padding: 0.4rem 0;
+}
+.text-link svg {
+  width: 19px;
+  height: 19px;
+  transition: transform 0.3s var(--ease);
+}
+.text-link:hover {
+  color: var(--accent);
+}
+.text-link:hover svg {
+  transform: translateX(4px);
+}
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem 2rem;
+}
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.25rem;
+  min-height: 48px;
+  line-height: 1.3;
+  padding: 0.85rem 1.5rem;
+  border-radius: 12px;
+  background: var(--button-bg);
+  color: var(--button-ink);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition:
+    background 0.25s,
+    transform 0.35s var(--ease);
+}
+.button svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s var(--ease);
+}
+.button:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+.button:hover svg {
+  transform: translateX(4px);
+}
+.button:active {
+  transform: translateY(1px);
+}
+.button--inverse {
+  background: var(--closing-ink);
+  color: var(--closing);
+}
+.button--inverse:hover {
+  background: var(--closing-muted);
+  color: var(--closing);
+}
+.text-button {
+  min-height: 44px;
+  padding: 0.4rem 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--small);
+  color: var(--muted);
+  background: none;
+}
+.text-button svg {
+  width: 16px;
+  height: 16px;
+}
+.icon-button {
+  width: 44px;
+  height: 44px;
   display: grid;
-  /* The markup layer is absolute, so the sheet has two rows in flow: the field
-     takes the slack and the fact strip keeps its natural height. Three tracks
-     handed the slack to the strip instead, leaving each cell half empty. */
-  grid-template-rows: 1fr auto;
-  padding: 0;
-  overflow: hidden;
+  place-items: center;
+  background: transparent;
+  color: var(--ink);
+  border-radius: 50%;
+  transition: background 0.2s;
 }
-
-/* --------------------------------------------------------------------------
-   MASTHEAD — one row across the full sheet: the mark and name together on the
-   left, the routes on the right. The drawing keeps its ruled edge, but the
-   left margin is gone; this row carries the identity instead.
-   -------------------------------------------------------------------------- */
-.mast {
+.icon-button:hover {
+  background: var(--surface-blue);
+}
+.icon-button svg {
+  width: 20px;
+  height: 20px;
+}
+.skip-link {
+  position: fixed;
+  left: 20px;
+  top: -100px;
+  z-index: 100;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+}
+.skip-link:focus {
+  top: 12px;
+}
+.header {
   position: sticky;
   top: 0;
   z-index: 30;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.header__inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem clamp(1rem, 3vw, 2.5rem);
-  flex-wrap: wrap;
-  padding: 0.85rem var(--gutter);
-  background: var(--stock);
-  border-bottom: var(--w-key) solid var(--ink);
+  height: 88px;
+  gap: 2rem;
 }
-.mast__id {
+.brand {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--ink);
+}
+.brand > span {
   display: block;
-  flex: 0 0 auto;
-  text-decoration: none;
-  /* The lockup is the only raster in the interface; keep its edges crisp
-     rather than letting the browser soften them on the way down. */
-  outline-offset: 6px;
 }
-.mast__logo {
-  height: 2rem;
-  width: auto;
-  max-width: 100%;
+.brand svg {
+  width: 166px;
+  height: auto;
 }
-.mast__nav {
+.brand path {
+  fill: currentColor;
+}
+.desktop-nav {
+  display: flex;
+  gap: clamp(1.5rem, 3vw, 3rem);
   margin-left: auto;
+  font-size: 0.9375rem;
+}
+.desktop-nav a {
+  text-decoration: none;
+  position: relative;
+  padding-block: 10px;
+}
+.desktop-nav a::after {
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--accent);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--ease);
+}
+.desktop-nav a:hover::after,
+.desktop-nav a[aria-current]::after {
+  transform: scaleX(1);
+}
+.header__tools {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+.header__consult {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 0.35rem clamp(0.85rem, 2vw, 1.75rem);
-  font: 500 0.6875rem/1 var(--f-tech);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--graphite);
-}
-.mast__nav a {
-  color: inherit;
+  gap: 0.75rem;
   text-decoration: none;
-  padding: 0.5rem 0;
-  border-bottom: var(--w-key) solid transparent;
-}
-.mast__nav a[aria-current='page'] {
-  color: var(--ink);
-  border-bottom-color: var(--red);
-}
-.mast__nav a:hover,
-.mast__nav a:focus-visible {
-  color: var(--ink);
-  border-bottom-color: var(--ink);
-}
-
-
-.ts__field {
-  position: relative;
-  display: grid;
-  align-content: center;
-  gap: clamp(1.4rem, 2.4vw, 2.1rem);
-  padding: clamp(2.5rem, 5vw, 4.5rem) var(--gutter);
-  z-index: 2;
-}
-
-.ts__title {
-  font-size: clamp(2.9rem, 8.2vw, 7.25rem);
-  font-weight: 800;
-  line-height: 0.92;
-  letter-spacing: -0.045em;
-  max-width: 17ch;
-  text-wrap: balance;
-}
-.ts__title em {
-  font-style: normal;
-  position: relative;
+  font-size: 0.875rem;
+  margin-left: 0.6rem;
+  border-left: 1px solid var(--line);
+  padding-left: 1.3rem;
   white-space: nowrap;
 }
-
-.ts__sub {
-  max-width: 46ch;
-  font-size: clamp(1.0625rem, 1rem + 0.55vw, 1.375rem);
-  color: var(--graphite);
-  line-height: 1.5;
+.header__consult svg {
+  width: 17px;
+  height: 17px;
 }
-
-/* The free-review assurance is a revision note, drawn in the margin and tied
-   back to the headline by a leader line. */
-.note {
+.theme-sun,
+.menu-toggle,
+.mobile-nav,
+.menu-close,
+.motion-play {
+  display: none;
+}
+[data-theme="dark"] .theme-sun {
+  display: block;
+}
+[data-theme="dark"] .theme-moon {
+  display: none;
+}
+[data-motion="paused"] .motion-pause {
+  display: none;
+}
+[data-motion="paused"] .motion-play {
+  display: block;
+}
+.hero {
   position: relative;
-  align-self: start;
-  justify-self: start;
-  max-width: 34ch;
-  border: var(--w-key) solid var(--red);
-  padding: 0.7rem 0.9rem;
-  color: var(--red-ink);
-  font: 500 0.8125rem/1.45 var(--f-tech);
-  background: var(--stock);
+  isolation: isolate;
+  overflow: clip;
+  min-height: min(calc(100svh - 89px), 811px);
+  padding-top: clamp(4rem, 6.5vw, 7rem);
+  padding-bottom: 15rem;
+  display: flex;
+  flex-direction: column;
 }
-.note::before {
-  content: attr(data-tag);
+.hero__content {
+  position: relative;
+  z-index: 2;
+}
+.hero__copy {
+  max-width: 780px;
+}
+.hero h1 {
+  max-width: 13ch;
+  font-weight: 500;
+  line-height: 1.06;
+}
+h1 span {
+  color: var(--accent);
+}
+.hero__copy > p {
+  margin-top: 1.7rem;
+  max-width: 48ch;
+  font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+  color: var(--muted);
+  line-height: 1.8;
+}
+.hero .actions {
+  margin-top: 2rem;
+}
+.hero__detail {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  margin-top: 1rem;
+}
+.hero__bottom {
   position: absolute;
-  top: calc(var(--w-key) * -1);
-  left: -1px;
-  transform: translateY(-100%);
-  background: var(--red-ink);
-  color: var(--stock);
-  font: 700 0.6875rem/1 var(--f-tech);
-  letter-spacing: 0.1em;
-  padding: 0.3rem 0.45rem;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  padding-bottom: 1.5rem;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
 }
-
-/* --------------------------------------------------------------------------
-   THE REDLINE OVERLAY — drawn markup, not decoration
-   -------------------------------------------------------------------------- */
-/* The markup draws BEHIND the lettering. A marker on a real print sits on top,
-   but on screen a cloud crossing a tightly-led headline reads as scribble and
-   costs legibility on the most important element on the page. Behind the
-   glyphs it still reads as a mark on the sheet and never obscures a word. */
-.markup {
+.hero__disciplines {
+  font-size: 0.875rem;
+  color: var(--muted);
+  max-width: 28ch;
+}
+.hero__journey {
+  width: min(60%, 820px);
+  position: absolute;
+  right: 0;
+  top: calc(100% - 7rem);
+  z-index: 2;
+}
+.flow-field {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+}
+.flow-field canvas,
+.flow-field__fallback {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+.flow-field__fallback {
+  stroke: var(--accent);
+  stroke-width: 1;
+  opacity: 0.17;
+}
+.flow-field.is-ready .flow-field__fallback {
+  opacity: 0;
+}
+.hero::after {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(90deg, var(--bg) 6%, transparent 74%);
+  content: "";
+  pointer-events: none;
+}
+.journey {
+  --journey-gap: clamp(1.5rem, 2.5vw, 3rem);
+  --journey-symbol: 54px;
+  --journey-inset: 1.3rem;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: var(--journey-gap);
+  padding-top: 2rem;
+}
+.journey__node {
+  position: relative;
+  padding: var(--journey-inset) 0;
+  min-width: 0;
+}
+.journey__symbol {
+  width: var(--journey-symbol);
+  height: var(--journey-symbol);
+  color: var(--accent);
+  margin-bottom: 1rem;
+  background: var(--bg);
+  border-radius: 50%;
+}
+.journey__symbol svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  stroke-width: 1.3;
+}
+.journey__title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.journey__body {
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  margin-top: 0.5rem;
+}
+.journey__connector {
+  position: absolute;
+  left: calc(var(--journey-symbol) + 12px);
+  width: calc(100% + var(--journey-gap) - var(--journey-symbol) - 24px);
+  top: calc(var(--journey-inset) + var(--journey-symbol) / 2);
+  height: 1px;
+  background: var(--line);
+}
+.journey__connector::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  opacity: 0.5;
+  transform-origin: left center;
+}
+.journey[data-journey-state="playing"] .journey__connector::after {
+  animation: journey-connect 0.75s var(--ease) both;
+}
+.journey[data-journey-state="playing"] .journey__node:nth-child(2) .journey__connector::after {
+  animation-delay: 0.65s;
+}
+.journey figcaption {
+  grid-column: 1/-1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+.journey figcaption svg {
+  width: 17px;
+  height: 17px;
+}
+.intro-section {
+  border-top: 1px solid var(--line);
+}
+.intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+}
+.intro-grid h2 {
+  max-width: 15ch;
+}
+.intro-grid .prose {
+  color: var(--muted);
+  font-size: 1.1rem;
+  max-width: 55ch;
+}
+.prose p + p {
+  margin-top: 1.3rem;
+}
+.prose .text-link {
+  margin-top: 1.8rem;
+}
+.service-list {
+  border-top: 1px solid var(--line);
+}
+.service-row {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 30px;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 2.7rem 0;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+.service-row h3 {
+  font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+}
+.service-row__discipline {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  margin-top: 0.6rem;
+}
+.service-row__body {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  max-width: 48ch;
+}
+.service-row > svg {
+  width: 24px;
+  height: 24px;
+  color: var(--accent);
+  transition: transform 0.35s var(--ease);
+}
+.service-row:hover h3 {
+  color: var(--accent);
+}
+.service-row:hover > svg {
+  transform: translate(4px, -4px);
+}
+.service-row:hover .service-row__body {
+  color: var(--ink);
+}
+.approach {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 5rem;
+  align-items: start;
+}
+.approach__intro {
+  position: sticky;
+  top: 150px;
+}
+.approach__intro h2 {
+  max-width: 15ch;
+}
+.approach__intro > p {
+  color: var(--muted);
+  margin-top: 1.6rem;
+  max-width: 39ch;
+}
+.process-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: process;
+}
+.process-list li {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 1.5rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--line);
+  counter-increment: process;
+}
+.process-list li:first-child {
+  padding-top: 0;
+}
+.process-list li::before {
+  content: "0" counter(process);
+  color: var(--accent);
+  font-size: 0.8125rem;
+  padding-top: 0.25rem;
+  font-variant-numeric: tabular-nums;
+}
+.process-list h3 {
+  font-size: 1.35rem;
+  letter-spacing: -0.025em;
+}
+.process-list p {
+  margin-top: 0.8rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  max-width: 50ch;
+}
+.connections {
+  padding: 2.5rem;
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+}
+.connections__controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.connections__controls button {
+  min-height: 44px;
+  background: transparent;
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.connections__controls button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--bg);
+}
+.connections__controls button:hover:not([aria-pressed="true"]) {
+  background: var(--surface-blue);
+  color: var(--ink);
+}
+.connections__map {
+  position: relative;
+  aspect-ratio: 800/420;
+  max-width: 950px;
+  margin: 1.5rem auto;
+}
+.connections__paths {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
-  /* Above the lettering, the way a marker is above the print. This was tried
-     underneath, to guarantee a mark could never sit on a word — but the
-     display face is set at 0.92 leading, so its lines overlap and a cloud
-     hugging one of them has its top and bottom edges buried in the ink of the
-     lines either side. It read as a stray arc in whatever corner happened to
-     be empty. A hairline over the type is legible and is what redlining
-     actually looks like; the leader is still routed around every word. */
-  z-index: 4;
-  overflow: visible;
+  stroke: var(--line-strong);
+  stroke-width: 1;
 }
-.markup [data-draw] {
-  stroke: var(--red);
-  fill: none;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 900ms var(--draw);
-}
-[data-mark].is-drawn [data-draw] {
-  stroke-dashoffset: 0 !important;
-}
-/* The hero's markup: cloud, leader, terminator dot. The selectors carry the
-   [data-draw] attribute so they outrank the base stroke rule above — without
-   it the shared 900ms shorthand wins and the whole mark draws at once instead
-   of cloud, then leader, then dot. */
-.markup [data-draw].mk-cloud {
-  stroke-width: 2;
-  transition-duration: 1200ms;
-  transition-delay: 340ms;
-}
-.markup [data-draw].mk-leader {
-  stroke-width: 1.5;
-  transition-duration: 700ms;
-  transition-delay: 1250ms;
-}
-.mk-dot {
-  fill: var(--red);
-  stroke: none;
+.connection-signal {
   opacity: 0;
-  transition: opacity 160ms linear 1900ms;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-dasharray: 100;
+  transition: opacity 0.4s;
 }
-[data-mark].is-drawn .mk-dot {
+[data-active="experience"] .connection-signal--experience,
+[data-active="workflow"] .connection-signal--workflow,
+[data-active="systems"] .connection-signal--systems {
   opacity: 1;
 }
-/* The cloud marks a phrase; it does not change its voice. One face, one
-   posture, on every sheet. */
-.ts__title em,
-[data-cloud] {
-  font-style: normal;
+[data-connections-state="playing"][data-active="experience"] .connection-signal--experience,
+[data-connections-state="playing"][data-active="workflow"] .connection-signal--workflow,
+[data-connections-state="playing"][data-active="systems"] .connection-signal--systems {
+  animation: connection-trace 1.2s var(--ease) both;
 }
-
-/* --------------------------------------------------------------------------
-   STAMPS (the actions)
-   -------------------------------------------------------------------------- */
-.stamp-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  border: var(--w-div) solid var(--ink);
-  width: fit-content;
-  max-width: 100%;
-}
-.stamp {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.95rem 1.5rem;
-  font: 700 0.8125rem/1 var(--f-tech);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-decoration: none;
-  border: 0;
-  background: var(--ink);
-  color: var(--stock);
-  transition: background 80ms var(--snap), color 80ms var(--snap);
-}
-.stamp:hover,
-.stamp:focus-visible {
-  background: var(--red-ink);
-  color: var(--stock);
-}
-.stamp--ghost {
-  background: transparent;
-  color: var(--ink);
-  border-left: var(--w-div) solid var(--ink);
-}
-.stamp--ghost:hover,
-.stamp--ghost:focus-visible {
-  background: var(--ink);
-  color: var(--stock);
-}
-.stamp svg {
-  width: 13px;
-  height: 13px;
-  flex: none;
-}
-
-/* --------------------------------------------------------------------------
-   TITLE BLOCK — the ruled table every drawing signs off in
-   -------------------------------------------------------------------------- */
-.tblock {
-  margin-inline: var(--gutter);
-  border: var(--w-key) solid var(--ink);
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
-  background: var(--ink);
-  gap: var(--w-hair);
-  z-index: 2;
-}
-.tblock__cell {
-  background: var(--stock);
-  padding: 0.85rem clamp(0.9rem, 1.6vw, 1.4rem);
-  display: grid;
-  gap: 0.3rem;
-  align-content: start;
-}
-.tblock__key {
-  font: 500 0.6875rem/1 var(--f-tech);
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-  color: var(--graphite);
-}
-.tblock__val {
-  font-size: 0.9375rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-
-/* --------------------------------------------------------------------------
-   SHEET 02 — SCOPE OF WORK (numbered clauses)
-   -------------------------------------------------------------------------- */
-.clauses {
-  border: var(--w-key) solid var(--ink);
-}
-.clause {
-  /* The heading's own first-line box. The clause number and the arrow are
-     given the same box so their optical centres line up with the heading at
-     every step of its clamp, rather than at the one width a nudge was tuned
-     for. */
-  --clause-lead: calc(clamp(1.5rem, 2.6vw, 2.35rem) * 1.04);
-
-  display: grid;
-  /* Leave room inside the frame for the figure and the navigation cue. */
-  grid-template-columns: 2.75rem minmax(0, 1.35fr) minmax(0, 1fr) 1.5rem;
-  gap: clamp(0.85rem, 1.8vw, 1.5rem);
-  align-items: start;
-  padding: clamp(1.6rem, 2.8vw, 2.4rem) clamp(1rem, 2vw, 1.75rem);
-  border-bottom: var(--w-key) solid var(--ink);
-  text-decoration: none;
-  color: inherit;
-  position: relative;
-  transition: background 90ms var(--snap);
-}
-.clause:last-child {
-  border-bottom: 0;
-}
-.clause::after {
-  content: '';
+.connections__center {
   position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: var(--w-div);
-  background: var(--red);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 160ms var(--snap);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 132px;
+  height: 132px;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  font-size: 0.75rem;
 }
-.clause:hover,
-.clause:focus-visible {
-  background: var(--stock-2);
+.connections__center svg {
+  width: 45px;
+  height: auto;
+  color: var(--accent);
 }
-.clause:hover::after,
-.clause:focus-visible::after {
-  transform: scaleX(1);
+.connection-point {
+  position: absolute;
+  width: 28%;
+  text-align: center;
+  background: var(--surface-soft);
+  padding: 0.75rem 0.5rem;
 }
-.clause__no {
-  font: 500 0.8125rem/1.4 var(--f-tech);
-  line-height: var(--clause-lead);
-  color: var(--red-ink);
+.connection-point--experience {
+  top: 10%;
+  left: 4%;
 }
-.clause__name {
+.connection-point--workflow {
+  bottom: 10%;
+  left: 4%;
+}
+.connection-point--product {
+  top: 10%;
+  right: 4%;
+}
+.connection-point--systems {
+  bottom: 10%;
+  right: 4%;
+}
+.connection-point__dot {
   display: block;
-  font-size: clamp(1.5rem, 2.6vw, 2.35rem);
-  font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1.04;
-  margin-bottom: 0.6rem;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin: 0 auto 0.5rem;
 }
-.clause__desc {
-  display: block;
-  color: var(--graphite);
-}
-/* A clause carries its parameters beside it, the way a spec entry does. */
-.clause__params {
-  display: grid;
-  gap: 0;
-  align-self: start;
-  /* The capping rule is this column's datum, and it sits on the same line the
-     figure, the heading and the arrow start from. A margin here pushed the
-     whole column 8px out of step with the other three. */
-  border-top: var(--w-hair) solid var(--rule);
-}
-.clause__param {
-  display: grid;
-  grid-template-columns: minmax(0, 6.5rem) minmax(0, 1fr);
-  gap: 0.2rem 0.9rem;
-  align-items: baseline;
-  padding: 0.45rem 0;
-  border-bottom: var(--w-hair) solid var(--rule);
-  font: 500 0.6875rem/1.35 var(--f-tech);
-  letter-spacing: 0.02em;
-}
-.clause__param dt {
-  color: var(--graphite);
-  font-size: 0.6875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-.clause__param dd {
-  color: var(--ink);
-}
-
-/* The sequence is dimensioned as one run, ticked at every step boundary. */
-.dimstring {
-  display: grid;
-  gap: 0.4rem;
-  margin-top: clamp(1.75rem, 3vw, 2.75rem);
-}
-.dimstring svg {
-  width: 100%;
-  height: 20px;
-  overflow: visible;
-}
-.dimstring path {
-  stroke: var(--red);
-  fill: none;
-  stroke-width: 1.25;
-  vector-effect: non-scaling-stroke;
-}
-.dimstring span {
-  font: 600 0.6875rem/1 var(--f-tech);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--red-ink);
-}
-
-/* Sign-off fields share the closing section’s four-column grid. */
-.issue {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  column-gap: var(--w-hair);
-}
-.issue > * {
-  grid-column: 1 / -1;
-}
-.issue .stamp-row {
-  grid-column: 1 / 3;
-  justify-self: start;
-  align-self: end;
-}
-.signoff {
-  grid-column: 3 / -1;
-  align-self: end;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--w-hair);
-  margin-top: clamp(1.75rem, 3vw, 2.5rem);
-  background: var(--rule-on-ink);
-  border: var(--w-key) solid var(--rule-on-ink);
-
-}
-.signoff > div {
-  background: var(--ink);
-  padding: 0.7rem 0.9rem;
-  display: grid;
-  gap: 0.28rem;
-}
-.signoff dt {
-  font: 500 0.6875rem/1 var(--f-tech);
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--on-ink-dim);
-}
-.signoff dd {
-  font-size: 0.8125rem;
+.connection-point p {
   font-weight: 600;
-  color: var(--stock);
+  font-size: 0.9375rem;
 }
-
-.clause__go {
-  align-self: start;
-  justify-self: end;
-  width: 24px;
-  /* Tall as the heading's first line; the glyph centres itself inside that box
-     (preserveAspectRatio) so it sits level with the heading, not with the row. */
-  height: var(--clause-lead);
-  color: var(--ink);
-  transition: transform 160ms var(--snap), color 160ms var(--snap);
+.connection-point > span:last-child {
+  font-size: 0.75rem;
+  color: var(--muted);
 }
-.clause:hover .clause__go,
-.clause:focus-visible .clause__go {
-  transform: translateX(5px);
-  color: var(--red);
+.connections__caption {
+  text-align: center;
+  font-size: 0.9375rem;
+  color: var(--muted);
+  min-height: 1.7em;
+  max-width: 60ch;
+  margin-inline: auto;
 }
-
-/* --------------------------------------------------------------------------
-   SHEET 03 — SEQUENCE (dimensioned steps)
-   -------------------------------------------------------------------------- */
-.seq {
-  padding: 0;
-  list-style: none;
+.work-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  background: var(--ink);
-  gap: var(--w-key);
-  border: var(--w-key) solid var(--ink);
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 2rem;
 }
-.drawing-overview {
-  margin-top: 1.1rem;
+.work-placeholder {
+  min-width: 0;
+}
+.work-placeholder__visual {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  min-height: 350px;
+  border-radius: var(--radius);
+  background: var(--surface-soft);
+  padding: 3rem;
+}
+.work-placeholder--demo .work-placeholder__visual {
+  background: var(--surface-blue);
+}
+.placeholder-label {
+  position: absolute;
+  left: 1.5rem;
+  bottom: 1.3rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.work-placeholder__caption {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.4rem;
+}
+.work-placeholder__caption h3 {
+  font-size: 1.35rem;
+}
+.work-placeholder__caption p {
+  font-size: 0.875rem;
+  color: var(--muted);
+  max-width: 46ch;
+  margin-top: 0.6rem;
+}
+.work-placeholder__caption > svg {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 0.25rem;
+  color: var(--muted);
+}
+.project-geometry {
+  width: 72%;
+  max-width: 290px;
+  aspect-ratio: 1.4;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  transform: rotate(-6deg);
+  padding: 1rem;
+  position: relative;
+}
+.project-geometry > div {
+  height: 25%;
+  border-bottom: 1px solid var(--line-strong);
+  margin-bottom: 1rem;
+}
+.project-geometry span {
+  height: 10%;
+  width: 70%;
+  display: block;
+  background: var(--line);
+  margin: 0.5rem 0;
+  border-radius: 3px;
+}
+.project-geometry span:last-child {
+  width: 45%;
+}
+.project-geometry::after {
+  content: "";
+  position: absolute;
+  inset: 25% -18% -16% 35%;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  border-radius: 12px;
+  z-index: -1;
+}
+.demo-geometry {
+  position: relative;
+  width: 200px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  transform: rotate(25deg);
+}
+.demo-geometry span {
+  display: block;
+  width: 25px;
+  height: 85%;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+}
+.demo-geometry span:nth-child(2),
+.demo-geometry span:nth-child(4) {
+  height: 65%;
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+.demo-geometry span:nth-child(3) {
+  height: 100%;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+.faq {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 6rem;
+}
+.faq h2 {
+  max-width: 13ch;
+}
+.faq details {
+  border-bottom: 1px solid var(--line);
+  padding: 1.4rem 0;
+}
+.faq details:first-child {
+  padding-top: 0;
+}
+.faq summary {
+  font-size: 1.075rem;
+  font-weight: 500;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+.faq summary svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  transition: transform 0.25s;
+}
+.faq details[open] summary svg {
+  transform: rotate(45deg);
+}
+.faq details p {
+  padding-top: 1rem;
+  font-size: 0.9375rem;
+  color: var(--muted);
+  max-width: 65ch;
+}
+.closing {
+  --focus: var(--closing-ink);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--closing);
+  color: var(--closing-ink);
+}
+.closing__content {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
-  gap: clamp(1.5rem, 4vw, 3rem);
-  align-items: center;
 }
-.drawing-overview .sh__lede {
-  margin-top: 0;
+.closing h2 {
+  max-width: 17ch;
 }
-.step {
-  background: var(--stock);
-  padding: clamp(1.25rem, 2.2vw, 1.9rem);
-  display: grid;
-  grid-template-columns: 2.75rem minmax(0, 1fr);
-  gap: 0.35rem 0.9rem;
-  align-content: start;
-  position: relative;
+.closing p {
+  max-width: 46ch;
+  color: var(--closing-muted);
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
 }
-/* Whole cells: side-by-side steps share one cell height. In a single column
-   the equalised height is just dead stock under short copy, so it only
-   applies once the sequence has columns to square up. */
-@media (min-width: 34rem) {
-  .step {
-    min-height: 15rem;
-  }
+.closing .actions {
+  margin-top: 2.25rem;
 }
-/* The figure sits in the cell's own margin, the way a clause number does. */
-.step__no {
-  grid-row: 1 / span 2;
-  font: 500 0.8125rem/1.35 var(--f-tech);
-  color: var(--red-ink);
-  white-space: nowrap;
+.closing__note {
+  color: var(--closing-muted);
+  font-size: 0.8125rem;
 }
-.step__title {
-  font-size: 1.1875rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.18;
-}
-.step__body {
-  color: var(--graphite);
+.closing__email {
+  display: inline-block;
+  color: var(--closing-muted);
+  margin-top: 3rem;
   font-size: 0.9375rem;
-  line-height: 1.5;
 }
-
-/* --------------------------------------------------------------------------
-   SHEET 04 — NOTES (how drawing notes are actually set)
-   -------------------------------------------------------------------------- */
-.notes {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-rows: repeat(3, auto);
-  grid-auto-flow: column;
-  column-gap: clamp(1.75rem, 4vw, 4rem);
+.closing__arc {
+  position: absolute;
+  right: -16%;
+  top: -40%;
+  width: 75%;
+  height: 170%;
+  transform: rotate(-26deg);
 }
-.note-item {
-  padding: 1.1rem 0;
-  border-bottom: var(--w-hair) solid var(--rule);
-  display: grid;
-  grid-template-columns: 2.75rem minmax(0, 1fr);
-  gap: 0.9rem;
-}
-.note-item__no {
-  font: 500 0.75rem/1.6 var(--f-tech);
-  color: var(--red-ink);
-}
-.note-item__q {
-  font-size: 1.0625rem;
-  font-weight: 700;
-  letter-spacing: -0.015em;
-  margin-bottom: 0.35rem;
-}
-.note-item__a {
-  color: var(--graphite);
-  font-size: 0.9375rem;
-  line-height: 1.55;
-  max-width: 72ch;
-}
-
-/* --------------------------------------------------------------------------
-   SHEET 05 — ISSUE (the close)
-   -------------------------------------------------------------------------- */
-.issue {
-  background: var(--ink);
-  color: var(--stock);
-  padding: clamp(3rem, 6vw, 5.5rem) var(--gutter);
-  position: relative;
-  border-bottom: 0;
-  isolation: isolate;
-}
-
-/* Section hatch. A cut face is poché'd on a drawing, and this is the only cut
-   face on the site — 45° hairlines at the same pitch as the stock's grid. */
-.issue::before {
-  content: '';
+.closing__arc span {
   position: absolute;
   inset: 0;
-  z-index: -1;
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(239, 238, 231, 0.07) 0 1px,
-    transparent 1px 11px
-  );
-  pointer-events: none;
+  border: 1px solid var(--closing-line);
+  border-radius: 50%;
 }
-.issue__title {
-  font-size: clamp(2.1rem, 5.4vw, 4.25rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 0.98;
-  max-width: 17ch;
-  text-wrap: balance;
+.closing__arc span:nth-child(2) {
+  inset: 12%;
 }
-.issue__body {
-  color: var(--on-ink);
-  max-width: 52ch;
-  margin-top: 1.2rem;
-  font-size: clamp(1rem, 0.95rem + 0.35vw, 1.1875rem);
+.closing__arc span:nth-child(3) {
+  inset: 24%;
 }
-.issue .stamp-row {
-  border-color: var(--stock);
-  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+.footer {
+  padding-top: 3.5rem;
+  padding-bottom: 1.8rem;
 }
-.issue .stamp {
-  background: var(--stock);
-  color: var(--ink);
-}
-.issue .stamp:hover,
-.issue .stamp:focus-visible {
-  background: var(--red-ink);
-  color: var(--stock);
-}
-.issue .stamp--ghost {
-  background: transparent;
-  color: var(--stock);
-  border-left-color: var(--stock);
-}
-.issue .stamp--ghost:hover,
-.issue .stamp--ghost:focus-visible {
-  background: var(--stock);
-  color: var(--ink);
-}
-.issue__seal {
-  position: absolute;
-  right: var(--gutter);
-  top: clamp(2rem, 5vw, 4rem);
-  text-transform: uppercase;
-  border: var(--w-div) solid var(--red);
-  color: var(--red-lit);
-  font: 700 0.6875rem/1.5 var(--f-tech);
-  letter-spacing: 0.14em;
-  padding: 0.75rem 0.9rem;
-  text-align: center;
-  transform: rotate(-4deg);
-}
-
-/* --------------------------------------------------------------------------
-   FOOT — the sheet's bottom margin: a revision table
-   -------------------------------------------------------------------------- */
-.foot {
-  border-top: var(--w-div) solid var(--ink);
-  font: 500 0.6875rem/1.6 var(--f-tech);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--graphite);
+.footer__top {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  background: var(--ink);
-  gap: var(--w-hair);
+  grid-template-columns: 1fr 1fr auto;
+  gap: 3rem;
+  align-items: start;
+  padding-bottom: 3.5rem;
 }
-.foot > * {
-  background: var(--stock);
-  padding: 1rem var(--pad);
+.footer__top .brand svg {
+  width: 150px;
+}
+.footer__top > p {
+  color: var(--muted);
+  max-width: 29ch;
+  font-size: 0.9375rem;
+}
+.footer__top nav {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 0.6rem 2.5rem;
+  font-size: 0.875rem;
+}
+.footer__top nav a {
+  text-decoration: none;
+}
+.footer__top nav a:hover {
+  color: var(--accent);
+}
+.footer__bottom {
+  border-top: 1px solid var(--line);
+  padding-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+.page-intro {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  padding-block: clamp(5rem, 9vw, 9rem) clamp(4rem, 6vw, 6rem);
+}
+.page-intro h1 {
+  max-width: 16ch;
+}
+.page-intro .lede {
+  margin-top: 2rem;
+  max-width: 53ch;
+}
+.page-intro .actions {
+  margin-top: 2rem;
+}
+.page-intro--short {
+  padding-bottom: 4rem;
+}
+.page-intro .flow-field {
+  opacity: 0.6;
+}
+.capability-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+  margin-top: 3rem;
+  font-size: 0.875rem;
+}
+.capability-nav a {
+  color: var(--muted);
+}
+.service-detail {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 6rem;
+  border-top: 1px solid var(--line);
+  padding-block: 4.5rem;
+  scroll-margin-top: 110px;
+}
+.service-detail h2 {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  max-width: 15ch;
+}
+.service-detail__discipline {
+  color: var(--accent);
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
+.service-detail .prose {
+  color: var(--muted);
+  font-size: 1rem;
+}
+.service-detail ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 2rem;
+}
+.service-detail li {
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  font-size: 0.875rem;
+}
+.service-detail li svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  align-self: center;
+  color: var(--accent);
+}
+.service-detail .text-link {
+  margin-top: 1.5rem;
+}
+.about-statement {
+  font-size: clamp(1.5rem, 2.8vw, 2.5rem);
+  max-width: 42ch;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+}
+.principles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  margin-top: 5rem;
+}
+.principles > div {
+  border-top: 1px solid var(--line-strong);
+  padding-top: 1.5rem;
+}
+.principles h3 {
+  font-size: 1.35rem;
+}
+.principles p {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  margin-top: 1rem;
+}
+.company-record {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem 5rem;
+  margin: 3rem 0 0;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+.company-record dt {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.company-record dd {
+  margin: 0.5rem 0 0;
+  font-size: 0.9375rem;
+}
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 7rem;
+  padding-bottom: var(--section);
+}
+.contact-panel {
+  color: var(--ink);
+  background: var(--surface-soft);
+  border-radius: var(--radius);
+  padding: clamp(1.5rem, 3.5vw, 3.5rem);
+}
+.contact-panel h2 {
+  font-size: 2rem;
+  max-width: 18ch;
+}
+.contact-panel > p {
+  color: var(--muted);
+  margin-top: 1.4rem;
+  font-size: 0.9375rem;
+}
+.contact-panel .button {
+  margin-top: 2rem;
+}
+.contact-form {
+  margin-top: 2.25rem;
+}
+.contact-form__status {
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--line);
+}
+.contact-form__status p {
+  font-size: 0.9375rem;
+  max-width: 46ch;
+}
+.contact-form__status .button {
+  margin-top: 1.25rem;
+}
+.contact-form fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+.contact-form fieldset:disabled .field {
+  opacity: 0.55;
+}
+.contact-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+.field {
+  display: grid;
+  gap: 0.45rem;
+}
+.field label {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.field label span {
+  font-weight: 400;
+  color: var(--muted);
+}
+.field input,
+.field textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  transition: border-color 0.2s;
+}
+.field textarea {
+  resize: vertical;
+  min-height: 9rem;
+}
+.field input:hover:enabled,
+.field textarea:hover:enabled {
+  border-color: var(--line-strong);
+}
+.field input:focus-visible,
+.field textarea:focus-visible {
+  border-color: var(--accent);
+  outline-offset: 2px;
+}
+.contact-form fieldset > .button {
+  justify-self: start;
+  margin-top: 0.5rem;
+}
+.contact-form fieldset:disabled > .button {
+  background: var(--surface-blue);
+  color: var(--muted);
+  transform: none;
+}
+.contact-form fieldset:disabled > .button svg {
+  transform: none;
+}
+.contact-form__trap {
+  position: absolute;
+  left: -9999px;
+}
+.contact-methods {
+  margin: 2rem 0 0;
+}
+.contact-methods > div {
+  border-top: 1px solid var(--line);
+  padding-block: 1.2rem;
+}
+.contact-methods dt {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.contact-methods dd {
+  margin: 0.4rem 0 0;
+  font-size: 1rem;
   overflow-wrap: anywhere;
 }
-.foot a {
+.contact-methods a {
+  text-decoration: none;
+}
+.contact-methods a:hover {
+  color: var(--accent);
+}
+.contact-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.contact-steps li + li {
+  margin-top: 2.2rem;
+}
+.contact-steps h3 {
+  font-size: 1.2rem;
+}
+.contact-steps p {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  margin-top: 0.7rem;
+}
+.contact-aside .journey {
+  --journey-gap: 1rem;
+  margin-top: 2.5rem;
+  gap: var(--journey-gap);
+}
+.contact-aside .journey__body,
+.contact-aside .journey figcaption {
+  display: none;
+}
+.contact-aside .journey__node {
+  background: var(--surface-soft);
+  box-shadow: none;
+  padding: 1rem;
+}
+.contact-aside .journey__connector {
+  left: calc(1rem + var(--journey-symbol) + 12px);
+  top: calc(1rem + var(--journey-symbol) / 2);
+}
+.contact-aside .journey__title {
+  font-size: 0.75rem;
+}
+.work-page-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.5rem 2rem;
+}
+.demo-section .work-placeholder__visual {
+  min-height: 420px;
+}
+.demo-section .work-placeholder__caption {
+  max-width: 800px;
+}
+.empty-page {
+  min-height: 65svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+  padding-block: 6rem;
+}
+.empty-page > p {
+  max-width: 45ch;
+  color: var(--muted);
+}
+/* Native search dialog retains the existing keyboard and focus behavior. */
+.cmdk {
+  width: min(620px, calc(100% - 2rem));
+  max-height: min(70svh, 600px);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
   color: var(--ink);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
 }
-.foot a:hover {
-  color: var(--red-ink);
+.cmdk::backdrop {
+  background: var(--dialog-backdrop);
 }
-
-/* --------------------------------------------------------------------------
-   ADAPT
-   -------------------------------------------------------------------------- */
-@media (max-width: 60rem) {
-  .drawing-overview {
-    grid-template-columns: minmax(0, 1fr);
+.cmdk__search {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+}
+.cmdk__search > svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.cmdk__input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font-size: 1rem;
+}
+.cmdk__input::placeholder {
+  color: var(--muted);
+}
+.cmdk__esc {
+  border: 1px solid var(--line);
+  padding: 0.1rem 0.4rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+.cmdk__body {
+  max-height: 48svh;
+  overflow-y: auto;
+  padding: 0.75rem;
+}
+.cmdk__list {
+  list-style: none;
+  padding: 0.75rem;
+  margin: 0;
+  max-height: 48svh;
+  overflow-y: auto;
+}
+.cmdk__group {
+  color: var(--muted);
+  padding: 0.8rem 0.75rem 0.4rem;
+  font-size: 0.75rem;
+}
+.cmdk__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 10px;
+  padding: 0.8rem 0.75rem;
+  cursor: pointer;
+}
+.cmdk__item[aria-selected="true"] {
+  background: var(--surface-blue);
+}
+.cmdk__icon svg {
+  width: 16px;
+  height: 16px;
+}
+.cmdk__label {
+  font-size: 0.875rem;
+}
+.cmdk__hint {
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-left: auto;
+}
+.cmdk__empty {
+  padding: 2rem 1rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+.cmdk__foot {
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 1rem 1.5rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+.cmdk__foot kbd {
+  font: inherit;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+@keyframes journey-connect {
+  from {
+    transform: scaleX(0);
   }
-  .notes {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: none;
-    grid-auto-flow: row;
+  to {
+    transform: scaleX(1);
   }
-  .foot {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@keyframes connection-trace {
+  from {
+    stroke-dashoffset: 100;
   }
-  .clause {
-    grid-template-columns: 2.75rem minmax(0, 1fr);
+}
+[data-motion="paused"] *,
+[data-motion="paused"] *::before,
+[data-motion="paused"] *::after {
+  animation-play-state: paused !important;
+}
+[data-motion="paused"] .connection-signal {
+  stroke-dasharray: none;
+}
+@media (max-width: 1100px) {
+  .header__inner {
+    gap: 1.25rem;
   }
-  /* No room for two columns of parameters in a phone-width sheet. */
-  .clause__param {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.15rem;
+  .header__consult {
+    display: none;
   }
-  .clause__params {
+  .hero {
+    min-height: auto;
+    padding-bottom: 0;
+  }
+  .hero__journey {
+    width: 75%;
+    margin: 2rem 0 0 auto;
+    position: relative;
+    inset: auto;
+  }
+  .hero__bottom {
+    position: relative;
+    left: auto;
+    transform: none;
+    padding-top: 2rem;
+  }
+  .intro-grid,
+  .faq,
+  .service-detail {
+    gap: 3rem;
+  }
+  .approach {
+    gap: 3rem;
+  }
+  .contact-layout {
+    gap: 3.5rem;
+  }
+}
+@media (max-width: 760px) {
+  :root {
+    --gutter: 1.5rem;
+  }
+  .header__inner {
+    height: 74px;
+    gap: 1rem;
+  }
+  .brand svg {
+    width: 142px;
+  }
+  .desktop-nav {
+    display: none;
+  }
+  .header__tools {
+    margin-left: auto;
+    gap: 0.1rem;
+  }
+  .search-trigger {
+    display: none;
+  }
+  .menu-toggle {
+    display: grid;
+  }
+  .mobile-nav {
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+  }
+  .mobile-nav a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    padding-block: 0.8rem;
+    border-top: 1px solid var(--line);
+    font-size: 1.2rem;
+  }
+  .mobile-nav svg {
+    width: 20px;
+    height: 20px;
+  }
+  .header.is-open .mobile-nav {
+    display: block;
+  }
+  .header.is-open .menu-open {
+    display: none;
+  }
+  .header.is-open .menu-close {
+    display: block;
+  }
+  .hero {
+    min-height: auto;
+    padding-top: 4.5rem;
+    padding-bottom: 0;
+  }
+  .hero__copy {
+    max-width: 590px;
+  }
+  .hero h1 {
+    font-size: clamp(3.2rem, 9.5vw, 5rem);
+  }
+  .hero__copy > p {
+    font-size: 1rem;
+    max-width: 46ch;
+  }
+  .hero__journey {
+    width: 100%;
+    margin-top: 3rem;
+    padding-top: 0;
+  }
+  .journey {
+    --journey-gap: 1rem;
+    --journey-symbol: 36px;
+    --journey-inset: 1rem;
+    gap: var(--journey-gap);
+  }
+  .journey__title {
+    font-size: 0.8125rem;
+  }
+  .journey__body {
+    font-size: 0.6875rem;
+  }
+  .hero__bottom {
+    padding-top: 2rem;
+  }
+  .hero__disciplines {
+    font-size: 0.75rem;
+    max-width: 25ch;
+  }
+  .hero__bottom .text-button {
+    font-size: 0.75rem;
+  }
+  .hero__bottom {
+    padding-bottom: 2rem;
+  }
+  .hero::after {
+    background: linear-gradient(90deg, var(--bg) 0%, transparent 110%);
+  }
+  .flow-field {
+    opacity: 0.7;
+  }
+  .section-head {
+    align-items: start;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .intro-grid,
+  .approach,
+  .faq,
+  .service-detail,
+  .contact-layout {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .intro-grid .prose {
+    font-size: 1rem;
+  }
+  .service-row {
+    grid-template-columns: 1fr 26px;
+    gap: 1rem;
+    padding-block: 2rem;
+  }
+  .service-row__body {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 0.875rem;
+  }
+  .service-row > svg {
+    grid-row: 1;
     grid-column: 2;
   }
-  .clause__go {
-    display: none;
-  }
-}
-
-
-@media (max-width: 30rem) {
-  .foot {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .clause {
-    grid-template-columns: 3rem minmax(0, 1fr);
-  }
-  .note-item {
-    grid-template-columns: 2.25rem minmax(0, 1fr);
-    gap: 0.6rem;
-  }
-}
-
-@media (max-width: 44rem) {
-  .issue__seal {
+  .approach__intro {
     position: static;
-    justify-self: start;
-    width: fit-content;
-    transform: none;
-    margin-bottom: 1.25rem;
   }
-  .mast__nav {
-    width: 100%;
-    justify-content: space-between;
+  .process-list li {
+    gap: 1rem;
   }
-  .ts__find {
-    flex: 0 0 auto;
+  .process-list h3 {
+    font-size: 1.25rem;
   }
-  .title-sheet {
-    min-height: auto;
+  .connections {
+    padding: 1.5rem 1rem;
   }
-  /* The cloud fits any width, so it stays; the leader needs a margin to run
-     through and there isn't one at this size. */
-  .mk-leader,
-  .mk-dot {
-    display: none;
+  .connections__map {
+    aspect-ratio: 1.4;
   }
-  .note {
-    max-width: none;
+  .connections__center {
+    width: 95px;
+    height: 95px;
+    font-size: 0.625rem;
   }
-  .stamp-row {
-    width: 100%;
-    flex-direction: column;
+  .connections__center svg {
+    width: 34px;
   }
-  .stamp--ghost {
-    border-left: 0;
-    border-top: var(--w-div) solid var(--ink);
+  .connection-point {
+    width: 33%;
+    padding: 0.5rem 0.15rem;
   }
-  .issue .stamp--ghost {
-    border-top-color: var(--stock);
+  .connection-point--experience,
+  .connection-point--workflow {
+    left: 0;
+  }
+  .connection-point--product,
+  .connection-point--systems {
+    right: 0;
+  }
+  .connection-point p {
+    font-size: 0.75rem;
+  }
+  .connection-point > span:last-child {
+    font-size: 0.625rem;
+  }
+  .connections__caption {
+    font-size: 0.8125rem;
+  }
+  .connections__controls button {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.75rem;
+  }
+  .work-grid,
+  .work-page-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .work-placeholder__visual {
+    min-height: 300px;
+  }
+  .work-placeholder__caption h3 {
+    font-size: 1.25rem;
+  }
+  .closing h2 {
+    max-width: 15ch;
+  }
+  .closing p {
+    font-size: 1rem;
+  }
+  .closing__arc {
+    right: -90%;
+    width: 130%;
+    opacity: 0.5;
+  }
+  .footer__top {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  .footer__top > p {
+    grid-column: 1;
+    font-size: 0.8125rem;
+  }
+  .footer__top nav {
+    grid-column: 2;
+    grid-row: 1/3;
+    justify-self: end;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .footer__bottom {
+    align-items: flex-start;
+    font-size: 0.6875rem;
+  }
+  .footer__bottom .text-button {
+    font-size: 0.75rem;
+  }
+  .page-intro {
+    padding-top: 4.5rem;
+  }
+  .page-intro h1 {
+    font-size: clamp(3rem, 9vw, 4.7rem);
+  }
+  .page-intro .lede {
+    font-size: 1.05rem;
+  }
+  .capability-nav {
+    gap: 0.6rem 1.5rem;
+    font-size: 0.8125rem;
+  }
+  .service-detail {
+    padding-block: 3rem;
+  }
+  .service-detail h2 {
+    max-width: 20ch;
+  }
+  .service-detail .prose {
+    font-size: 0.9375rem;
+  }
+  .principles {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+  .contact-layout {
+    padding-top: 0;
+  }
+  .contact-form__row {
+    grid-template-columns: 1fr;
+  }
+  .contact-panel .button {
+    gap: 1rem;
+  }
+  .contact-aside .journey {
+    margin-top: 1rem;
+  }
+  .demo-section .work-placeholder__visual {
+    min-height: 320px;
   }
 }
-
+@media (max-width: 420px) {
+  :root {
+    --gutter: 1.25rem;
+  }
+  .hero .actions {
+    gap: 1.25rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero .button {
+    gap: 3rem;
+  }
+  .hero h1 {
+    font-size: 3.2rem;
+  }
+  .journey {
+    --journey-gap: 0.65rem;
+    --journey-symbol: 30px;
+    --journey-inset: 0.85rem;
+  }
+  .journey__title {
+    font-size: 0.75rem;
+  }
+  .journey__body {
+    font-size: 0.6875rem;
+  }
+  .journey figcaption {
+    font-size: 0.6875rem;
+  }
+  .contact-panel .button {
+    width: 100%;
+    font-size: 0.8125rem;
+    padding: 1rem;
+  }
+  .connections__map {
+    margin-block: 2rem;
+  }
+  .connections__controls {
+    gap: 0;
+  }
+  .connections__controls button {
+    padding: 0.6rem;
+    font-size: 0.6875rem;
+  }
+  .connection-point > span:last-child {
+    display: none;
+  }
+  .connection-point p {
+    font-size: 0.6875rem;
+  }
+  .connections__center {
+    width: 85px;
+    height: 85px;
+  }
+  .footer__top {
+    gap: 1.5rem;
+  }
+}
+@media (pointer: coarse) {
+  .icon-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .connections__controls button {
+    min-height: 44px;
+  }
+  .text-link {
+    min-height: 44px;
+  }
+  .text-button {
+    min-height: 44px;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -977,333 +1899,16 @@ svg {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
+    animation: none !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
-
-/* --------------------------------------------------------------------------
-   TOUCH — a pointer that cannot hit a 20px row needs a 44px one. Density is
-   kept for fine pointers rather than lowered for everybody.
-   -------------------------------------------------------------------------- */
-@media (pointer: coarse) {
-  .foot a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-  }
-  .mast__nav a,
-  .mast__id,
-  .ts__find {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-  }
-  .stamp {
-    padding-block: 1.05rem;
-  }
-  .clause {
-    padding-block: 1.5rem;
+@media (max-width: 760px) {
+  :root:not([data-js]) .mobile-nav {
+    display: block;
   }
 }
-
-/* --------------------------------------------------------------------------
-   SHEET 05 — SCHEDULE OF RATES
-   A rate schedule is a table, so this is one: ruled cells, clause numbers,
-   figures set in the technical face because they are measurements.
-   -------------------------------------------------------------------------- */
-
-/* The switch decides which figure is on the sheet. CSS does the showing, so
-   the monthly column is still correct with no script at all. */
-[data-billing][data-cycle='monthly'] [data-when='annual'],
-[data-billing][data-cycle='annual'] [data-when='monthly'] {
+:root:not([data-js]) .connections__controls {
   display: none;
-}
-
-.cycle {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.6rem 1rem;
-  margin-top: clamp(1.5rem, 3vw, 2.25rem);
-}
-.cycle__btn {
-  font: 700 0.75rem/1 var(--f-tech);
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  min-height: 44px;
-  padding: 0.8rem 1.2rem;
-  border: var(--w-key) solid var(--ink);
-  background: transparent;
-  color: var(--ink);
-  cursor: pointer;
-  transition: background 80ms var(--snap), color 80ms var(--snap);
-}
-.cycle__btn:hover {
-  background: var(--stock-2);
-}
-.cycle__btn[aria-pressed='true'] {
-  background: var(--ink);
-  color: var(--stock);
-}
-.cycle__hint {
-  font: 500 0.75rem/1.4 var(--f-tech);
-  color: var(--red-ink);
-}
-
-.rates {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--w-key);
-  background: var(--ink);
-  border: var(--w-key) solid var(--ink);
-  margin-top: clamp(1.5rem, 3vw, 2.25rem);
-}
-.rate {
-  background: var(--stock);
-  padding: clamp(1.15rem, 2.2vw, 1.85rem);
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-}
-.rate__cta {
-  margin-top: auto;
-}
-.rate__no {
-  font: 500 0.75rem/1 var(--f-tech);
-  color: var(--red-ink);
-}
-.rate__name {
-  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  line-height: 1.02;
-  margin: 0.5rem 0 0.35rem;
-}
-.rate__tag {
-  color: var(--graphite);
-  font-size: 0.9375rem;
-  line-height: 1.45;
-}
-.rate__price {
-  border-top: var(--w-key) solid var(--ink);
-  border-bottom: var(--w-key) solid var(--ink);
-  padding: 0.85rem 0;
-  display: flex;
-  align-items: baseline;
-  gap: 0.55rem;
-  flex-wrap: wrap;
-}
-.rate__price b {
-  font-size: clamp(2.1rem, 3.6vw, 3rem);
-  font-weight: 800;
-  letter-spacing: -0.05em;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-.rate__price i {
-  font: 500 0.75rem/1 var(--f-tech);
-  font-style: normal;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--graphite);
-}
-.rate__save {
-  font: 600 0.75rem/1 var(--f-tech);
-  color: var(--red-ink);
-  border: var(--w-key) solid var(--red);
-  padding: 0.4rem 0.55rem;
-  justify-self: start;
-}
-.rate__list {
-  list-style: none;
-  padding: 0;
-  display: grid;
-  border-top: var(--w-hair) solid var(--rule);
-}
-.rate__list li {
-  font-size: 0.875rem;
-  line-height: 1.45;
-  color: var(--graphite);
-  padding: 0.55rem 0 0.55rem 1.35rem;
-  border-bottom: var(--w-hair) solid var(--rule);
-  position: relative;
-}
-.rate__list li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 1.05em;
-  width: 8px;
-  height: var(--w-key);
-  background: var(--red);
-}
-.rate__cta {
-  justify-self: stretch;
-  justify-content: center;
-  border: var(--w-div) solid var(--ink);
-}
-.rate__foot {
-  margin-top: 1.25rem;
-  max-width: 78ch;
-  color: var(--graphite);
-  font-size: 0.875rem;
-}
-
-@media (max-width: 66rem) {
-  .rates {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* Below this the stamped actions no longer fit beside the sign-off without
-   wrapping inside their own frame; the sign-off drops under the stamps and
-   keeps the full-width column grid. */
-@media (max-width: 74rem) {
-  .issue .stamp-row,
-  .signoff {
-    grid-column: 1 / -1;
-  }
-}
-
-
-/* --------------------------------------------------------------------------
-   ISSUE BLOCK, WIDE
-   -------------------------------------------------------------------------- */
-@media (min-width: 90rem) {
-  .issue__title {
-    max-width: 20ch;
-  }
-}
-
-
-/* --------------------------------------------------------------------------
-   TOUCH FLOOR — the last controls measured under 44px: the billing switch and
-   the skip link, which is small but is still a link once it is focused.
-   -------------------------------------------------------------------------- */
-@media (pointer: coarse) {
-  .cycle__btn,
-  .skip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 44px;
-  }
-}
-
-
-/* --------------------------------------------------------------------------
-   MASTHEAD, NARROW — the row cannot hold the lockup, four routes and the
-   finder at once, so it becomes two: identity and finder on top, routes
-   beneath. It stops sticking here; a masthead worth 20% of a phone screen is
-   not worth keeping on screen.
-   -------------------------------------------------------------------------- */
-@media (max-width: 52rem) {
-  .mast {
-    position: static;
-    row-gap: 0;
-    padding-block: 0.6rem;
-  }
-  .mast__id {
-    order: 1;
-  }
-  .ts__find {
-    order: 2;
-    margin-left: auto;
-  }
-  .mast__nav {
-    order: 3;
-    width: 100%;
-    margin-left: 0;
-    justify-content: space-between;
-    gap: 0.25rem 0.5rem;
-    border-top: var(--w-hair) solid var(--rule);
-    margin-top: 0.55rem;
-    padding-top: 0.15rem;
-  }
-  .mast__logo {
-    height: 1.75rem;
-  }
-}
-
-@media (max-width: 23rem) {
-  .mast__logo {
-    height: 1.5rem;
-  }
-  .mast__nav {
-    letter-spacing: 0.02em;
-    gap: 0.25rem;
-  }
-}
-
-@media (max-width: 52rem) {
-  .ts__find {
-    border-left: 0;
-  }
-}
-
-
-/* --------------------------------------------------------------------------
-   TITLE SHEET, WIDE — below a certain width everything stacks in one column,
-   which on a large monitor leaves the right half of the opening view empty.
-   From here the sheet reads as a drawing does: the statement across the top,
-   the explanation and the margin note side by side beneath it, the actions
-   along the bottom. The note moving to the right also shortens its leader,
-   which no longer has to travel the width of the sheet to reach the cloud.
-   -------------------------------------------------------------------------- */
-@media (min-width: 64rem) {
-  .ts__field {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-    column-gap: clamp(2rem, 4vw, 4.5rem);
-    align-content: center;
-  }
-  .ts__title,
-  .ts__field .stamp-row {
-    grid-column: 1 / -1;
-  }
-  .ts__sub {
-    grid-column: 1;
-    align-self: start;
-    max-width: none;
-  }
-  .ts__field .note {
-    grid-column: 2;
-    align-self: start;
-    justify-self: end;
-    max-width: 38ch;
-  }
-}
-
-/* A sample review uses the existing card grid with readable field labels. */
-@media (min-width: 64rem) {
-  .ts__field--review { grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr); }
-  .ts__field--review .ts__title {
-    grid-column: 1;
-    font-size: clamp(2.9rem, 5.4vw, 5.5rem);
-  }
-  .ts__field--review .note { grid-column: 1; justify-self: start; }
-  .ts__field--review .stamp-row { grid-column: 1; }
-  .ts__field--review .form { grid-column: 2; grid-row: 1 / 5; align-self: center; }
-}
-
-.sample-finding dt {
-  margin-top: 1.25rem;
-  font: 600 0.8125rem/1.4 var(--f-tech);
-  color: var(--ink);
-}
-.sample-finding dd { margin: 0.35rem 0 0; color: var(--graphite); }
-.plan-context { padding: 1rem; border: var(--w-key) solid var(--ink); margin-top: 1.5rem; }
-
-.sample-review {
-  margin-top: clamp(1.75rem, 3vw, 2.75rem);
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-.sample-finding .group__name {
-  font: 700 1.125rem/1.3 var(--f-sheet);
-  letter-spacing: -0.01em;
-  text-transform: none;
-  color: var(--ink);
-}
-@media (max-width: 60rem) {
-  .sample-review { grid-template-columns: minmax(0, 1fr); }
 }

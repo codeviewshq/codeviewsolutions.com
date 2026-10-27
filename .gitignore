@@ -32,3 +32,11 @@ Thumbs.db
 
 # server bootstrap scripts (kept local, repo is public)
 .infra/
+
+# Temporary design studies
+.impeccable/mocks/
+
+# Local design-review captures and live-session state
+.hallmark/*
+!.hallmark/report.md
+.impeccable/live/
